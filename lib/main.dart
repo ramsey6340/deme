@@ -1,4 +1,7 @@
+import 'package:deme/provider/change_splash-screenn.dart';
+import 'package:deme/routes.dart';
 import 'package:deme/size_config.dart';
+import 'package:deme/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'log-pages/log-up/log_up.dart';
@@ -20,6 +23,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: LogUp(),
+      //home: SplashScreen(),
+      routes: routes,
     );
   }
 }

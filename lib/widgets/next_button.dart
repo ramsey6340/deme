@@ -5,14 +5,14 @@ import '../size_config.dart';
 class NextButton extends StatelessWidget{
   const NextButton({
     Key ? key,
-    this.text,
+    this.text = 'Continuer',
     required this.press,
     this.color = kPrimaryColor,
-    this.textStyle=const TextStyle(fontSize: 18,),
+    this.textStyle=const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
     this.child,
     this.elevation=0,
     this.padding,
-    this.borderRadius=20,
+    this.borderRadius=5,
     this.borderColor=Colors.transparent,
     this.borderWidth=1.0,
   }):super(key: key);

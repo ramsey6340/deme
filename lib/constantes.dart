@@ -4,7 +4,7 @@ const kTextColor = Color(0xFF757575);
 const Color kRoundedCategoryColor = Color(0xFF0077B5);
 const Color kPrimaryColor = Color(0xFF0077B5);
 const kTextFieldOpacity = 0.7;
-
+const kAnimationDuration = Duration(milliseconds: 200);
 double baseWidth = 428;
 
 const int kPasswordMaxLength = 4;

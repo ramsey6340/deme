@@ -1,76 +1,49 @@
 import 'package:deme/constantes.dart';
 import 'package:deme/log-pages/log-up/body/body1.dart';
+import 'package:deme/log-pages/log-up/body/body2.dart';
+import 'package:deme/provider/change_log_screen.dart';
+import 'package:deme/widgets/next_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils.dart';
 
 class LogUp extends StatelessWidget {
+  static const String routeName = "log_up";
   const LogUp({super.key});
 
   @override
   Widget build(BuildContext context) {
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
+    List<Widget> logBodies = [Body1(), Body2()];
 
     return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-        child: Container(
+      body: ChangeNotifierProvider(
+        create: (BuildContext context) => ChangeLogScreen(),
+        child: SizedBox(
           width: double.infinity,
-          decoration: const BoxDecoration (
-            color: Colors.white,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 0*fem),
-                  width: 428*fem,
-                  height: 243*fem,
-                  child: Image.asset(
-                    'assets/images/header-img.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Body1(),
-                /*Container(
-                  // vousavezdjuncompteseconnectS4J (6:28)
-                  margin: EdgeInsets.fromLTRB(7*fem, 0*fem, 0*fem, 0*fem),
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom (
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: RichText(
-                      text: TextSpan(
-                        style: SafeGoogleFont (
-                          'Inter',
-                          fontSize: 16*ffem,
-                          fontWeight: FontWeight.w500,
-                          height: 1.2125*ffem/fem,
-                          color: Color(0xff000000),
-                        ),
-                        children: [
-                          const TextSpan(
-                            text: 'Vous avez déjà un compte ? ',
-                          ),
-                          TextSpan(
-                            text: 'Se connecté',
-                            style: SafeGoogleFont (
-                              'Inter',
-                              fontSize: 16*ffem,
-                              fontWeight: FontWeight.w500,
-                              height: 1.2125*ffem/fem,
-                              color: kPrimaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
+          child: Container(
+            width: double.infinity,
+            decoration: const BoxDecoration (
+              color: Colors.white,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 0*fem),
+                    width: 428*fem,
+                    height: 243*fem,
+                    child: Image.asset(
+                      'assets/images/header-img.jpg',
+                      fit: BoxFit.cover,
                     ),
                   ),
-                )*/
-              ],
+                  Consumer<ChangeLogScreen>(builder: (context, changeLogScreen, child) => logBodies[changeLogScreen.logIndex]),
+                ],
+              ),
             ),
           ),
         ),
