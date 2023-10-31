@@ -15,8 +15,8 @@ class TextFormFieldCustom extends StatefulWidget  {
     this.focusBorderSideColor=Colors.black,
     this.fillColor=Colors.white,
     this.hintTextColor=kTextColor,
-    this.cursorColor=Colors.blue,
-    this.suffixColor=Colors.blue,
+    this.cursorColor=Colors.black,
+    this.suffixColor=Colors.black,
     this.inputTextColor=Colors.black,
     this.onChanged,
     this.validator,
@@ -75,16 +75,16 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom> {
         ),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
-            borderSide: BorderSide(color: widget.focusBorderSideColor,)
+            borderSide: BorderSide(color: widget.focusBorderSideColor)
         ),
 
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
-            borderSide: const BorderSide(color: Colors.transparent,)
+            borderSide: const BorderSide(color: Colors.red,)
         ),
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
-            borderSide: const BorderSide(color: Colors.transparent,)
+            borderSide: const BorderSide(color: Colors.red,)
         ),
       ),
 

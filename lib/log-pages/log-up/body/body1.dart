@@ -17,8 +17,8 @@ class Body1 extends StatefulWidget {
 class _Body1State extends State<Body1> {
   final _formKey = GlobalKey<FormState>();
 
-  String? passwordError = '';
-  String? emailError = '';
+  String? passwordError;
+  String? emailError;
   String? confirmPasswordError;
 
   String password = '';
@@ -62,7 +62,7 @@ class _Body1State extends State<Body1> {
                         PhoneFormFieldCustom(
                           hintText: 'numéro de téléphone',
                           fillColor: Colors.white,
-                          focusBorderSideColor: Colors.transparent,
+                          focusBorderSideColor: Colors.black,
                           borderSideColor: Colors.black,
                           hintTextColor: Colors.black.withOpacity(kTextFieldOpacity),
                           cursorColor: kRoundedCategoryColor,
@@ -71,13 +71,8 @@ class _Body1State extends State<Body1> {
                         TextFormFieldCustom(
                           textInputType: TextInputType.emailAddress,
                           hintText: 'email',
-                          fillColor: Colors.white,
-                          focusBorderSideColor: Colors.black,
-                          borderSideColor: Colors.red,
                           hintTextColor: Colors.black.withOpacity(kTextFieldOpacity),
                           cursorColor: kRoundedCategoryColor,
-                          suffixColor: Colors.black54,
-                          inputTextColor: Colors.black,
                           errorText: emailError,
                           // la méthode validator
                           validator: (value){
@@ -103,16 +98,12 @@ class _Body1State extends State<Body1> {
                             }
                           },
                         ),
+                        (emailError == null)?SizedBox(height: 24,):SizedBox(),
                         TextFormFieldCustom(
                           isPassword: true,
                           hintText: 'Mot de passe',
-                          fillColor: Colors.grey,
-                          focusBorderSideColor: Colors.transparent,
-                          borderSideColor: Colors.red,
-                          hintTextColor: Colors.white.withOpacity(kTextFieldOpacity),
+                          hintTextColor: Colors.black.withOpacity(kTextFieldOpacity),
                           cursorColor: kRoundedCategoryColor,
-                          suffixColor: Colors.black54,
-                          inputTextColor: Colors.white,
                           errorText: passwordError,
                           // la méthode validator
                           validator: (value){
@@ -154,16 +145,12 @@ class _Body1State extends State<Body1> {
                             }
                           },
                         ),
+                        (passwordError == null)?SizedBox(height: 24,):SizedBox(),
                         TextFormFieldCustom(
                           isPassword: true,
                           hintText: 'Confirmation de mot de passe',
-                          fillColor: Colors.grey,
-                          focusBorderSideColor: Colors.transparent,
-                          borderSideColor: Colors.transparent,
-                          hintTextColor: Colors.white.withOpacity(kTextFieldOpacity),
+                          hintTextColor: Colors.black.withOpacity(kTextFieldOpacity),
                           cursorColor: kRoundedCategoryColor,
-                          suffixColor: Colors.black54,
-                          inputTextColor: Colors.white,
                           errorText: confirmPasswordError,
                           // la méthode validator
                           validator: (value){
