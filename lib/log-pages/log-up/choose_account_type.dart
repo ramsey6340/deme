@@ -8,23 +8,19 @@ import '../../../widgets/next_button.dart';
 import '../../../widgets/phone_form_field_custom.dart';
 import '../../../widgets/profile_img.dart';
 import '../../../widgets/text_form_field_custom.dart';
+import '../../widgets/list_tile_radio_custom.dart';
 
-class Body2 extends StatefulWidget {
-  const Body2({super.key});
+class ChooseAccountType extends StatefulWidget {
+  const ChooseAccountType({super.key});
 
   @override
-  State<Body2> createState() => _Body1State();
+  State<ChooseAccountType> createState() => _Body1State();
 }
 
-class _Body1State extends State<Body2> {
+class _Body1State extends State<ChooseAccountType> {
   final _formKey = GlobalKey<FormState>();
 
-  String? passwordError;
-  String? emailError;
-  String? confirmPasswordError;
-
-  String password = '';
-  String confirmPassword = '';
+  String? currentValue;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +36,7 @@ class _Body1State extends State<Body2> {
             Container(
               margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 27 * fem),
               child: Text(
-                'Dite nous plus',
+                'Êtes-vous une organisation humanitaire ?',
                 style: GoogleFonts.inter(
                     fontSize: 30 * ffem,
                     fontWeight: FontWeight.w700,
@@ -57,57 +53,30 @@ class _Body1State extends State<Body2> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        ProfileImg(
-                          profileImg: 'assets/data_test/avatar.png',
-                          pressShowImg: () {},
-                          showIconModif: true,
+                        ListTileRadioCustom(
+                          title: 'OUI',
+                          radioValue: 'organization',
+                          radioGroupValue: currentValue,
+                          radioOnChanged: (value) {
+                            setState(() {
+                              currentValue = 'organization';
+                            });
+                          },
                         ),
                         SizedBox(
-                          height: 20,
+                          height: getProportionateScreenHeight(20),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Email",
-                              style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextFormFieldCustom(
-                              textInputType: TextInputType.emailAddress,
-                              hintText: 'Ex: test@gmail.com',
-                              hintTextColor:
-                                  Colors.black.withOpacity(kTextFieldOpacity),
-                              cursorColor: kRoundedCategoryColor,
-                              errorText: emailError,
-                              // la méthode validator
-                              validator: (value) {
-                                if (!emailValidatorRegExp.hasMatch(value!)) {
-                                  setState(() {
-                                    emailError = 'Email incorrecte';
-                                  });
-                                  return emailError;
-                                }
-                                return null;
-                              },
-                              // la méthode onChanged
-                              onChanged: (value) {
-                                if (value.isEmpty) {
-                                  setState(() {
-                                    emailError = '';
-                                  });
-                                } else if (value.isNotEmpty &&
-                                    !emailValidatorRegExp.hasMatch(value)) {
-                                  setState(() {
-                                    emailError = '';
-                                  });
-                                }
-                              },
-                            ),
-                          ],
+                        ListTileRadioCustom(
+                          title: 'NON',
+                          radioValue: 'user',
+                          radioGroupValue: currentValue,
+                          radioOnChanged: (value) {
+                            setState(() {
+                              currentValue = 'user';
+                            });
+                          },
                         ),
-                        SizedBox(height: getProportionateScreenHeight(40)),
-                        // Bouton de validation
+                        SizedBox(height: getProportionateScreenHeight(50)),
                         NextButton(
                           padding: EdgeInsets.symmetric(
                               horizontal: getProportionateScreenWidth(100),

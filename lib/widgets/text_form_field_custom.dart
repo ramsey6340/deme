@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../constantes.dart';
+import '../../constants.dart';
 
 
 class TextFormFieldCustom extends StatefulWidget  {
@@ -80,11 +80,11 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom> {
 
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
-            borderSide: const BorderSide(color: Colors.red,)
+            borderSide: const BorderSide(color: Colors.black,)
         ),
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
-            borderSide: const BorderSide(color: Colors.red,)
+            borderSide: const BorderSide(color: Colors.black,)
         ),
       ),
 

@@ -1,4 +1,4 @@
-import 'package:deme/constantes.dart';
+import 'package:deme/constants.dart';
 import 'package:deme/log-pages/log-up/body/body1.dart';
 import 'package:deme/log-pages/log-up/body/body2.dart';
 import 'package:deme/provider/change_log_screen.dart';
@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils.dart';
+import 'body/body3.dart';
+import 'body/finish_log_message.dart';
+import 'body/body4.dart';
+import 'body/body5.dart';
+import 'choose_account_type.dart';
 
 class LogUp extends StatelessWidget {
   static const String routeName = "log_up";
@@ -16,7 +21,7 @@ class LogUp extends StatelessWidget {
   Widget build(BuildContext context) {
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    List<Widget> logBodies = [Body1(), Body2()];
+    List<Widget> logBodies = [ChooseAccountType(), ChooseAccountType()];
 
     return Scaffold(
       body: ChangeNotifierProvider(
@@ -35,7 +40,7 @@ class LogUp extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 0*fem),
                     width: 428*fem,
-                    height: 243*fem,
+                    height: 150*fem,
                     child: Image.asset(
                       'assets/images/header-img.jpg',
                       fit: BoxFit.cover,

@@ -4,6 +4,11 @@ import 'package:deme/size_config.dart';
 import 'package:deme/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'log-pages/forgot-password/forgot_otp_field.dart';
+import 'log-pages/forgot-password/forgot_phone_field.dart';
+import 'log-pages/forgot-password/reset_password.dart';
+import 'log-pages/log-in/log_in.dart';
+import 'log-pages/log-up/body/otp/otp_screen.dart';
 import 'log-pages/log-up/log_up.dart';
 
 void main() {
@@ -22,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LogUp(),
+      home: ResetPassword(),
       //home: SplashScreen(),
       routes: routes,
     );

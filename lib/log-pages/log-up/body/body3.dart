@@ -5,26 +5,19 @@ import '../../../constants.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
-import '../../../widgets/phone_form_field_custom.dart';
-import '../../../widgets/profile_img.dart';
 import '../../../widgets/text_form_field_custom.dart';
 
-class Body2 extends StatefulWidget {
-  const Body2({super.key});
+class Body3 extends StatefulWidget {
+  const Body3({super.key});
 
   @override
-  State<Body2> createState() => _Body1State();
+  State<Body3> createState() => _Body1State();
 }
 
-class _Body1State extends State<Body2> {
+class _Body1State extends State<Body3> {
   final _formKey = GlobalKey<FormState>();
 
-  String? passwordError;
-  String? emailError;
-  String? confirmPasswordError;
-
-  String password = '';
-  String confirmPassword = '';
+  String? loginError;
 
   @override
   Widget build(BuildContext context) {
@@ -57,36 +50,28 @@ class _Body1State extends State<Body2> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        ProfileImg(
-                          profileImg: 'assets/data_test/avatar.png',
-                          pressShowImg: () {},
-                          showIconModif: true,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Email",
+                              "Login",
                               style: GoogleFonts.inter(
                                   fontWeight: FontWeight.bold),
                             ),
                             TextFormFieldCustom(
                               textInputType: TextInputType.emailAddress,
-                              hintText: 'Ex: test@gmail.com',
+                              hintText: '',
                               hintTextColor:
                                   Colors.black.withOpacity(kTextFieldOpacity),
                               cursorColor: kRoundedCategoryColor,
-                              errorText: emailError,
+                              errorText: loginError,
                               // la méthode validator
                               validator: (value) {
                                 if (!emailValidatorRegExp.hasMatch(value!)) {
                                   setState(() {
-                                    emailError = 'Email incorrecte';
+                                    loginError = 'Ce login existe déjà';
                                   });
-                                  return emailError;
+                                  return loginError;
                                 }
                                 return null;
                               },
@@ -94,20 +79,94 @@ class _Body1State extends State<Body2> {
                               onChanged: (value) {
                                 if (value.isEmpty) {
                                   setState(() {
-                                    emailError = '';
+                                    loginError = '';
                                   });
                                 } else if (value.isNotEmpty &&
                                     !emailValidatorRegExp.hasMatch(value)) {
                                   setState(() {
-                                    emailError = '';
+                                    loginError = '';
                                   });
                                 }
                               },
                             ),
                           ],
                         ),
-                        SizedBox(height: getProportionateScreenHeight(40)),
-                        // Bouton de validation
+                        SizedBox(height: getProportionateScreenHeight(20)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Date de naissance",
+                              style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextFormFieldCustom(
+                              textInputType: TextInputType.datetime,
+                              hintText: 'Date de naissance : JJ/MM/AAAA',
+                              hintTextColor:
+                                  Colors.black.withOpacity(kTextFieldOpacity),
+                              cursorColor: kRoundedCategoryColor,
+                              suffixColor: Colors.black,
+                              inputTextColor: Colors.black,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Entrer votre date de naissance";
+                                } else if (!birthDayRegExp.hasMatch(value)) {
+                                  return "La date doit être de la forme JJ/MM/AAAA";
+                                } else if (birthDayRegExp.hasMatch(value)) {
+                                  final dateSplit = value.split("/");
+                                  int day = int.parse(dateSplit[0]);
+                                  int month = int.parse(dateSplit[1]);
+                                  int year = int.parse(dateSplit[2]);
+                                  final currentDate = DateTime.now();
+                                  int currentYear = currentDate.year;
+                                  int oldYear = currentYear - year;
+                                  if (day < 1 || day > 31) {
+                                    return "Le jour est incorrecte";
+                                  } else if (month < 1 || month > 12) {
+                                    return "Le mois est incorrecte";
+                                  } else if (month >= 1 && month <= 12) {
+                                    switch (month) {
+                                      case 2:
+                                        if (day > 29) {
+                                          return "jour ou mois incorrecte";
+                                        }
+                                        break;
+                                      case 4:
+                                        if (day > 30) {
+                                          return "jour ou mois incorrecte";
+                                        }
+                                        break;
+                                      case 6:
+                                        if (day > 30) {
+                                          return "jour ou mois incorrecte";
+                                        }
+                                        break;
+                                      case 9:
+                                        if (day > 30) {
+                                          return "jour ou mois incorrecte";
+                                        }
+                                        break;
+                                      case 11:
+                                        if (day > 30) {
+                                          return "jour ou mois incorrecte";
+                                        }
+                                        break;
+                                    }
+                                  } else if (oldYear < 12) {
+                                    return "Vous ête trop jeune";
+                                  } else if (oldYear > 150) {
+                                    return "Vous ête trop âgé";
+                                  }
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(40),
+                        ),
                         NextButton(
                           padding: EdgeInsets.symmetric(
                               horizontal: getProportionateScreenWidth(100),
@@ -115,8 +174,6 @@ class _Body1State extends State<Body2> {
                           press: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              // si tout est ok on peut maintenant afficher la page succès
-                              //Navigator.pushNamed(context, SignUpAdditionalInfo.routeName);
                             }
                           },
                         ),
@@ -132,8 +189,8 @@ class _Body1State extends State<Body2> {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.arrow_back),
-                                SizedBox(
+                                const Icon(Icons.arrow_back),
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Text(
@@ -143,7 +200,7 @@ class _Body1State extends State<Body2> {
                                     fontSize: 16 * ffem,
                                     fontWeight: FontWeight.w400,
                                     height: 1.2125 * ffem / fem,
-                                    color: Color(0xff000000),
+                                    color: Colors.black,
                                   ),
                                 ),
                               ],

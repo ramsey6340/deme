@@ -3,7 +3,7 @@ import 'package:deme/provider/change_splash-screenn.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../constantes.dart';
+import '../../constants.dart';
 import '../../utils.dart';
 import '../../widgets/next_button.dart';
 import 'splash_content.dart';
