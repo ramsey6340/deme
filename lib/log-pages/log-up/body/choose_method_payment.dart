@@ -1,21 +1,24 @@
 import 'package:deme/widgets/checkbox_list_title_custom.dart';
+import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../models/method_payment.dart';
+import '../../../provider/change_log_screen.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
 
-class Body4 extends StatefulWidget {
-  const Body4({super.key});
+class ChooseMethodPayment extends StatefulWidget {
+  const ChooseMethodPayment({super.key});
 
   @override
-  State<Body4> createState() => _Body4State();
+  State<ChooseMethodPayment> createState() => _ChooseMethodPaymentState();
 }
 
-class _Body4State extends State<Body4> {
+class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
   List<MethodPayment> methodPaymentsData = [
     MethodPayment(
         methodPaymentId: '1',
@@ -71,6 +74,8 @@ class _Body4State extends State<Body4> {
 
   @override
   Widget build(BuildContext context) {
+    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SafeArea(
@@ -125,35 +130,14 @@ class _Body4State extends State<Body4> {
                       padding: EdgeInsets.symmetric(
                           horizontal: getProportionateScreenWidth(100),
                           vertical: getProportionateScreenHeight(10)),
-                      press: () {}),
-                  SizedBox(height: getProportionateScreenHeight(20)),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(
-                          0 * fem, 2 * fem, 0 * fem, 0 * fem),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Ignorer',
-                            style: SafeGoogleFont(
-                              'Inter',
-                              fontSize: 16 * ffem,
-                              fontWeight: FontWeight.w400,
-                              height: 1.2125 * ffem / fem,
-                              color: Color(0xff000000),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(Icons.arrow_forward),
-                        ],
-                      ),
-                    ),
+                      press: () {
+                        changeLogScreen.incrementIndex();
+                      }
                   ),
+                  SizedBox(height: getProportionateScreenHeight(20)),
+                  TextNavigator(text: 'Ignorer', isReturn: false, onTap: (){
+                    changeLogScreen.incrementIndex();
+                  }),
                 ],
               ),
             ),

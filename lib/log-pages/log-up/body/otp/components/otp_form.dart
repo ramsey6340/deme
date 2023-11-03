@@ -1,4 +1,7 @@
+import 'package:deme/provider/change_log_screen.dart';
+import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../constants.dart';
 import '../../../../../size_config.dart';
@@ -42,12 +45,13 @@ class _OTPFormState extends State<OTPForm> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
     return Form(
       key: _formKey,
       child: Column(
         children: [
           // Les 4 cellules pour le formulaire OTP
-          otp_input(),
+          otpInput(),
           SizedBox(height: SizeConfig.screenHeight * 0.15,),
           // Le boutton "Continuer"
           NextButton(
@@ -57,18 +61,19 @@ class _OTPFormState extends State<OTPForm> {
             press: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                // si tout est ok on peut maintenant afficher la page succès
-                //Navigator.pushNamed(context, SignUpAdditionalInfo.routeName);
+                changeLogScreen.incrementIndex();
               }
             },
           ),
+          SizedBox(height: getProportionateScreenHeight(20),),
+          TextNavigator(onTap: (){changeLogScreen.decrementIndex();})
         ],
       ),
     );
   }
 
   // Methode qui va retourner un Widget Row contenant les 4 champ de saisi pour les 4 valeurs de la vérification par OTP
-  Widget otp_input(){
+  Widget otpInput(){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -79,7 +84,7 @@ class _OTPFormState extends State<OTPForm> {
             cursorColor: kTextColor,
             autofocus: true,
             keyboardType: TextInputType.number,
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
             textAlign: TextAlign.center,
             decoration: otpFieldDecoration, // la decoration du cellule
             onChanged: (value){
@@ -94,7 +99,7 @@ class _OTPFormState extends State<OTPForm> {
             cursorColor: kTextColor,
             focusNode: pin2FocusNode,
             keyboardType: TextInputType.number,
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
             textAlign: TextAlign.center,
             decoration: otpFieldDecoration, // la decoration du cellule
             onChanged: (value){nextField(value: value, focusNode: pin3FocusNode);},
@@ -107,7 +112,7 @@ class _OTPFormState extends State<OTPForm> {
             cursorColor: kTextColor,
             focusNode: pin3FocusNode,
             keyboardType: TextInputType.number,
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
             textAlign: TextAlign.center,
             decoration: otpFieldDecoration, // la decoration du cellule
             onChanged: (value){nextField(value: value, focusNode: pin4FocusNode);},
@@ -120,7 +125,7 @@ class _OTPFormState extends State<OTPForm> {
             cursorColor: kTextColor,
             focusNode: pin4FocusNode,
             keyboardType: TextInputType.number,
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
             textAlign: TextAlign.center,
             decoration: otpFieldDecoration, // la decoration du cellule
             onChanged: (value){pin4FocusNode.unfocus();},

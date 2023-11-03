@@ -1,3 +1,5 @@
+import 'package:deme/log-pages/log-up/log_up.dart';
+import 'package:deme/provider/type_user_log_up.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +11,7 @@ import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
 import '../../../widgets/phone_form_field_custom.dart';
 import '../../../widgets/text_form_field_custom.dart';
+import '../../forgot-password/forgot_phone_field.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -29,6 +32,9 @@ class _Body1State extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUp>(context);
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SafeArea(
@@ -140,7 +146,9 @@ class _Body1State extends State<Body> {
                             margin: EdgeInsets.fromLTRB(
                                 7 * fem, 0 * fem, 0 * fem, 0 * fem),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, ForgotPhoneField.routeName);
+                              },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                               ),
@@ -171,7 +179,11 @@ class _Body1State extends State<Body> {
                             margin: EdgeInsets.fromLTRB(
                                 7 * fem, 0 * fem, 0 * fem, 0 * fem),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                changeLogScreen.setIndex(0);
+                                Navigator.pushNamed(context, LogUp.routeName);
+                                typeUserLogUp.setTypeUserLogUp(null);
+                              },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                               ),

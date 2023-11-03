@@ -1,14 +1,17 @@
+import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../provider/change_log_screen.dart';
+import '../../../provider/type_user_log_up.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
 import '../../../widgets/phone_form_field_custom.dart';
 import '../../../widgets/text_form_field_custom.dart';
+import '../../log-in/log_in.dart';
 
 class Body1 extends StatefulWidget {
   const Body1({super.key});
@@ -23,12 +26,15 @@ class _Body1State extends State<Body1> {
   String? passwordError;
   String? emailError;
   String? confirmPasswordError;
+  String? phoneNumberError;
 
   String password = '';
   String confirmPassword = '';
 
   @override
   Widget build(BuildContext context) {
+    final typeUserLogUp = Provider.of<TypeUserLogUp>(context);
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SafeArea(
@@ -42,8 +48,8 @@ class _Body1State extends State<Body1> {
               Container(
                 margin:
                     EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 27 * fem),
-                child: Text(
-                  'Créer un compte',
+                child: Text((typeUserLogUp.typeUserLogUp == 'user')?
+                  'Créer un compte':'Créer un compte pour votre organisation',
                   style: GoogleFonts.inter(
                       fontSize: 30 * ffem,
                       fontWeight: FontWeight.w700,
@@ -61,14 +67,30 @@ class _Body1State extends State<Body1> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           PhoneFormFieldCustom(
-                            hintText: 'numéro de téléphone',
+                            hintText: (typeUserLogUp.typeUserLogUp == 'user')?'numéro de téléphone':'numéro de téléphone de l\'organisation',
                             fillColor: Colors.white,
-                            focusBorderSideColor: Colors.black,
-                            borderSideColor: Colors.black,
-                            hintTextColor:
-                                Colors.black.withOpacity(kTextFieldOpacity),
+                            focusBorderSideColor: (phoneNumberError != null)?Colors.red:Colors.black,
+                            borderSideColor: (phoneNumberError != null)?Colors.red:Colors.black,
+                            hintTextColor: Colors.black.withOpacity(kTextFieldOpacity),
                             cursorColor: kRoundedCategoryColor,
                             inputTextColor: Colors.black,
+                            errorBorderColor: (phoneNumberError != null)?Colors.red:Colors.black,
+                            focusErrorBorderColor: (phoneNumberError != null)?Colors.red:Colors.black,
+                            validator: (phoneNumber){
+                              if (phoneNumber!.number.isEmpty) {
+                                return "Entrer un numéro de téléphone";
+                              } else if (!phoneNumber.isValidNumber()) {
+                                return "Numéro de téléphone invalide";
+                              }
+                              return null; // La validation a réussi, pas d'erreur.
+                            },
+                            onChanged: (phoneNumber){
+                              if (!phoneNumber.isValidNumber()) {
+                                setState(() {
+                                  phoneNumberError = "Entrer un numéro de téléphone";
+                                });
+                              }
+                            },
                           ),
                           TextFormFieldCustom(
                             isPassword: true,
@@ -176,7 +198,6 @@ class _Body1State extends State<Body1> {
                             },
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
-                          // Bouton de validation
                           NextButton(
                             padding: EdgeInsets.symmetric(
                                 horizontal: getProportionateScreenWidth(100),
@@ -185,16 +206,23 @@ class _Body1State extends State<Body1> {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
                                 changeLogScreen.incrementIndex();
-                                print(changeLogScreen.logIndex);
+                                print(phoneNumberError);
                               }
                             },
                           ),
+                          SizedBox(height: getProportionateScreenHeight(20)),
+                          TextNavigator(onTap: (){
+                            changeLogScreen.decrementIndex();
+                            typeUserLogUp.setTypeUserLogUp(null);
+                          }),
                           SizedBox(height: getProportionateScreenHeight(20)),
                           Container(
                             margin: EdgeInsets.fromLTRB(
                                 7 * fem, 0 * fem, 0 * fem, 0 * fem),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, LogIn.routeName);
+                              },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                               ),

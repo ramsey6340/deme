@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -13,7 +15,7 @@ class PhoneFormFieldCustom extends StatelessWidget {
     this.initialValue,
     this.hintText,
     this.searchText='Rechercher un pays',
-    this.invalidNumberMessage='Ce numéro est incorrecte',
+    this.invalidNumberMessage='',
     this.borderSideColor=Colors.black,
     this.focusBorderSideColor=kRoundedCategoryColor,
     this.fillColor=Colors.black,
@@ -23,6 +25,9 @@ class PhoneFormFieldCustom extends StatelessWidget {
     this.onCountryChanged,
     this.onChanged,
     this.onSaved,
+    this.errorBorderColor=Colors.black,
+    this.focusErrorBorderColor=Colors.black,
+    this.validator,
   }) : super(key: key);
 
   final String? initialCountryCode;
@@ -31,6 +36,8 @@ class PhoneFormFieldCustom extends StatelessWidget {
   final String searchText;
   final String? invalidNumberMessage;
   final Color borderSideColor;
+  final Color errorBorderColor;
+  final Color focusErrorBorderColor;
   final Color focusBorderSideColor;
   final Color fillColor;
   final Color hintTextColor;
@@ -39,6 +46,7 @@ class PhoneFormFieldCustom extends StatelessWidget {
   final void Function(Country)? onCountryChanged;
   final void Function(PhoneNumber)? onChanged;
   final Function(PhoneNumber?)? onSaved;
+  final FutureOr<String?> Function(PhoneNumber?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +74,11 @@ class PhoneFormFieldCustom extends StatelessWidget {
         ),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
-            borderSide: const BorderSide(color: Colors.transparent,)
+            borderSide: BorderSide(color: errorBorderColor,)
         ),
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
-            borderSide: const BorderSide(color: Colors.transparent)
+            borderSide: BorderSide(color: focusErrorBorderColor)
         ),
       ),
       initialCountryCode: 'ML',
@@ -78,6 +86,7 @@ class PhoneFormFieldCustom extends StatelessWidget {
       onCountryChanged: onCountryChanged,
       onSaved: onSaved,
       onChanged: onChanged,
+      validator: validator,
     );
   }
 }

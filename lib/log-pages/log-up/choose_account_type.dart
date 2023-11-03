@@ -1,16 +1,17 @@
+import 'package:deme/provider/type_user_log_up.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
-import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
-import '../../../widgets/phone_form_field_custom.dart';
-import '../../../widgets/profile_img.dart';
-import '../../../widgets/text_form_field_custom.dart';
+import '../../provider/change_log_screen.dart';
 import '../../widgets/list_tile_radio_custom.dart';
+import 'log_up.dart';
 
 class ChooseAccountType extends StatefulWidget {
+  static const String routeName = "choose_account_type";
   const ChooseAccountType({super.key});
 
   @override
@@ -24,6 +25,10 @@ class _Body1State extends State<ChooseAccountType> {
 
   @override
   Widget build(BuildContext context) {
+    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUp>(context);
+    print(typeUserLogUp.typeUserLogUp);
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SafeArea(
@@ -61,6 +66,7 @@ class _Body1State extends State<ChooseAccountType> {
                             setState(() {
                               currentValue = 'organization';
                             });
+                            typeUserLogUp.setTypeUserLogUp(currentValue!);
                           },
                         ),
                         SizedBox(
@@ -74,6 +80,7 @@ class _Body1State extends State<ChooseAccountType> {
                             setState(() {
                               currentValue = 'user';
                             });
+                            typeUserLogUp.setTypeUserLogUp(currentValue!);
                           },
                         ),
                         SizedBox(height: getProportionateScreenHeight(50)),
@@ -82,43 +89,11 @@ class _Body1State extends State<ChooseAccountType> {
                               horizontal: getProportionateScreenWidth(100),
                               vertical: getProportionateScreenHeight(10)),
                           press: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              // si tout est ok on peut maintenant afficher la page succès
-                              //Navigator.pushNamed(context, SignUpAdditionalInfo.routeName);
-                            }
+                            (typeUserLogUp.typeUserLogUp != null)?changeLogScreen.incrementIndex():null;
                           },
                         ),
                         SizedBox(height: getProportionateScreenHeight(20)),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(
-                                0 * fem, 2 * fem, 0 * fem, 0 * fem),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.arrow_back),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Retour',
-                                  style: SafeGoogleFont(
-                                    'Inter',
-                                    fontSize: 16 * ffem,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.2125 * ffem / fem,
-                                    color: Color(0xff000000),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+
                       ],
                     ),
                   )

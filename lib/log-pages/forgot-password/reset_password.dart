@@ -1,4 +1,5 @@
 import 'package:deme/constants.dart';
+import 'package:deme/log-pages/log-in/log_in.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -205,13 +206,14 @@ class _ResetPasswordState extends State<ResetPassword> {
                                     press: () {
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
-                                        // si tout est ok on peut maintenant afficher la page succès
-                                        //Navigator.pushNamed(context, SignUpAdditionalInfo.routeName);
+                                        Navigator.pushNamed(context, LogIn.routeName);
                                       }
                                     },
                                   ),
                                   SizedBox(height: getProportionateScreenHeight(20)),
-                                  TextNavigator(onTap: (){}),
+                                  TextNavigator(text: 'Annuler', onTap: (){
+                                    Navigator.pushNamed(context, LogIn.routeName);
+                                  }),
                                 ],
                               ),
                             )

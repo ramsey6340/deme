@@ -1,7 +1,11 @@
+import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
+import '../../../provider/change_log_screen.dart';
+import '../../../provider/type_user_log_up.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
@@ -28,19 +32,22 @@ class _Body1State extends State<Body2> {
 
   @override
   Widget build(BuildContext context) {
+    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUp>(context);
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SafeArea(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        margin: const EdgeInsets.only(left: 20, right: 20,  bottom: 20),
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 27 * fem),
-              child: Text(
-                'Dite nous plus',
+              child: Text((typeUserLogUp.typeUserLogUp == 'user')?
+                'Dite nous plus':'Dite nous plus sur vôtre organisation',
                 style: GoogleFonts.inter(
                     fontSize: 30 * ffem,
                     fontWeight: FontWeight.w700,
@@ -62,7 +69,7 @@ class _Body1State extends State<Body2> {
                           pressShowImg: () {},
                           showIconModif: true,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Column(
@@ -106,7 +113,25 @@ class _Body1State extends State<Body2> {
                             ),
                           ],
                         ),
-                        SizedBox(height: getProportionateScreenHeight(40)),
+                        (typeUserLogUp.typeUserLogUp == 'organization')? SizedBox(height: getProportionateScreenHeight(20)): SizedBox(),
+                        (typeUserLogUp.typeUserLogUp == 'organization')?
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Matricule de l'organisation",
+                              style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            TextFormFieldCustom(
+                              textInputType: TextInputType.emailAddress,
+                              hintText: 'Matricule',
+                              hintTextColor: Colors.black.withOpacity(kTextFieldOpacity),
+                              cursorColor: kRoundedCategoryColor,
+                            ),
+                          ],
+                        ):SizedBox(),
+                        SizedBox(height: getProportionateScreenHeight(30)),
                         // Bouton de validation
                         NextButton(
                           padding: EdgeInsets.symmetric(
@@ -115,41 +140,16 @@ class _Body1State extends State<Body2> {
                           press: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              // si tout est ok on peut maintenant afficher la page succès
-                              //Navigator.pushNamed(context, SignUpAdditionalInfo.routeName);
+
+                              changeLogScreen.incrementIndex();
                             }
                           },
                         ),
                         SizedBox(height: getProportionateScreenHeight(20)),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(
-                                0 * fem, 2 * fem, 0 * fem, 0 * fem),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.arrow_back),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Retour',
-                                  style: SafeGoogleFont(
-                                    'Inter',
-                                    fontSize: 16 * ffem,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.2125 * ffem / fem,
-                                    color: Color(0xff000000),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        (typeUserLogUp.typeUserLogUp == 'user')?
+                        TextNavigator(text: 'Ignorer', isReturn: false, onTap: (){
+                          changeLogScreen.incrementIndex();
+                        }):SizedBox(),
                       ],
                     ),
                   )

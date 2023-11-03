@@ -1,9 +1,13 @@
 import 'package:deme/models/cause.dart';
+import 'package:deme/provider/change_log_screen.dart';
+import 'package:deme/provider/type_user_log_up.dart';
 import 'package:deme/widgets/checkbox_list_title_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
+import '../../../main_screen.dart';
 import '../../../models/method_payment.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
@@ -11,14 +15,14 @@ import '../../../widgets/cause_card.dart';
 import '../../../widgets/next_button.dart';
 import '../../../widgets/text_navigator.dart';
 
-class Body5 extends StatefulWidget {
-  const Body5({super.key});
+class InitPreferredCause extends StatefulWidget {
+  const InitPreferredCause({super.key});
 
   @override
-  State<Body5> createState() => _Body4State();
+  State<InitPreferredCause> createState() => _Body4State();
 }
 
-class _Body4State extends State<Body5> {
+class _Body4State extends State<InitPreferredCause> {
   List<Cause> causesData = [
     Cause(
         causeId: '1',
@@ -46,6 +50,9 @@ class _Body4State extends State<Body5> {
 
   @override
   Widget build(BuildContext context) {
+    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUp>(context);
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SafeArea(
@@ -56,8 +63,8 @@ class _Body4State extends State<Body5> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              child: Text(
-                'Quel sont vos causes préferé ?',
+              child: Text((typeUserLogUp.typeUserLogUp == 'user')?
+                'Quelle sont vos causes préferé ?':'Quelles sont les causes que vôtre organisation defend ?',
                 style: GoogleFonts.inter(
                     fontSize: 30 * ffem,
                     fontWeight: FontWeight.w700,
@@ -107,11 +114,14 @@ class _Body4State extends State<Body5> {
                       padding: EdgeInsets.symmetric(
                           horizontal: getProportionateScreenWidth(100),
                           vertical: getProportionateScreenHeight(10)),
-                      press: () {}),
+                      press: () {
+                        Navigator.pushNamed(context, MainScreen.routeName);
+                      }
+                  ),
                   SizedBox(height: getProportionateScreenHeight(20)),
                   TextNavigator(
                     onTap: () {
-                      Navigator.pop(context);
+                      changeLogScreen.decrementIndex();
                     },
                   ),
                 ],
@@ -123,75 +133,3 @@ class _Body4State extends State<Body5> {
     );
   }
 }
-
-/*class CauseCard extends StatelessWidget {
-  const CauseCard({
-    super.key,
-    required this.fem,
-    required this.causesData,
-    required this.ffem,
-  });
-
-  final double fem;
-  final List<Cause> causesData;
-  final double ffem;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 15*fem, 0*fem),
-      padding: EdgeInsets.fromLTRB(0*fem, 12*fem, 0*fem, 0*fem),
-      width: 180*fem,
-      decoration: BoxDecoration (
-        borderRadius: BorderRadius.circular(20*fem),
-        image: DecorationImage (
-          fit: BoxFit.cover,
-          image: AssetImage (
-            causesData[index].imageUrl,
-          ),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 15*fem, 104*fem),
-            width: 24*fem,
-            height: 24*fem,
-            child: Checkbox(
-              value: false,
-              onChanged: (value) {},
-              side: BorderSide(color: Colors.white, width: 2),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            ),
-          ),
-          Container(
-            // group6Gpr (I10:266;10:262)
-            width: double.infinity,
-            height: 40*fem,
-            decoration: BoxDecoration (
-              color: Color(0xc6000000),
-              borderRadius: BorderRadius.only (
-                bottomRight: Radius.circular(20*fem),
-                bottomLeft: Radius.circular(20*fem),
-              ),
-            ),
-            child: Center(
-              child: Text(
-                causesData[index].name,
-                textAlign: TextAlign.center,
-                style: SafeGoogleFont (
-                  'Inter',
-                  fontSize: 20*ffem,
-                  fontWeight: FontWeight.w500,
-                  height: 1.2125*ffem/fem,
-                  color: Color(0xffffffff),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}*/

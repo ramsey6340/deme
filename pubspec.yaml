@@ -39,6 +39,8 @@ dependencies:
   google_fonts: ^6.1.0
   intl_phone_field: ^3.2.0
   flutter_svg: ^2.0.9
+  persistent_bottom_nav_bar: ^5.0.2
+  font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
   flutter_test:

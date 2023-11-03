@@ -1,3 +1,4 @@
+import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../constants.dart';
@@ -59,13 +60,6 @@ class Body extends StatelessWidget {
                   ),
                 ),
               ),
-              /*GestureDetector(
-                onTap: (){},
-                child: const Text(
-                  "Renvoyer le code OTP",
-                  style: TextStyle(decoration: TextDecoration.underline),
-                ),
-              ),*/
             ],
           ),
         ),

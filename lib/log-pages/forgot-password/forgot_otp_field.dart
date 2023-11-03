@@ -1,4 +1,5 @@
 import 'package:deme/constants.dart';
+import 'package:deme/log-pages/forgot-password/reset_password.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -146,13 +147,12 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
                                     press: () {
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
-                                        // si tout est ok on peut maintenant afficher la page succès
-                                        //Navigator.pushNamed(context, SignUpAdditionalInfo.routeName);
+                                        Navigator.pushNamed(context, ResetPassword.routeName);
                                       }
                                     },
                                   ),
                                   SizedBox(height: getProportionateScreenHeight(20)),
-                                  TextNavigator(onTap: (){}),
+                                  TextNavigator(onTap: (){Navigator.pop(context);}),
                                 ],
                               ),
                             )
