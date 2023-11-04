@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
-class ChangeLogScreen with ChangeNotifier{
+class ChangeLogScreenProvider with ChangeNotifier{
   int logIndex = 0;
 
   void incrementIndex() {

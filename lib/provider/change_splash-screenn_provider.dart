@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ChangeSplashScreen with ChangeNotifier{
+class ChangeSplashScreenProvider with ChangeNotifier{
   int splashIndex = 0;
 
   void incrementIndex() {

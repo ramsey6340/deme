@@ -1,4 +1,4 @@
-import 'package:deme/provider/type_user_log_up.dart';
+import 'package:deme/provider/type_user_log_up_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
 import '../../../widgets/next_button.dart';
-import '../../provider/change_log_screen.dart';
+import '../../provider/change_log_screen_provider.dart';
 import '../../widgets/list_tile_radio_custom.dart';
 import 'log_up.dart';
 
@@ -25,8 +25,8 @@ class _Body1State extends State<ChooseAccountType> {
 
   @override
   Widget build(BuildContext context) {
-    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
-    final typeUserLogUp = Provider.of<TypeUserLogUp>(context);
+    final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
     print(typeUserLogUp.typeUserLogUp);
 
     double fem = MediaQuery.of(context).size.width / baseWidth;

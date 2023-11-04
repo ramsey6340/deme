@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
-import '../../../provider/change_log_screen.dart';
-import '../../../provider/type_user_log_up.dart';
+import '../../../provider/change_log_screen_provider.dart';
+import '../../../provider/type_user_log_up_provider.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
@@ -33,12 +33,12 @@ class _Body1State extends State<Body1> {
 
   @override
   Widget build(BuildContext context) {
-    final typeUserLogUp = Provider.of<TypeUserLogUp>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SafeArea(
-      child: Consumer<ChangeLogScreen>(
+      child: Consumer<ChangeLogScreenProvider>(
         builder: (context, changeLogScreen, child) => Container(
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           width: double.infinity,

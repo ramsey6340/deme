@@ -1,4 +1,4 @@
-import 'package:deme/provider/change_log_screen.dart';
+import 'package:deme/provider/change_log_screen_provider.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +45,7 @@ class _OTPFormState extends State<OTPForm> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
+    final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
     return Form(
       key: _formKey,
       child: Column(

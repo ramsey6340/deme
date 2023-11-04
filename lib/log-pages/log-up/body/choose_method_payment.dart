@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../models/method_payment.dart';
-import '../../../provider/change_log_screen.dart';
+import '../../../provider/change_log_screen_provider.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
@@ -74,7 +74,7 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
 
   @override
   Widget build(BuildContext context) {
-    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
+    final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;

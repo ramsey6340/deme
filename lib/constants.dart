@@ -9,6 +9,7 @@ const kAnimationDuration = Duration(milliseconds: 200);
 double baseWidth = 428;
 
 const kNumberOfLogUpPage = 7;
+const kNumberOfHomeOption = 2;
 
 // Decoration correspondant à chaque cellule du formulaire OTP
 final otpFieldDecoration = InputDecoration(

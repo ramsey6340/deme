@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
-import '../../../provider/change_log_screen.dart';
+import '../../../provider/change_log_screen_provider.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
@@ -12,7 +12,7 @@ class FinishLogMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
+    final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;

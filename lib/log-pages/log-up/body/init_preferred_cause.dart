@@ -1,6 +1,6 @@
 import 'package:deme/models/cause.dart';
-import 'package:deme/provider/change_log_screen.dart';
-import 'package:deme/provider/type_user_log_up.dart';
+import 'package:deme/provider/change_log_screen_provider.dart';
+import 'package:deme/provider/type_user_log_up_provider.dart';
 import 'package:deme/widgets/checkbox_list_title_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,8 +50,8 @@ class _Body4State extends State<InitPreferredCause> {
 
   @override
   Widget build(BuildContext context) {
-    final changeLogScreen = Provider.of<ChangeLogScreen>(context);
-    final typeUserLogUp = Provider.of<TypeUserLogUp>(context);
+    final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;

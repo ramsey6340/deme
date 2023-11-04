@@ -2,9 +2,11 @@ import 'package:deme/main-pages/donation/donation.dart';
 import 'package:deme/main-pages/given/given.dart';
 import 'package:deme/main-pages/organization/organization.dart';
 import 'package:deme/main-pages/testimory/testimory.dart';
+import 'package:deme/provider/home_page_menu_option_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:provider/provider.dart';
 
 import 'main-pages/home/home.dart';
 
@@ -63,15 +65,20 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: controller,
-      items: navBarItems(),
-      backgroundColor: Colors.white,
-      hideNavigationBarWhenKeyboardShows: true,
-      popAllScreensOnTapOfSelectedTab: true,
-      navBarStyle: NavBarStyle.style3,
-      screens: screens(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => HomePageMenuOptionProvider()),
+      ],
+      child: PersistentTabView(
+        context,
+        controller: controller,
+        items: navBarItems(),
+        backgroundColor: Colors.white,
+        hideNavigationBarWhenKeyboardShows: true,
+        popAllScreensOnTapOfSelectedTab: true,
+        navBarStyle: NavBarStyle.style3,
+        screens: screens(),
+      ),
     );
   }
 }

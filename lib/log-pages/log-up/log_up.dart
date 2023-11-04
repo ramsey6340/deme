@@ -1,7 +1,7 @@
 import 'package:deme/constants.dart';
 import 'package:deme/log-pages/log-up/body/body1.dart';
 import 'package:deme/log-pages/log-up/body/body2.dart';
-import 'package:deme/provider/change_log_screen.dart';
+import 'package:deme/provider/change_log_screen_provider.dart';
 import 'package:deme/widgets/next_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +45,7 @@ class LogUp extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Consumer<ChangeLogScreen>(builder: (context, changeLogScreen, child) => logBodies[changeLogScreen.logIndex]),
+                Consumer<ChangeLogScreenProvider>(builder: (context, changeLogScreen, child) => logBodies[changeLogScreen.logIndex]),
               ],
             ),
           ),

@@ -1,5 +1,5 @@
 import 'package:deme/log-pages/log-up/log_up.dart';
-import 'package:deme/provider/change_splash-screenn.dart';
+import 'package:deme/provider/change_splash-screenn_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,7 @@ class Body extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    final indexSplash = Provider.of<ChangeSplashScreen>(context);
+    final indexSplash = Provider.of<ChangeSplashScreenProvider>(context);
     return SafeArea(
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),

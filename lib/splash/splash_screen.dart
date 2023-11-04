@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/change_splash-screenn.dart';
+import '../provider/change_splash-screenn_provider.dart';
 import '../size_config.dart';
 import 'components/body.dart';
 
@@ -13,8 +13,8 @@ class SplashScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     return Scaffold(
-      body:  ChangeNotifierProvider<ChangeSplashScreen>(
-          create: (BuildContext context) => ChangeSplashScreen(),
+      body:  ChangeNotifierProvider<ChangeSplashScreenProvider>(
+          create: (BuildContext context) => ChangeSplashScreenProvider(),
           child: Body()
       ),
     );

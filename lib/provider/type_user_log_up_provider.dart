@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TypeUserLogUp with ChangeNotifier{
+class TypeUserLogUpProvider with ChangeNotifier{
   // Le type d'utilisateur qui est entrain de s'inscrire (user ou organization)
   String? typeUserLogUp;
 

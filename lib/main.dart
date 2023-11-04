@@ -1,6 +1,6 @@
-import 'package:deme/provider/change_log_screen.dart';
-import 'package:deme/provider/change_splash-screenn.dart';
-import 'package:deme/provider/type_user_log_up.dart';
+import 'package:deme/provider/change_log_screen_provider.dart';
+import 'package:deme/provider/change_splash-screenn_provider.dart';
+import 'package:deme/provider/type_user_log_up_provider.dart';
 import 'package:deme/routes.dart';
 import 'package:deme/size_config.dart';
 import 'package:deme/splash/splash_screen.dart';
@@ -18,8 +18,8 @@ import 'main_screen.dart';
 void main() {
   runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => TypeUserLogUp()),
-        ChangeNotifierProvider(create: (context) => ChangeLogScreen()),
+        ChangeNotifierProvider(create: (context) => TypeUserLogUpProvider()),
+        ChangeNotifierProvider(create: (context) => ChangeLogScreenProvider()),
       ],
     child: const MyApp(),
   ));
