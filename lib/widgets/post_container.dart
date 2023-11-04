@@ -2,9 +2,14 @@ import 'package:deme/constants.dart';
 import 'package:deme/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../models/post.dart';
 
 class PostContainer extends StatefulWidget {
-  const PostContainer({super.key});
+  const PostContainer({super.key, required this.post});
+  final Post post;
+
   @override
   State<PostContainer> createState() => _PostContainerState();
 }
@@ -33,7 +38,7 @@ class _PostContainerState extends State<PostContainer> {
               children: [
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage: AssetImage('assets/data_test/avatar.png'),
+                  backgroundImage: AssetImage(widget.post.activity.assignment.organization.imageUrl),
                 ),
                 SizedBox(width: getProportionateScreenWidth(8),),
                 Column(
@@ -41,17 +46,17 @@ class _PostContainerState extends State<PostContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'UNHCR',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
+                      widget.post.activity.assignment.organization.name,
+                      style: GoogleFonts.workSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500
                       ),
                     ),
                     SizedBox(height: 5),
                     Text(
-                      'Aidons Gao fasse aux terroristes',
-                      style: TextStyle(
-                        fontSize: 15,
+                      widget.post.activity.title,
+                      style: GoogleFonts.workSans(
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -61,6 +66,7 @@ class _PostContainerState extends State<PostContainer> {
             (imageEmpty)
                 ? const SizedBox.shrink()
                 : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 15),
                 Container(
@@ -68,13 +74,17 @@ class _PostContainerState extends State<PostContainer> {
                   decoration: BoxDecoration(
                       color: kPrimaryColor,
                       borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
+                      image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage('assets/data_test/education.png'),
+                        image: AssetImage(widget.post.imageUrl!),
                       )),
                 ),
                 const SizedBox(height: 10,),
-                const Text("Un réfugié quitte son pays non pas parce qu'il le veut, mais parce qu'il le faut. Il ne devrait jamais être nécessaire de devenir un réfugié...")
+                Text(widget.post.description,
+                  style: GoogleFonts.workSans(
+                    fontSize: 14,
+                  ),textAlign: TextAlign.start,
+                )
               ],
             ),
             SizedBox(height: 15),
@@ -110,9 +120,13 @@ class _PostContainerState extends State<PostContainer> {
                     IconButton(
                       icon: Icon(
                         isLiked ? Icons.favorite : Icons.favorite_border,
-                        color: isLiked ? Colors.blue : Colors.black,
+                        color: isLiked ? kPrimaryColor : Colors.black,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          isLiked = !isLiked;
+                        });
+                      },
                     ),
                     Text(
                       '$likesCount',
