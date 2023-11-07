@@ -67,7 +67,7 @@ class _Body1State extends State<Body2> {
                         ProfileImg(
                           profileImg: 'assets/data_test/avatar.png',
                           pressShowImg: () {},
-                          showIconModif: true,
+                          showIconAction: true,
                         ),
                         const SizedBox(
                           height: 20,

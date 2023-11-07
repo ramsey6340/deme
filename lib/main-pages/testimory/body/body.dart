@@ -1,20 +1,20 @@
+import 'package:deme/models/post.dart';
+import 'package:deme/services/post_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../data-test/data_test.dart';
-import '../../../models/post.dart';
-import '../../../services/post_service.dart';
 import '../../../widgets/post_container.dart';
 import '../../../widgets/post_shimmer.dart';
 
-class ActivityPage extends StatefulWidget {
-  const ActivityPage({super.key});
+class Body extends StatefulWidget {
+  const Body({super.key});
 
   @override
-  State<ActivityPage> createState() => _ActivityPageState();
+  State<Body> createState() => _BodyState();
 }
 
-class _ActivityPageState extends State<ActivityPage> {
+class _BodyState extends State<Body> {
   late Future<List<Post>?> futurePosts;
   PostService postService = PostService();
 

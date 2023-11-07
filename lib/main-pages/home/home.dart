@@ -3,6 +3,7 @@ import 'package:deme/main-pages/home/body/campaign_page.dart';
 import 'package:deme/provider/home_page_menu_option_provider.dart';
 import 'package:deme/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../data-test/data_test.dart';
 import '../../widgets/app_bar_custom.dart';
@@ -18,46 +19,49 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool isActivitySelected = true;
 
   List<Widget> homePages = [ActivityPage(), CampaignPage()];
   @override
   Widget build(BuildContext context) {
-    final homePageMenuOptionProvider = Provider.of<HomePageMenuOptionProvider>(context);
-    return Scaffold(
-      appBar: AppBarCustom(
-        title: 'Accueil',
-        onLeadingPress: () {},
-        onTrailingPress: () {},
-      ),
-      body: Column(
-        children: [
-          PhysicalModel(
-            elevation: 6, // Ajustez cette valeur pour contrôler l'élévation
-            shadowColor: Colors.black, // Couleur de l'ombre
-            color: Colors.white, // Couleur du conteneur
-
-            child: SizedBox(
-              height: MediaQuery.sizeOf(context).height * 0.07,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ButtonChip(press: () {
-                    setState(() {
-                      homePageMenuOptionProvider.setMenuOptionIndex(0);
-                  });
-                    }, text: 'Activités', isSelected: homePageMenuOptionProvider.menuOptionIndex==0),
-                  SizedBox(width: getProportionateScreenWidth(20),),
-                  ButtonChip(press: () {
-                    setState(() {
-                      homePageMenuOptionProvider.setMenuOptionIndex(1);
-                  }); }, text: 'Campagnes', isSelected: homePageMenuOptionProvider.menuOptionIndex==1,),
-                ],
+    return DefaultTabController(
+      length: homePages.length,
+      child: Scaffold(
+        appBar: AppBar(
+          surfaceTintColor: Colors.white,
+          centerTitle: true,
+          title: Text('Accueil', style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w400), overflow: TextOverflow.ellipsis,),
+          leading: IconButton(icon: Icon(Icons.account_circle_rounded), onPressed: (){},),
+          actions: [
+            IconButton(icon: Icon(Icons.map), onPressed: (){},),
+          ],
+          bottom: TabBar(
+            labelColor: kPrimaryColor,
+            dividerColor: Colors.grey,
+            indicatorColor: kPrimaryColor,
+            unselectedLabelColor: Colors.grey,
+            indicator: UnderlineTabIndicator(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: kPrimaryColor, // Couleur noire avec opacité
+                width: 3, // Largeur de la ligne de délimitation
               ),
             ),
+            labelStyle: const TextStyle(
+              backgroundColor: Colors.transparent, // Fond transparent pour le texte de l'onglet sélectionné
+            ),
+            unselectedLabelStyle: const TextStyle(
+              backgroundColor: Colors.transparent, // Fond transparent pour le texte de l'onglet non sélectionné
+            ),
+
+            tabs: [
+              Tab(icon: Text("Activités", style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, backgroundColor: Colors.transparent),)),
+              Tab(icon: Text("Campagnes", style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold))),
+            ],
           ),
-          Expanded(child: homePages[homePageMenuOptionProvider.menuOptionIndex]),
-        ],
+        ),
+        body: TabBarView(
+          children: homePages,
+        ),
       ),
     );
   }

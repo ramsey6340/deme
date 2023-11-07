@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'body/body.dart';
 import '../../widgets/app_bar_custom.dart';
 
 class Testimory extends StatelessWidget {
@@ -9,9 +9,7 @@ class Testimory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarCustom(title: 'Témoignages', onLeadingPress: () {  }, onTrailingPress: () {  },),
-      body: Center(
-        child: Text("Temognage"),
-      ),
+      body: Body(),
     );
   }
 }

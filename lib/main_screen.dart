@@ -1,13 +1,14 @@
-import 'package:deme/main-pages/donation/donation.dart';
 import 'package:deme/main-pages/given/given.dart';
 import 'package:deme/main-pages/organization/organization.dart';
 import 'package:deme/main-pages/testimory/testimory.dart';
+import 'package:deme/provider/given_page_menu_option.dart';
 import 'package:deme/provider/home_page_menu_option_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 
+import 'main-pages/demand-page/demand_page.dart';
 import 'main-pages/home/home.dart';
 
 class MainScreen extends StatefulWidget {
@@ -58,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
 
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
   List<Widget> screens() {
-    return [Home(), Organization(), Testimory(), Donation(), Given()];
+    return [Home(), Organization(), Testimory(), DemandPage(), Given()];
   }
 
 
@@ -68,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomePageMenuOptionProvider()),
+        ChangeNotifierProvider(create: (context) => GivenPageMenuOptionProvider()),
       ],
       child: PersistentTabView(
         context,

@@ -25,10 +25,9 @@ class _PostContainerState extends State<PostContainer> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Container(
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.black.withOpacity(0.5), width: 0.5)
-          )
-        ),
+            border: Border(
+                bottom: BorderSide(
+                    color: Colors.black.withOpacity(0.5), width: 0.5))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,19 +37,29 @@ class _PostContainerState extends State<PostContainer> {
               children: [
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage: AssetImage(widget.post.activity.assignment.organization.imageUrl),
+                  backgroundImage: AssetImage(
+                      widget.post.activity.assignment.organization.imageUrl),
                 ),
-                SizedBox(width: getProportionateScreenWidth(8),),
+                SizedBox(
+                  width: getProportionateScreenWidth(8),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.post.activity.assignment.organization.name,
-                      style: GoogleFonts.workSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500
-                      ),
+                    Text.rich(
+                      TextSpan(
+                          text:
+                              widget.post.activity.assignment.organization.name,
+                          style: GoogleFonts.workSans(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          children: [
+                            TextSpan(
+                                text:
+                                    '\n@${widget.post.activity.assignment.cause.name.toLowerCase()}',
+                                style: GoogleFonts.workSans(
+                                    fontSize: 12, color: kPrimaryColor))
+                          ]),
                     ),
                     SizedBox(height: 5),
                     Text(
@@ -63,30 +72,34 @@ class _PostContainerState extends State<PostContainer> {
                 ),
               ],
             ),
-            (imageEmpty)
-                ? const SizedBox.shrink()
-                : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 15),
-                Container(
-                  height: getProportionateScreenHeight(200),
-                  decoration: BoxDecoration(
-                      color: kPrimaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(widget.post.imageUrl!),
-                      )),
-                ),
-                const SizedBox(height: 10,),
-                Text(widget.post.description,
-                  style: GoogleFonts.workSans(
-                    fontSize: 14,
-                  ),textAlign: TextAlign.start,
-                )
-              ],
-            ),
+            Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 15),
+                      Container(
+                        height: (widget.post.imageUrl != null)?getProportionateScreenHeight(200):0,
+                        decoration: (widget.post.imageUrl != null)?BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                            image:  DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(widget.post.imageUrl!),
+                            )):BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        widget.post.description,
+                        style: GoogleFonts.workSans(
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.start,
+                      )
+                    ],
+                  ),
             SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -102,7 +115,9 @@ class _PostContainerState extends State<PostContainer> {
                     ),
                   ],
                 ),
-                SizedBox(width: getProportionateScreenWidth(10),),
+                SizedBox(
+                  width: getProportionateScreenWidth(10),
+                ),
                 Row(
                   children: [
                     IconButton(
@@ -114,7 +129,9 @@ class _PostContainerState extends State<PostContainer> {
                     ),
                   ],
                 ),
-                SizedBox(width: getProportionateScreenWidth(10),),
+                SizedBox(
+                  width: getProportionateScreenWidth(10),
+                ),
                 Row(
                   children: [
                     IconButton(

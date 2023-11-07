@@ -10,6 +10,7 @@ double baseWidth = 428;
 
 const kNumberOfLogUpPage = 7;
 const kNumberOfHomeOption = 2;
+const kNumberOfGivenOption = 2;
 
 // Decoration correspondant à chaque cellule du formulaire OTP
 final otpFieldDecoration = InputDecoration(

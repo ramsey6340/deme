@@ -3,11 +3,25 @@ import 'package:flutter_svg/svg.dart';
 
 
 class ProfileImg extends StatelessWidget {
-  const ProfileImg({Key? key, required this.profileImg, this.pressShowImg, this.pressModifImg, this.showIconModif=false,}) : super(key: key);
+  const ProfileImg({
+    Key? key,
+    required this.profileImg,
+    this.pressShowImg,
+    this.pressModifImg,
+    this.showIconAction=false,
+    this.iconMinimal=Icons.camera_alt,
+    this.iconMinimalColor=Colors.black,
+    this.iconMinimalSize=30,
+    this.backgroundIconMinimal=const Color(0xFFF5F6F9),
+  }) : super(key: key);
   final String profileImg;
   final Function()? pressShowImg;
   final Function()? pressModifImg;
-  final bool showIconModif;
+  final bool showIconAction;
+  final IconData iconMinimal;
+  final Color iconMinimalColor;
+  final Color backgroundIconMinimal;
+  final double iconMinimalSize;
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +39,13 @@ class ProfileImg extends StatelessWidget {
             right: 0,
             child: GestureDetector(
               onTap: pressModifImg,
-              child: (showIconModif)?Container(
+              child: (showIconAction)?Container(
                 padding: const EdgeInsets.all(5),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF5F6F9),
+                decoration: BoxDecoration(
+                  color: backgroundIconMinimal,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.camera_alt),
+                child: Icon(iconMinimal, color: iconMinimalColor, size: iconMinimalSize,),
               ):null,
             ),
           )
