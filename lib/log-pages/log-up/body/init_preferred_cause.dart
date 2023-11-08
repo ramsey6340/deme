@@ -115,7 +115,7 @@ class _Body4State extends State<InitPreferredCause> {
                           horizontal: getProportionateScreenWidth(100),
                           vertical: getProportionateScreenHeight(10)),
                       press: () {
-                        Navigator.pushNamed(context, MainScreen.routeName);
+                        Navigator.pushNamedAndRemoveUntil(context, MainScreen.routeName, (route) => false);
                       }
                   ),
                   SizedBox(height: getProportionateScreenHeight(20)),

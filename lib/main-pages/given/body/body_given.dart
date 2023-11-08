@@ -14,7 +14,6 @@ class BodyGiven extends StatefulWidget {
 }
 
 class _BodyGivenState extends State<BodyGiven> {
-
   List<Widget> givenPages = [FinancialPage(), MaterialPageGiven()];
   TextEditingController textController = TextEditingController();
   @override
@@ -25,7 +24,11 @@ class _BodyGivenState extends State<BodyGiven> {
         appBar: AppBar(
           surfaceTintColor: Colors.white,
           centerTitle: true,
-          title: Text('${widget.organization.name}', style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w400), overflow: TextOverflow.ellipsis,),
+          title: Text(
+            '${widget.organization.name}',
+            style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w400),
+            overflow: TextOverflow.ellipsis,
+          ),
           bottom: TabBar(
             labelColor: kPrimaryColor,
             dividerColor: Colors.black.withOpacity(0.8),
@@ -39,15 +42,26 @@ class _BodyGivenState extends State<BodyGiven> {
               ),
             ),
             labelStyle: const TextStyle(
-              backgroundColor: Colors.transparent, // Fond transparent pour le texte de l'onglet sélectionné
+              backgroundColor: Colors
+                  .transparent, // Fond transparent pour le texte de l'onglet sélectionné
             ),
             unselectedLabelStyle: const TextStyle(
-              backgroundColor: Colors.transparent, // Fond transparent pour le texte de l'onglet non sélectionné
+              backgroundColor: Colors
+                  .transparent, // Fond transparent pour le texte de l'onglet non sélectionné
             ),
-
             tabs: [
-              Tab(icon: Text("Financier", style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, backgroundColor: Colors.transparent),)),
-              Tab(icon: Text("Materiel", style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold))),
+              Tab(
+                  icon: Text(
+                "Financier",
+                style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    backgroundColor: Colors.transparent),
+              )),
+              Tab(
+                  icon: Text("Materiel",
+                      style: GoogleFonts.inter(
+                          fontSize: 18, fontWeight: FontWeight.bold))),
             ],
           ),
         ),

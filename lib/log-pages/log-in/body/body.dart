@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
+import '../../../main_screen.dart';
 import '../../../provider/change_log_screen_provider.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
@@ -171,6 +172,7 @@ class _Body1State extends State<Body> {
                             press: () {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
+                                Navigator.pushNamedAndRemoveUntil(context, MainScreen.routeName, (route) => false);
                               }
                             },
                           ),

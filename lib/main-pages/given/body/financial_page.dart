@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:deme/constants.dart';
 import 'package:deme/models/method_payment.dart';
 import 'package:deme/services/method_payment_service.dart';
@@ -44,33 +45,64 @@ class _FinancialPageState extends State<FinancialPage> {
         key: formKey,
         child: ListView(
           children: [
-            SizedBox(height: getProportionateScreenHeight(40),),
-            Text("Vous faite don de ", style: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 20),),
-            SizedBox(height: getProportionateScreenHeight(20),),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(10)),
-                  child: TextField(
-                    controller: textEditingController,
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.center,
-                    cursorColor: kPrimaryColor,
-                    style: GoogleFonts.inter(fontSize: 36, fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(
-                      hintText: "Montant",
-                      hintStyle: GoogleFonts.inter(fontWeight: FontWeight.normal, fontSize: 24),
-                      suffixIcon: Text("fcfa", style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: kPrimaryColor), textAlign: TextAlign.center,),
-                      enabledBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2.0), // Personnalisez la couleur et l'épaisseur ici
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2.0), // Personnalisez la couleur et l'épaisseur ici
-                      ),
-                    ),
-                  )
+            SizedBox(
+              height: getProportionateScreenHeight(40),
             ),
-            SizedBox(height: getProportionateScreenHeight(80),),
-            Text("Mode de paiement", style: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 20),),
-            SizedBox(height: getProportionateScreenHeight(10),),
+            Text(
+              "Vous faite don de ",
+              style:
+                  GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 20),
+            ),
+            SizedBox(
+              height: getProportionateScreenHeight(20),
+            ),
+            Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: getProportionateScreenWidth(10)),
+                child: TextField(
+                  controller: textEditingController,
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                  cursorColor: kPrimaryColor,
+                  style: GoogleFonts.inter(
+                      fontSize: 36, fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                    hintText: "Montant",
+                    hintStyle: GoogleFonts.inter(
+                        fontWeight: FontWeight.normal, fontSize: 24),
+                    suffixIcon: Text(
+                      "fcfa",
+                      style: GoogleFonts.inter(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: kPrimaryColor),
+                      textAlign: TextAlign.center,
+                    ),
+                    enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.black,
+                          width:
+                              2.0), // Personnalisez la couleur et l'épaisseur ici
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.black,
+                          width:
+                              2.0), // Personnalisez la couleur et l'épaisseur ici
+                    ),
+                  ),
+                )),
+            SizedBox(
+              height: getProportionateScreenHeight(80),
+            ),
+            Text(
+              "Mode de paiement",
+              style:
+                  GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 20),
+            ),
+            SizedBox(
+              height: getProportionateScreenHeight(10),
+            ),
             FutureBuilder(
               future: futureMethodPayment,
               builder: (context, snapshot) {
@@ -83,29 +115,52 @@ class _FinancialPageState extends State<FinancialPage> {
                     ),
                     // Add more decoration..
                   ),
-                  hint: (snapshot.hasData)?
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(backgroundImage: AssetImage(snapshot.data![0].imageUrl), radius: 20,),
-                      Text(snapshot.data![0].name, style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w500),),
-                    ],
-                  ):const Text("Choisissez un mode de paiement"),
-                  items: (snapshot.hasData)?snapshot.data
-                      ?.map((methodPayment) => DropdownMenuItem<MethodPayment>(
-                    value: methodPayment,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(backgroundImage: AssetImage(methodPayment.imageUrl), radius: 20,),
-                        const SizedBox(width: 10,),
-                        Text(methodPayment.name, style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w500),),
-                      ],
-                    ),
-                  ))
-                      .toList():[],
+                  hint: (snapshot.hasData)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:
+                                  AssetImage(snapshot.data![0].imageUrl),
+                              radius: 20,
+                            ),
+                            Text(
+                              snapshot.data![0].name,
+                              style: GoogleFonts.inter(
+                                  fontSize: 20, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        )
+                      : const Text("Choisissez un mode de paiement"),
+                  items: (snapshot.hasData)
+                      ? snapshot.data
+                          ?.map((methodPayment) =>
+                              DropdownMenuItem<MethodPayment>(
+                                value: methodPayment,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage(methodPayment.imageUrl),
+                                      radius: 20,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      methodPayment.name,
+                                      style: GoogleFonts.inter(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                          .toList()
+                      : [],
                   validator: (value) {
                     if (value == null) {
                       return 'Choisisser un mode de paiement';
@@ -140,8 +195,26 @@ class _FinancialPageState extends State<FinancialPage> {
                 );
               },
             ),
-            SizedBox(height: getProportionateScreenHeight(40),),
-            NextButton(text: 'Valider', press: (){}),
+            SizedBox(
+              height: getProportionateScreenHeight(40),
+            ),
+            NextButton(text: 'Valider', press: () {
+
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.success,
+                animType: AnimType.rightSlide,
+                titleTextStyle: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 24),
+                descTextStyle: GoogleFonts.inter(fontSize: 16),
+                headerAnimationLoop: false,
+                title: 'Donation reussi',
+                desc:
+                'Vôtre donation a bien été envoyé. Vous pouvez voir le reçu dans votre compte',
+                btnOkOnPress: () {},
+                btnOkIcon: Icons.check_circle,
+                btnOkColor: Colors.green,
+              ).show();
+            }),
           ],
         ),
       ),

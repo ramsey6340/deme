@@ -1,4 +1,5 @@
 import 'package:deme/models/organization.dart';
+import '../models/address.dart';
 import '../models/demand.dart';
 import '../models/activity.dart';
 import '../models/assignment.dart';
@@ -9,9 +10,9 @@ import '../models/user.dart';
 
 // Les users
 List<User> users = [
-  User(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png'),
-  User(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png'),
-  User(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png')
+  User(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', address: addresses[0]),
+  User(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', address: addresses[1]),
+  User(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', address: addresses[2])
 ];
 
 // Les cause
@@ -24,11 +25,11 @@ List<Cause> causes = [
 
 // Les organisations
 List<Organization> organizations = [
-  Organization(organizationId: '1', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1910', nbSubscription: 20307),
-  Organization(organizationId: '2', name: "UNICEF", imageUrl: 'assets/data_test/o2.png', isValid: true, isVerified: false, matricule: 'HD78NLSPAIDP', type: 'Fondation', startDateExercise: '21/01/1950', nbSubscription: 10307),
-  Organization(organizationId: '3', name: "Sauvons les enfants", imageUrl: 'assets/data_test/o3.png', isValid: false, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/1810', nbSubscription: 104),
-  Organization(organizationId: '4', name: "Diversity", imageUrl: 'assets/data_test/o4.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1990', nbSubscription: 1000420),
-  Organization(organizationId: '5', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/2000', nbSubscription: 2345),
+  Organization(organizationId: '1', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1910', nbSubscription: 20307, login: 'UNHCR', address: addresses[0]),
+  Organization(organizationId: '2', name: "UNICEF", imageUrl: 'assets/data_test/o2.png', isValid: true, isVerified: false, matricule: 'HD78NLSPAIDP', type: 'Fondation', startDateExercise: '21/01/1950', nbSubscription: 10307, login: 'UNICEF', address: addresses[0]),
+  Organization(organizationId: '3', name: "Sauvons les enfants", imageUrl: 'assets/data_test/o3.png', isValid: false, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/1810', nbSubscription: 104, login: 'Sauvons les enfants', address: addresses[0]),
+  Organization(organizationId: '4', name: "Diversity", imageUrl: 'assets/data_test/o4.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1990', nbSubscription: 1000420, login: 'Diversity', address: addresses[0]),
+  Organization(organizationId: '5', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/2000', nbSubscription: 2345, login: 'UNHCR', address: addresses[0]),
 ];
 
 // Les assignments
@@ -85,4 +86,11 @@ List<MethodPayment> methodsPayment = [
   MethodPayment(methodPaymentId: '6', name: 'Moov Money', description: 'Moov Money est pour Moov Africa', imageUrl: 'assets/data_test/mm_logo.png', termsOfUse: null),
   MethodPayment(methodPaymentId: '7', name: 'Sama Money', description: 'Sama Money est pour Sama', imageUrl: 'assets/data_test/sm_logo.png', termsOfUse: null),
   MethodPayment(methodPaymentId: '8', name: 'Pay Pal', description: 'Pay Pal est pour Pay Pal', imageUrl: 'assets/data_test/pp_logo.jpg', termsOfUse: null),
+];
+
+// Les adresses
+List<Address> addresses = [
+  Address(addressId: '1', country: 'Mali', city: 'Bamako', neighborhood: 'Kalanbankoro ACI', geolocation: 'https://maps.google.com/q=1.3,3.6'),
+  Address(addressId: '2', country: 'Mali', city: 'Bamako', neighborhood: 'Att bougou 759', geolocation: 'https://maps.google.com/q=1.3,3.6'),
+  Address(addressId: '3', country: 'Mali', city: 'Sikasso', neighborhood: 'Faladie IJA', geolocation: 'https://maps.google.com/q=1.3,3.6'),
 ];

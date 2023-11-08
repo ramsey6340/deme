@@ -39,7 +39,6 @@ class _GivenState extends State<Given> {
 
   TextEditingController textController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,59 +47,85 @@ class _GivenState extends State<Given> {
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
-          child: Container(color: Colors.black.withOpacity(0.5), height: 1,),
+          child: Container(
+            color: Colors.black.withOpacity(0.5),
+            height: 1,
+          ),
         ),
-        title: Text('Faire un don', style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w400), overflow: TextOverflow.ellipsis,),
-        leading: IconButton(icon: Icon(Icons.account_circle_rounded, size: 30,), onPressed: (){},),
+        title: Text(
+          'Faire un don',
+          style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w400),
+          overflow: TextOverflow.ellipsis,
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.account_circle_rounded,
+            size: 30,
+          ),
+          onPressed: () {},
+        ),
         actions: [
           AnimSearchWidgetCustom(
             boxShadow: false,
             color: Colors.transparent,
             textFieldColor: Colors.grey.withOpacity(0.5),
             helpText: 'Rechercher...',
-            width: getProportionateScreenWidth(280),
+            width: getProportionateScreenWidth(300),
             textController: textController,
             onSuffixTap: () {
               setState(() {
                 textController.clear();
               });
-            }, onSubmitted: (value) {  },
+            },
+            onSubmitted: (value) {},
           ),
-
-          IconButton(icon: Icon(Icons.map,), onPressed: (){},),
+          SizedBox(width: 20,),
         ],
       ),
       body: FutureBuilder(
         future: futureOrganization,
         builder: (context, snapshot) {
-          return (snapshot.hasData)?
-          GridView.count(
-            childAspectRatio: 0.8,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 10,
-            crossAxisCount: 2,
-            children: List.generate(snapshot.data!.length, (index) => OrganizationContainer(organization: snapshot.data![index], showFollowButton: false, onTapOrga: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => BodyGiven(organization: snapshot.data![index])));
-            },)),
-          ):
-          Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
-            enabled: true,
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 cartes par ligne
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
-                childAspectRatio: 0.8, // Ajustez l'aspect ratio selon vos besoins
-              ),
-              itemBuilder: (context, index) {
-                return OrganizationShimmer();
-              },
-
-            ),
-          );
+          return (snapshot.hasData)
+              ? GridView.count(
+                  childAspectRatio: 0.8,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  children: List.generate(
+                      snapshot.data!.length,
+                      (index) => OrganizationContainer(
+                            organization: snapshot.data![index],
+                            showFollowButton: false,
+                            onTapOrga: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BodyGiven(
+                                          organization:
+                                              snapshot.data![index])));
+                            },
+                          )),
+                )
+              : Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  enabled: true,
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 cartes par ligne
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      childAspectRatio:
+                          0.8, // Ajustez l'aspect ratio selon vos besoins
+                    ),
+                    itemBuilder: (context, index) {
+                      return OrganizationShimmer();
+                    },
+                  ),
+                );
         },
       ),
     );
