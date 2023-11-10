@@ -220,27 +220,26 @@ class _AccountPageState extends State<AccountPage> {
             ),
           ),
           SliverPersistentHeader(
-                  delegate: _SliverAppBarDelegate(
-                    const TabBar(
-                      labelColor: kPrimaryColor,
-                      indicatorColor: kPrimaryColor,
-                      tabs: [
-                        Tab(text: "Paramètres"),
-                        Tab(text: "Activités"),
-                        Tab(text: "Campagnes"),
-                      ],
-                    ),
-                  ),
-                  pinned: true,
-                ),
+            delegate: _SliverAppBarDelegate(
+              const TabBar(
+                labelColor: kPrimaryColor,
+                indicatorColor: kPrimaryColor,
+                tabs: [
+                  Tab(text: "Paramètres"),
+                  Tab(text: "Activités"),
+                  Tab(text: "Campagnes"),
+                ],
+              ),
+            ),
+            pinned: true,
+          ),
 
-                // SliverFillRemaining for the content
-                SliverFillRemaining(
-                  child: TabBarView(
-                    children: accountPages,
-                  ),
-                ),
-
+          // SliverFillRemaining for the content
+          SliverFillRemaining(
+            child: TabBarView(
+              children: accountPages,
+            ),
+          ),
         ]),
       ),
     );
@@ -272,3 +271,4 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return false;
   }
 }
+
