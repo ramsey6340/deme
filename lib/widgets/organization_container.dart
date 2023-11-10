@@ -86,7 +86,8 @@ class _OrganizationContainerState extends State<OrganizationContainer> {
                       ],
                     ),
                   ),
-                  (widget.showFollowButton)?Container(
+                  (widget.showFollowButton)?
+                  Container(
                     width: double.infinity,
                     height: 34,
                     decoration: BoxDecoration (

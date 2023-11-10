@@ -13,6 +13,7 @@ import 'log-pages/forgot-password/reset_password.dart';
 import 'log-pages/log-in/log_in.dart';
 import 'log-pages/log-up/body/otp/otp_screen.dart';
 import 'log-pages/log-up/log_up.dart';
+import 'main-pages/account-page/account_page.dart';
 import 'main_screen.dart';
 
 void main() {
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MainScreen(),
+      home: AccountPage(profileId: '1',),
+      //home: MainScreen(),
       //home: SplashScreen(),
       routes: routes,
     );

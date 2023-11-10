@@ -13,6 +13,7 @@ class ProfileImg extends StatelessWidget {
     this.iconMinimalColor=Colors.black,
     this.iconMinimalSize=30,
     this.backgroundIconMinimal=const Color(0xFFF5F6F9),
+    this.radiusSize=70
   }) : super(key: key);
   final String profileImg;
   final Function()? pressShowImg;
@@ -22,6 +23,7 @@ class ProfileImg extends StatelessWidget {
   final Color iconMinimalColor;
   final Color backgroundIconMinimal;
   final double iconMinimalSize;
+  final double radiusSize;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class ProfileImg extends StatelessWidget {
           GestureDetector(
             onTap: pressShowImg,
             child: CircleAvatar(
-              radius: 70,
+              radius: radiusSize,
               backgroundImage: AssetImage(profileImg),
             ),
           ),

@@ -43,13 +43,13 @@ class _MainScreenState extends State<MainScreen> {
         inactiveColorPrimary: const Color(0xFF676666).withOpacity(0.62),
       ),
       PersistentBottomNavBarItem(
-        icon: FaIcon(FontAwesomeIcons.handshakeAngle),
+        icon: FaIcon(FontAwesomeIcons.handHoldingHand),
         title: ("Démander"),
         activeColorPrimary: Colors.black,
         inactiveColorPrimary: const Color(0xFF676666).withOpacity(0.62),
       ),
       PersistentBottomNavBarItem(
-        icon: FaIcon(FontAwesomeIcons.handHoldingHand),
+        icon: FaIcon(FontAwesomeIcons.handshakeAngle),
         title: ("Donner"),
         activeColorPrimary: Colors.black,
         inactiveColorPrimary: const Color(0xFF676666).withOpacity(0.62),
