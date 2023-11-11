@@ -37,7 +37,7 @@ class _LastDonationState extends State<LastDonation> {
                   itemBuilder: (context, index) {
                     final financialDonation = snapshot.data![index];
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       child: FinancialDonationWidget(
                           financialDonation: financialDonation),
                     );
@@ -47,12 +47,12 @@ class _LastDonationState extends State<LastDonation> {
                   highlightColor: Colors.grey.shade100,
                   enabled: true,
                   child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: 4,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 10,
                       itemBuilder: (context, index) {
                         return Container(
-                            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                            child: FinancialDonationWidgetShimmer());
+                            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            child: const FinancialDonationWidgetShimmer());
                       }),
                 );
         },

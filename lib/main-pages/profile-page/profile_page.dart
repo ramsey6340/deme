@@ -289,10 +289,13 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SliverPersistentHeader(
             delegate: _SliverAppBarDelegate(
-              const TabBar(
+              TabBar(
                 labelColor: kPrimaryColor,
                 indicatorColor: kPrimaryColor,
-                tabs: [
+                labelStyle: GoogleFonts.inter(
+                  fontWeight: FontWeight.bold
+                ),
+                tabs: const [
                   Tab(text: "Paramètres"),
                   Tab(text: "derniers post"),
                   Tab(text: "donations"),
