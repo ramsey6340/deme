@@ -1,45 +1,84 @@
 import 'package:deme/constants.dart';
-import 'package:deme/main-pages/account-page/body/last_activity.dart';
-import 'package:deme/main-pages/account-page/body/last_campaign.dart';
-import 'package:deme/main-pages/account-page/body/setting.dart';
+import 'package:deme/main-pages/profile-page/body/last_post.dart';
+import 'package:deme/main-pages/profile-page/body/last_donation.dart';
+import 'package:deme/main-pages/profile-page/body/setting.dart';
+import 'package:deme/models/organization.dart';
 import 'package:deme/size_config.dart';
 import 'package:deme/widgets/profile_img.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key, required this.profileId});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key, required this.organization});
 
-  final String profileId;
+  final Organization organization;
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
-  List<Widget> accountPages = [Setting(), LastActivity(), LastCampaign()];
+class _ProfilePageState extends State<ProfilePage> {
+  List<Widget> accountPages = [Setting(), LastPost(), LastDonation()];
+
+  String formatNumber(int number) {
+    final f = NumberFormat.compact(locale: 'en');
+    return f.format(number);
+  }
 
   @override
   build(BuildContext context) {
     return DefaultTabController(
       length: accountPages.length,
       child: Scaffold(
+        //appBar: AppBar(),
         body: CustomScrollView(slivers: [
           SliverToBoxAdapter(
             child: Stack(
               alignment: Alignment.center,
               children: [
                 Column(children: [
-                  Container(
-                    width: double.infinity,
-                    height: getProportionateScreenHeight(120),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/data_test/profile_bgd.png'),
-                          fit: BoxFit.fill),
-                    ),
-                    child: Image.asset('assets/data_test/profile_bgd.png'),
+                  Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: getProportionateScreenHeight(120),
+                        decoration: const BoxDecoration(),
+                        child: Image.asset(
+                          'assets/data_test/profile_bgd.png',
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.black,
+                                      size: 30,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   Stack(alignment: Alignment.center, children: [
                     Container(
@@ -55,7 +94,7 @@ class _AccountPageState extends State<AccountPage> {
                           height: getProportionateScreenHeight(60),
                         ),
                         Text(
-                          "Fonds des Nations unies pour les Enfants (UNICEF)",
+                          widget.organization.name,
                           style: GoogleFonts.inter(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -74,12 +113,13 @@ class _AccountPageState extends State<AccountPage> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.white, width: 5),
                       shape: BoxShape.circle),
-                  child: const ProfileImg(
+                  child: ProfileImg(
                     showIconAction: true,
                     iconMinimal: Icons.verified,
                     iconMinimalColor: Colors.green,
                     radiusSize: 60,
-                    profileImg: 'assets/data_test/avatar.png',
+                    //profileImg: 'assets/data_test/avatar.png',
+                    profileImg: widget.organization.imageUrl,
                   ),
                 ),
               ],
@@ -88,7 +128,7 @@ class _AccountPageState extends State<AccountPage> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                Text("@UNICEF",
+                Text("@${widget.organization.login}",
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: Colors.blue,
@@ -109,7 +149,8 @@ class _AccountPageState extends State<AccountPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "20k",
+                          formatNumber(
+                              widget.organization.subscribersId.length),
                           style: GoogleFonts.inter(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
@@ -126,7 +167,7 @@ class _AccountPageState extends State<AccountPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "103",
+                          formatNumber(widget.organization.nbSubscription),
                           style: GoogleFonts.inter(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
@@ -176,17 +217,44 @@ class _AccountPageState extends State<AccountPage> {
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: TextButton.icon(
-                            onPressed: () {},
-                            icon: const FaIcon(
-                              FontAwesomeIcons.userPlus,
-                              color: kPrimaryColor,
-                              size: 22,
-                            ),
+                            onPressed: () {
+                              setState(() {
+                                if (widget.organization.subscribersId
+                                    .contains(currentUserId)) {
+                                  widget.organization.subscribersId
+                                      .remove(currentUserId);
+                                } else {
+                                  widget.organization.subscribersId
+                                      .add(currentUserId);
+                                }
+                              });
+                            },
+                            style: TextButton.styleFrom(
+                                backgroundColor: widget
+                                        .organization.subscribersId
+                                        .contains(currentUserId)
+                                    ? const Color(0xFF0077B5).withOpacity(0.3)
+                                    : Colors.transparent),
+                            icon: (widget.organization.subscribersId
+                                    .contains(currentUserId))
+                                ? const FaIcon(
+                                    FontAwesomeIcons.userMinus,
+                                    color: kPrimaryColor,
+                                    size: 22,
+                                  )
+                                : const FaIcon(
+                                    FontAwesomeIcons.userPlus,
+                                    color: kPrimaryColor,
+                                    size: 22,
+                                  ),
                             label: Text(
-                              "S'abonner",
+                              (widget.organization.subscribersId
+                                      .contains(currentUserId))
+                                  ? "Suivi"
+                                  : "Suivre",
                               textAlign: TextAlign.center,
                               style: GoogleFonts.inter(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: kPrimaryColor),
                             )),
@@ -226,8 +294,8 @@ class _AccountPageState extends State<AccountPage> {
                 indicatorColor: kPrimaryColor,
                 tabs: [
                   Tab(text: "Paramètres"),
-                  Tab(text: "Activités"),
-                  Tab(text: "Campagnes"),
+                  Tab(text: "derniers post"),
+                  Tab(text: "donations"),
                 ],
               ),
             ),
@@ -271,4 +339,3 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return false;
   }
 }
-

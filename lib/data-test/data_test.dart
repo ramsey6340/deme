@@ -4,6 +4,7 @@ import '../models/demand.dart';
 import '../models/activity.dart';
 import '../models/assignment.dart';
 import '../models/cause.dart';
+import '../models/financial_donation.dart';
 import '../models/method_payment.dart';
 import '../models/post.dart';
 import '../models/user.dart';
@@ -25,11 +26,11 @@ List<Cause> causes = [
 
 // Les organisations
 List<Organization> organizations = [
-  Organization(organizationId: '1', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1910', nbSubscription: 20307, login: 'UNHCR', address: addresses[0]),
-  Organization(organizationId: '2', name: "UNICEF", imageUrl: 'assets/data_test/o2.png', isValid: true, isVerified: false, matricule: 'HD78NLSPAIDP', type: 'Fondation', startDateExercise: '21/01/1950', nbSubscription: 10307, login: 'UNICEF', address: addresses[0]),
-  Organization(organizationId: '3', name: "Sauvons les enfants", imageUrl: 'assets/data_test/o3.png', isValid: false, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/1810', nbSubscription: 104, login: 'Sauvons les enfants', address: addresses[0]),
-  Organization(organizationId: '4', name: "Diversity", imageUrl: 'assets/data_test/o4.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1990', nbSubscription: 1000420, login: 'Diversity', address: addresses[0]),
-  Organization(organizationId: '5', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/2000', nbSubscription: 2345, login: 'UNHCR', address: addresses[0]),
+  Organization(organizationId: '1', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1910', nbSubscription: 100, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3']),
+  Organization(organizationId: '2', name: "UNICEF", imageUrl: 'assets/data_test/o2.png', isValid: true, isVerified: false, matricule: 'HD78NLSPAIDP', type: 'Fondation', startDateExercise: '21/01/1950', nbSubscription: 34, login: 'UNICEF', address: addresses[0], subscribersId: ['2', '3']),
+  Organization(organizationId: '3', name: "Sauvons les enfants", imageUrl: 'assets/data_test/o3.png', isValid: false, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/1810', nbSubscription: 104, login: 'Sauvons les enfants', address: addresses[0], subscribersId: ['2']),
+  Organization(organizationId: '4', name: "Diversity", imageUrl: 'assets/data_test/o4.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1990', nbSubscription: 76, login: 'Diversity', address: addresses[0], subscribersId: ['3']),
+  Organization(organizationId: '5', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/2000', nbSubscription: 98, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3']),
 ];
 
 // Les assignments
@@ -93,4 +94,11 @@ List<Address> addresses = [
   Address(addressId: '1', country: 'Mali', city: 'Bamako', neighborhood: 'Kalanbankoro ACI', geolocation: 'https://maps.google.com/q=1.3,3.6'),
   Address(addressId: '2', country: 'Mali', city: 'Bamako', neighborhood: 'Att bougou 759', geolocation: 'https://maps.google.com/q=1.3,3.6'),
   Address(addressId: '3', country: 'Mali', city: 'Sikasso', neighborhood: 'Faladie IJA', geolocation: 'https://maps.google.com/q=1.3,3.6'),
+];
+
+// Les donations financiers
+List<FinancialDonation> financialDonations = [
+  FinancialDonation(financialDonationId: '1', amount: 15000, date: 'Mardi le 12/09/2023', isUsed: false, user: users[0], beneficiaryOrga: organizations[0], beneficiaryDemand: null),
+  FinancialDonation(financialDonationId: '1', amount: 1000000, date: 'Vendredi le 04/07/2023', isUsed: true, user: users[1], beneficiaryOrga: organizations[0], beneficiaryDemand: null),
+  FinancialDonation(financialDonationId: '1', amount: 50000, date: 'Mardi le 12/01/2023', isUsed: false, user: users[2], beneficiaryOrga: organizations[1], beneficiaryDemand: null),
 ];

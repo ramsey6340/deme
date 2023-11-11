@@ -1,3 +1,4 @@
+import 'package:deme/constants.dart';
 import 'package:flutter/material.dart';
 
 
@@ -36,7 +37,7 @@ class ButtonChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
         ),
         backgroundColor: (isSelected)? selectedBackground: backgroundColor,
-        side: (isBorder)?BorderSide(color: (isSelected)?Colors.transparent: const Color(0xFF3F489C)):const BorderSide(color: Colors.transparent),
+        side: (isBorder)?BorderSide(color: (isSelected)?Colors.transparent: kPrimaryColor):const BorderSide(color: Colors.transparent),
         label: Text(text, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
         labelStyle: TextStyle(color: (isSelected)?selectedTextColor:textColor),
         avatar: (isSelected)? selectedLeading: leading,

@@ -12,8 +12,9 @@ class Organization {
   final String matricule;
   final String type;
   final String startDateExercise;
-  final int nbSubscription;
+  final int nbSubscription; // nombre d'abonnement
   final Address address;
+  final List<String> subscribersId;
 
   Organization({
     required this.organizationId,
@@ -26,6 +27,7 @@ class Organization {
     required this.type,
     required this.startDateExercise,
     required this.nbSubscription,
-    required this.address
+    required this.address,
+    required this.subscribersId
   });
 }

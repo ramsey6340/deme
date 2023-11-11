@@ -1,18 +1,16 @@
-import 'package:deme/constants.dart';
 import 'package:deme/main-pages/given/body/body_given.dart';
-import 'package:deme/main-pages/given/body/financial_page.dart';
-import 'package:deme/main-pages/given/body/material_page_given.dart';
+import 'package:deme/main-pages/profile-page/profile_page.dart';
 import 'package:deme/widgets/organization_container.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../data-test/data_test.dart';
 import '../../models/organization.dart';
 import '../../services/organization_service.dart';
 import '../../size_config.dart';
 import '../../widgets/anim_search_widget_custom.dart';
 import '../../widgets/organization_shimmer.dart';
-import '../../widgets/profile_img.dart';
 
 class Given extends StatefulWidget {
   const Given({super.key});
@@ -58,11 +56,13 @@ class _GivenState extends State<Given> {
           overflow: TextOverflow.ellipsis,
         ),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.account_circle_rounded,
             size: 30,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(organization: organizations[0],)));
+          },
         ),
         actions: [
           AnimSearchWidgetCustom(

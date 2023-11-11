@@ -32,3 +32,6 @@ const int kLastNameMinLength = 2;
 const int maxLengthOfExampleProduct = 12;
 final RegExp emailValidatorRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 final RegExp birthDayRegExp = RegExp(r"^[0-9]{2}\/[0-9]{2}\/[0-9]{4}");
+
+
+String currentUserId = '1';

@@ -1,17 +1,28 @@
+import 'dart:ffi';
+
 import 'package:deme/models/organization.dart';
 import 'package:deme/widgets/profile_img.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import '../constants.dart';
 import '../size_config.dart';
 
+
 class OrganizationContainer extends StatefulWidget {
-  const OrganizationContainer({super.key, required this.organization, this.showFollowButton=true, this.showNbFollower=true, this.onTapOrga});
+  const OrganizationContainer({
+    super.key,
+    required this.organization,
+    this.showFollowButton=true,
+    this.showNbFollower=true,
+    this.onTapOrga,
+    this.onTapFollowBtn
+  });
+
   final Organization organization;
   final bool showFollowButton;
   final bool showNbFollower;
+  final void Function()? onTapFollowBtn;
   final void Function()? onTapOrga;
 
   @override
@@ -23,6 +34,7 @@ class _OrganizationContainerState extends State<OrganizationContainer> {
     final f = NumberFormat.compact(locale: 'en');
     return f.format(number);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,55 +70,58 @@ class _OrganizationContainerState extends State<OrganizationContainer> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          child: Text(
-                            widget.organization.name,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.inter(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600
-                            ),
+                        Text(
+                          widget.organization.name,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600
                           ),
                         ),
                         (widget.showNbFollower)?Text(
-                          '${formatNumber(widget.organization.nbSubscription)} suivies',
+                          '${formatNumber(widget.organization.subscribersId.length)} suivies',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.inter(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: Color(0xff676565)
+                              color: const Color(0xff676565)
                           ),
-                        ):SizedBox(),
+                        ):const SizedBox(),
                       ],
                     ),
                   ),
                   (widget.showFollowButton)?
-                  Container(
-                    width: double.infinity,
-                    height: 34,
-                    decoration: BoxDecoration (
-                      border: Border.all(color: Color(0xff0077b5)),
-                      color: Color(0xffffffff),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Suivre',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: kPrimaryColor
+                  InkWell(
+                    onTap: (){
+                      widget.onTapFollowBtn?.call();
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 34,
+                      decoration: BoxDecoration (
+                        border: (widget.organization.subscribersId.contains(currentUserId))?null:Border.all(color: const Color(0xff0077b5)),
+                        color: (widget.organization.subscribersId.contains(currentUserId))?const Color(0xFF0077B5).withOpacity(0.3):Colors.transparent,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Center(
+                        child: Text(
+                          (widget.organization.subscribersId.contains(currentUserId))?'Suivie':'Suivre',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: kPrimaryColor
+                          ),
                         ),
                       ),
                     ),
-                  ):SizedBox(),
+                  ):const SizedBox(),
                 ],
               ),
             ),
