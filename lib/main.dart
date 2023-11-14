@@ -2,6 +2,7 @@ import 'package:deme/provider/change_log_screen_provider.dart';
 import 'package:deme/provider/type_user_log_up_provider.dart';
 import 'package:deme/routes.dart';
 import 'package:deme/size_config.dart';
+import 'package:deme/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main_screen.dart';
@@ -30,8 +31,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MainScreen(),
-      //home: SplashScreen(),
+      //home: MainScreen(),
+      home: SplashScreen(),
       routes: routes,
     );
   }

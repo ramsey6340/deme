@@ -24,6 +24,7 @@ class _Body1State extends State<Body1> {
   final _formKey = GlobalKey<FormState>();
 
   String? passwordError;
+  String? nameError;
   String? emailError;
   String? confirmPasswordError;
   String? phoneNumberError;
@@ -66,32 +67,97 @@ class _Body1State extends State<Body1> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          PhoneFormFieldCustom(
-                            hintText: (typeUserLogUp.typeUserLogUp == 'user')?'numéro de téléphone':'numéro de téléphone de l\'organisation',
-                            fillColor: Colors.white,
-                            focusBorderSideColor: (phoneNumberError != null)?Colors.red:Colors.black,
-                            borderSideColor: (phoneNumberError != null)?Colors.red:Colors.black,
-                            hintTextColor: Colors.black.withOpacity(kTextFieldOpacity),
-                            cursorColor: kRoundedCategoryColor,
-                            inputTextColor: Colors.black,
-                            errorBorderColor: (phoneNumberError != null)?Colors.red:Colors.black,
-                            focusErrorBorderColor: (phoneNumberError != null)?Colors.red:Colors.black,
-                            validator: (phoneNumber){
-                              if (phoneNumber!.number.isEmpty) {
-                                return "Entrer un numéro de téléphone";
-                              } else if (!phoneNumber.isValidNumber()) {
-                                return "Numéro de téléphone invalide";
-                              }
-                              return null; // La validation a réussi, pas d'erreur.
-                            },
-                            onChanged: (phoneNumber){
-                              if (!phoneNumber.isValidNumber()) {
-                                setState(() {
-                                  phoneNumberError = "Entrer un numéro de téléphone";
-                                });
-                              }
-                            },
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Nom complet",
+                                style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextFormFieldCustom(
+                                textInputType: TextInputType.text,
+                                hintText: '',
+                                hintTextColor:
+                                Colors.black.withOpacity(kTextFieldOpacity),
+                                cursorColor: kRoundedCategoryColor,
+                                errorText: nameError,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    setState(() {
+                                      nameError = 'renseigner votre nom complet';
+                                    });
+                                    return nameError;
+                                  }
+                                  return null;
+                                },
+                                // la méthode onChanged
+                                onChanged: (value) {
+                                  if (value.isEmpty) {
+                                    setState(() {
+                                      nameError = '';
+                                    });
+                                  } else if (value.isNotEmpty &&
+                                      !emailValidatorRegExp.hasMatch(value)) {
+                                    setState(() {
+                                      nameError = '';
+                                    });
+                                  }
+                                },
+                              ),
+                            ],
                           ),
+                          (nameError == null)
+                              ? const SizedBox(
+                            height: 24,
+                          )
+                              : const SizedBox(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Email",
+                                style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextFormFieldCustom(
+                                textInputType: TextInputType.emailAddress,
+                                hintText: 'Ex: test@gmail.com',
+                                hintTextColor:
+                                Colors.black.withOpacity(kTextFieldOpacity),
+                                cursorColor: kRoundedCategoryColor,
+                                errorText: emailError,
+                                // la méthode validator
+                                validator: (value) {
+                                  if (!emailValidatorRegExp.hasMatch(value!)) {
+                                    setState(() {
+                                      emailError = 'Email incorrecte';
+                                    });
+                                    return emailError;
+                                  }
+                                  return null;
+                                },
+                                // la méthode onChanged
+                                onChanged: (value) {
+                                  if (value.isEmpty) {
+                                    setState(() {
+                                      emailError = '';
+                                    });
+                                  } else if (value.isNotEmpty &&
+                                      !emailValidatorRegExp.hasMatch(value)) {
+                                    setState(() {
+                                      emailError = '';
+                                    });
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          (emailError == null)
+                              ? const SizedBox(
+                            height: 24,
+                          )
+                              : const SizedBox(),
                           TextFormFieldCustom(
                             isPassword: true,
                             hintText: 'Mot de passe',

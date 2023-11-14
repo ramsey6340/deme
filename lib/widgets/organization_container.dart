@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:deme/models/organization.dart';
 import 'package:deme/widgets/profile_img.dart';
 import 'package:flutter/material.dart';
