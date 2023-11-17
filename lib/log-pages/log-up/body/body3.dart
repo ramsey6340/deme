@@ -1,7 +1,14 @@
+import 'package:deme/services/user_service.dart';
+import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
+import '../../../provider/change_log_screen_provider.dart';
+import '../../../provider/current_user_provider.dart';
+import '../../../provider/global_error_provider.dart';
+import '../../../provider/type_user_log_up_provider.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
@@ -15,12 +22,21 @@ class Body3 extends StatefulWidget {
 }
 
 class _Body1State extends State<Body3> {
+  UserService userService = UserService();
+  TextEditingController birthDayController = TextEditingController();
+  TextEditingController loginController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   String? loginError;
 
   @override
   Widget build(BuildContext context) {
+    final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    final globalErrorProvider = Provider.of<GlobalErrorProvider>(context);
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return SafeArea(
@@ -54,11 +70,12 @@ class _Body1State extends State<Body3> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Login",
+                              "Nom d'utilisateur",
                               style: GoogleFonts.inter(
                                   fontWeight: FontWeight.bold),
                             ),
                             TextFormFieldCustom(
+                              controller: loginController,
                               textInputType: TextInputType.emailAddress,
                               hintText: '',
                               hintTextColor:
@@ -67,9 +84,9 @@ class _Body1State extends State<Body3> {
                               errorText: loginError,
                               // la méthode validator
                               validator: (value) {
-                                if (!emailValidatorRegExp.hasMatch(value!)) {
+                                if (value!.isEmpty) {
                                   setState(() {
-                                    loginError = 'Ce login existe déjà';
+                                    loginError = 'Choisissez un login';
                                   });
                                   return loginError;
                                 }
@@ -91,7 +108,13 @@ class _Body1State extends State<Body3> {
                             ),
                           ],
                         ),
-                        SizedBox(height: getProportionateScreenHeight(20)),
+                        (globalErrorProvider.loginAvailabilityError != null)
+                            ? Text(
+                                globalErrorProvider.loginAvailabilityError!,
+                                style: GoogleFonts.inter(color: Colors.red),
+                              )
+                            : SizedBox(
+                                height: getProportionateScreenHeight(20)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -101,6 +124,7 @@ class _Body1State extends State<Body3> {
                                   fontWeight: FontWeight.bold),
                             ),
                             TextFormFieldCustom(
+                              controller: birthDayController,
                               textInputType: TextInputType.datetime,
                               hintText: 'Date de naissance : JJ/MM/AAAA',
                               hintTextColor:
@@ -167,7 +191,7 @@ class _Body1State extends State<Body3> {
                         SizedBox(
                           height: getProportionateScreenHeight(40),
                         ),
-                        NextButton(
+                        /*NextButton(
                           padding: EdgeInsets.symmetric(
                               horizontal: getProportionateScreenWidth(100),
                               vertical: getProportionateScreenHeight(10)),
@@ -176,11 +200,79 @@ class _Body1State extends State<Body3> {
                               _formKey.currentState!.save();
                             }
                           },
+                        ),*/
+
+                        Center(
+                          child: EasyButton(
+                              idleStateWidget: Text(
+                                'Continuer',
+                                style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              loadingStateWidget:
+                                  const CircularProgressIndicator(
+                                strokeWidth: 3.0,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              ),
+                              useWidthAnimation: true,
+                              useEqualLoadingStateWidgetDimension: true,
+                              width: double.infinity,
+                              height: getProportionateScreenHeight(50),
+                              contentGap: 6.0,
+                              borderRadius: 5,
+                              buttonColor: kPrimaryColor,
+                              onPressed: () async{
+
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+
+                                  await Future.delayed(const Duration(milliseconds: 500), () {
+                                    if (typeUserLogUp.typeUserLogUp == 'user') {
+                                      final currentUser =  currentUserProvider.currentUser;
+                                      userService.isLoginAvailable(
+                                          loginController.value.text)
+                                          .then((value) {
+                                        if (value) {
+                                          globalErrorProvider
+                                              .setLoginAvailabilityError(null);
+                                          if (currentUser != null) {
+                                            userService.patchUserInfo(
+                                                currentUser.userId!, {
+                                              "login": loginController.value.text,
+                                              "birthDay":
+                                              birthDayController.value.text
+                                            }).then((value) {
+                                              currentUserProvider.setLogin(
+                                                  value!.login.toString());
+                                              currentUserProvider.setBirthDay(
+                                                  value.birthDay.toString());
+
+                                              changeLogScreen.incrementIndex();
+                                            }).catchError((onError) {
+                                              print(onError);
+                                            });
+                                          }
+                                        } else {
+                                          globalErrorProvider
+                                              .setLoginAvailabilityError(
+                                              "Ce nom d'utilisateur existe déjà");
+                                        }
+                                      }).catchError((onError) {
+                                        print(onError);
+                                      });
+                                    }
+                                  });
+                                }
+                              }),
                         ),
                         SizedBox(height: getProportionateScreenHeight(20)),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pop(context);
+                            changeLogScreen.decrementIndex();
                           },
                           child: Container(
                             margin: EdgeInsets.fromLTRB(

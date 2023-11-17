@@ -1,7 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:deme/constants.dart';
 import 'package:deme/models/method_payment.dart';
-import 'package:deme/services/method_payment_service.dart';
+import 'package:deme/services/payment_service.dart';
 import 'package:deme/size_config.dart';
 import 'package:deme/widgets/next_button.dart';
 import 'package:deme/widgets/text_form_field_custom.dart';
@@ -18,7 +18,7 @@ class FinancialPage extends StatefulWidget {
 
 class _FinancialPageState extends State<FinancialPage> {
   late Future<List<MethodPayment>> futureMethodPayment;
-  MethodPaymentService methodPaymentService = MethodPaymentService();
+  PaymentService methodPaymentService = PaymentService();
 
   @override
   void initState() {

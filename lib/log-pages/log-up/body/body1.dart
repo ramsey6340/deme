@@ -1,5 +1,6 @@
 import 'package:deme/models/user.dart';
 import 'package:deme/widgets/text_navigator.dart';
+import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +13,13 @@ import '../../../provider/verification_otp_provider.dart';
 import '../../../services/auth_service.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
+import '../../../widgets/loading_button.dart';
 import '../../../widgets/next_button.dart';
 import '../../../widgets/phone_form_field_custom.dart';
 import '../../../widgets/text_form_field_custom.dart';
 import '../../log-in/log_in.dart';
+
+import 'dart:io' show Platform;
 
 class Body1 extends StatefulWidget {
   const Body1({super.key});
@@ -296,10 +300,11 @@ class _Body1State extends State<Body1> {
                                     login: null,
                                     numTel: null,
                                     imageUrl: null,
-                                    deviceType: null,
+                                    deviceType: (Platform.isAndroid)?'Android':'iOS',
                                     delete: false,
                                     activated: true,
-                                    anonymous: false
+                                    anonymous: false,
+                                    birthDay: null
                                 );
                                 authService.sendMailOtpCode(email).then((value) {
                                   verificationOtpProvider.setTrueOtpCode(value);
@@ -308,6 +313,7 @@ class _Body1State extends State<Body1> {
                                 currentUserProvider.setCurrentUser(currentUser);
                                 currentUserProvider.setCurrentUserPassword(password);
 
+                                print("Debut, User: ${currentUserProvider.currentUser}");
                                 changeLogScreen.incrementIndex();
                               }
                             },

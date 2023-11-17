@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
 import '../../../provider/change_log_screen_provider.dart';
+import '../../../provider/type_user_log_up_provider.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
@@ -13,6 +14,8 @@ class FinishLogMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
+
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
@@ -25,7 +28,9 @@ class FinishLogMessage extends StatelessWidget {
           children: [
             Container(
               child: Text(
-                'Aucune organisation humanitaire n’est ni trop grand ni trop petit',
+        (typeUserLogUp.typeUserLogUp=='user')?
+        'Aucune don n’est ni trop grand ni trop petit':
+        'Aucune organisation humanitaire n’est ni trop grand ni trop petit',
                 style: GoogleFonts.inter(
                     fontSize: 30 * ffem,
                     fontWeight: FontWeight.w700,

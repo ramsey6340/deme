@@ -1,16 +1,31 @@
+import 'package:deme/services/auth_service.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../../../../../constants.dart';
+import '../../../../../provider/current_user_provider.dart';
+import '../../../../../provider/verification_otp_provider.dart';
 import '../../../../../size_config.dart';
 import '../../../../../utils.dart';
 import 'otp_form.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
 
   @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  AuthService authService = AuthService();
+
+  @override
   Widget build(BuildContext context) {
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    final verificationOtpProvider = Provider.of<VerificationOtpProvider>(context);
+
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return Padding(
@@ -25,7 +40,7 @@ class Body extends StatelessWidget {
                   fontSize: 30 * ffem,
                   fontWeight: FontWeight.w700,
                   color: Colors.black),),
-              Text("Nous avons envoyé un code au \n+223 72 19 ***", style: GoogleFonts.inter(fontSize: 18),textAlign: TextAlign.center),
+              Text("Nous avons envoyé un code de vérification dans votre boite e-mail", style: GoogleFonts.inter(fontSize: 18),textAlign: TextAlign.center),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -45,7 +60,11 @@ class Body extends StatelessWidget {
                 margin: EdgeInsets.fromLTRB(
                     7 * fem, 0 * fem, 0 * fem, 0 * fem),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    authService.sendMailOtpCode(currentUserProvider.currentUser!.email).then((value) {
+                      verificationOtpProvider.setTrueOtpCode(value);
+                    });
+                  },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                   ),

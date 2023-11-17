@@ -11,6 +11,7 @@ import '../constants.dart';
 class PhoneFormFieldCustom extends StatelessWidget {
   const PhoneFormFieldCustom({
     Key? key,
+    this.controller,
     this.initialCountryCode='ML',
     this.initialValue,
     this.hintText,
@@ -30,6 +31,7 @@ class PhoneFormFieldCustom extends StatelessWidget {
     this.validator,
   }) : super(key: key);
 
+  final TextEditingController? controller;
   final String? initialCountryCode;
   final String? initialValue;
   final String? hintText;
@@ -51,6 +53,7 @@ class PhoneFormFieldCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IntlPhoneField(
+      controller: controller,
       dropdownIcon: const Icon(Icons.arrow_drop_down, color: Colors.black54,),
       disableLengthCheck: false,
       searchText: searchText,

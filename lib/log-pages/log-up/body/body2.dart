@@ -1,10 +1,14 @@
+import 'package:deme/services/user_service.dart';
 import 'package:deme/widgets/text_navigator.dart';
+import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
+import '../../../models/user.dart';
 import '../../../provider/change_log_screen_provider.dart';
+import '../../../provider/current_user_provider.dart';
 import '../../../provider/type_user_log_up_provider.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
@@ -21,8 +25,12 @@ class Body2 extends StatefulWidget {
 }
 
 class _Body1State extends State<Body2> {
+  UserService userService = UserService();
+
+
   final _formKey = GlobalKey<FormState>();
 
+  String phoneNumberValue = '';
   String? passwordError;
   String? emailError;
   String? confirmPasswordError;
@@ -31,10 +39,15 @@ class _Body1State extends State<Body2> {
   String password = '';
   String confirmPassword = '';
 
+  TextEditingController numTelController = TextEditingController();
+  TextEditingController matriculeController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
     final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
@@ -74,6 +87,7 @@ class _Body1State extends State<Body2> {
                           height: 20,
                         ),
                         PhoneFormFieldCustom(
+                          controller: numTelController,
                           hintText: (typeUserLogUp.typeUserLogUp == 'user')?'numéro de téléphone':'numéro de téléphone de l\'organisation',
                           fillColor: Colors.white,
                           focusBorderSideColor: (phoneNumberError != null)?Colors.red:Colors.black,
@@ -84,10 +98,13 @@ class _Body1State extends State<Body2> {
                           errorBorderColor: (phoneNumberError != null)?Colors.red:Colors.black,
                           focusErrorBorderColor: (phoneNumberError != null)?Colors.red:Colors.black,
                           validator: (phoneNumber){
-                            if (phoneNumber!.number.isEmpty) {
+                            if (numTelController.value.text.isEmpty) {
                               return "Entrer un numéro de téléphone";
-                            } else if (!phoneNumber.isValidNumber()) {
-                              return "Numéro de téléphone invalide";
+                            } else {
+                              setState(() {
+                                phoneNumberValue = '${phoneNumber!.countryCode} ${numTelController.value.text}';
+                              });
+                              return null;
                             }
                             return null; // La validation a réussi, pas d'erreur.
                           },
@@ -110,6 +127,7 @@ class _Body1State extends State<Body2> {
                                   fontWeight: FontWeight.bold),
                             ),
                             TextFormFieldCustom(
+                              controller: matriculeController,
                               textInputType: TextInputType.emailAddress,
                               hintText: 'Matricule',
                               hintTextColor: Colors.black.withOpacity(kTextFieldOpacity),
@@ -119,7 +137,7 @@ class _Body1State extends State<Body2> {
                         ):SizedBox(),
                         SizedBox(height: getProportionateScreenHeight(30)),
                         // Bouton de validation
-                        NextButton(
+                        /*NextButton(
                           padding: EdgeInsets.symmetric(
                               horizontal: getProportionateScreenWidth(100),
                               vertical: getProportionateScreenHeight(10)),
@@ -130,12 +148,56 @@ class _Body1State extends State<Body2> {
                               changeLogScreen.incrementIndex();
                             }
                           },
+                        ),*/
+
+                        Center(
+                          child: EasyButton(
+                            idleStateWidget: Text(
+                              'Continuer',
+                              style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20
+                              ),
+                            ),
+                            loadingStateWidget: const CircularProgressIndicator(
+                              strokeWidth: 3.0,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                            useWidthAnimation: true,
+                            useEqualLoadingStateWidgetDimension: true,
+                            width: double.infinity,
+                            height: getProportionateScreenHeight(50),
+                            contentGap: 6.0,
+                            borderRadius: 5,
+                            buttonColor: kPrimaryColor,
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+
+                                if(typeUserLogUp.typeUserLogUp == 'user' && numTelController.value.text.isNotEmpty){
+                                  currentUserProvider.setNumTel(phoneNumberValue);
+                                  final currentUser = currentUserProvider.currentUser;
+                                  if(currentUser != null){
+                                    userService.patchUserInfo(
+                                        currentUser.userId!,
+                                        {"numTel": currentUser.numTel}
+                                    ).then((value) {
+                                      print(value);
+                                      changeLogScreen.incrementIndex();
+
+                                    }).catchError((onError){
+                                      print(onError);
+                                    });
+                                  }
+                                }
+                              }
+                            }
+                          ),
                         ),
                         SizedBox(height: getProportionateScreenHeight(20)),
-                        (typeUserLogUp.typeUserLogUp == 'user')?
-                        TextNavigator(text: 'Ignorer', isReturn: false, onTap: (){
-                          changeLogScreen.incrementIndex();
-                        }):SizedBox(),
                       ],
                     ),
                   )

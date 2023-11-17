@@ -1,14 +1,16 @@
+import 'package:deme/services/payment_service.dart';
 import 'package:deme/widgets/checkbox_list_title_custom.dart';
 import 'package:deme/widgets/text_navigator.dart';
+import 'package:deme/widgets/title_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../constants.dart';
 import '../../../models/method_payment.dart';
 import '../../../provider/change_log_screen_provider.dart';
 import '../../../size_config.dart';
-import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
 
 class ChooseMethodPayment extends StatefulWidget {
@@ -19,7 +21,7 @@ class ChooseMethodPayment extends StatefulWidget {
 }
 
 class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
-  List<MethodPayment> methodPaymentsData = [
+  /*List<MethodPayment> methodPaymentsData = [
     MethodPayment(
         methodPaymentId: '1',
         name: "Orange Money",
@@ -68,9 +70,17 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
         description: null,
         imageUrl: "assets/data_test/sm.png",
         termsOfUse: null),
-  ];
+  ];*/
 
   List<bool> methodPayments = List.generate(13, (index) => false);
+  PaymentService paymentService = PaymentService();
+  late Future<List<MethodPayment>> futurePayment;
+
+  @override
+  void initState() {
+    super.initState();
+    futurePayment = paymentService.getAllMethodPayment();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,20 +115,46 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
                     height: getProportionateScreenHeight(10),
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: methodPaymentsData.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: CheckboxListTileCustom(
-                              checkBoxValue: methodPayments[index],
-                              onChangedCheckValue: (value) {
-                                setState(() {
-                                  methodPayments[index] = value!;
-                                });
-                              },
-                              title: methodPaymentsData[index].name,
-                              imageUrl: methodPaymentsData[index].imageUrl),
+                    child: FutureBuilder(
+                      future: futurePayment,
+                      builder: (context, snapshot) {
+                        return (snapshot.hasData)?ListView.builder(
+                          itemCount: snapshot.data?.length,
+                          itemBuilder: (context, index) {
+                            final methodPayment = snapshot.data![index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: CheckboxListTileCustom(
+                                  checkBoxValue: false,
+                                  onChangedCheckValue: (value) {
+                                    setState(() {
+                                    });
+                                  },
+                                  title: methodPayment.name,
+                                  imageUrl: methodPayment.imageUrl),
+                            );
+                          },
+                        ):Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          enabled: true,
+                          child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: 4,
+                              itemBuilder: (context, index) {
+                                return const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        CircleAvatar(radius: 15,),
+                                        TitlePlaceholder(width: 150),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
                         );
                       },
                     ),

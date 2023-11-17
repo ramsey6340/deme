@@ -8,7 +8,7 @@ class AuthService {
 
   static const baseServiceAuthUrl = "$baseUrl/service-auth";
 
-  Future<String?> createUser(String password, User user) async{
+  Future<String> createUser(String password, User user) async{
     final response = await http.post(Uri.parse('$baseServiceAuthUrl/users?password=$password'),
       body: json.encode(user),
       headers: {
@@ -19,8 +19,7 @@ class AuthService {
 
     if(response.statusCode == 201) {
       print("User crée avec succès");
-      final responseData = json.decode(utf8.decode(response.bodyBytes));
-      return responseData.toString();
+      return response.body;
 
     }
     Map<String, dynamic> errorMessage = {};
@@ -43,7 +42,7 @@ class AuthService {
     }
 
     print("Error: $errorMessage");
-    return null;
+    throw Exception(errorResponse);
   }
 
   Future<String?> sendMailOtpCode(String email) async {

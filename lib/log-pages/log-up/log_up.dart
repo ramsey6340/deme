@@ -22,7 +22,7 @@ class LogUp extends StatelessWidget {
   Widget build(BuildContext context) {
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    List<Widget> logBodies = [ChooseAccountType(), Body1(), OTPScreen(), Body2(), FinishLogMessage(), ChooseMethodPayment(), InitPreferredCause()];
+    List<Widget> logBodies = [ChooseAccountType(), Body1(), OTPScreen(), Body2(), Body3(), FinishLogMessage(), ChooseMethodPayment(), InitPreferredCause()];
 
     return Scaffold(
       body: SizedBox(

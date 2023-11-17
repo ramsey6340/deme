@@ -19,7 +19,7 @@ class CheckboxListTileCustom extends StatelessWidget {
       ),
       child: CheckboxListTile(
         value: checkBoxValue,
-        secondary: CircleAvatar(backgroundImage: AssetImage(imageUrl), radius: 15,),
+        secondary: CircleAvatar(backgroundImage: NetworkImage(imageUrl), radius: 15,),
         title: Text(title, style: GoogleFonts.inter(
             color: const Color(0xFF676666), fontSize: 18, fontWeight: FontWeight.w500
         ),),

@@ -1,6 +1,10 @@
+import 'package:deme/models/user.dart';
 import 'package:deme/provider/change_log_screen_provider.dart';
+import 'package:deme/widgets/loading_button.dart';
 import 'package:deme/widgets/text_navigator.dart';
+import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../constants.dart';
@@ -55,6 +59,7 @@ class _OTPFormState extends State<OTPForm> {
 
   String otpProposedCode = '';
 
+
   @override
   Widget build(BuildContext context) {
     final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
@@ -73,10 +78,10 @@ class _OTPFormState extends State<OTPForm> {
             style: TextStyle(color: Colors.red),
           ),
           SizedBox(
-            height: SizeConfig.screenHeight * 0.15,
+            height: getProportionateScreenHeight(50),
           ),
           // Le boutton "Continuer"
-          NextButton(
+          /*NextButton(
             padding: EdgeInsets.symmetric(
                 horizontal: getProportionateScreenWidth(100),
                 vertical: getProportionateScreenHeight(10)),
@@ -108,7 +113,69 @@ class _OTPFormState extends State<OTPForm> {
                 }
               }
             },
+          ),*/
+
+
+          Center(
+            child: EasyButton(
+              idleStateWidget: Text(
+                'Continuer',
+                style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20
+                ),
+              ),
+              loadingStateWidget: const CircularProgressIndicator(
+                strokeWidth: 3.0,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.white,
+                ),
+              ),
+              useWidthAnimation: true,
+              useEqualLoadingStateWidgetDimension: true,
+              width: double.infinity,
+              height: getProportionateScreenHeight(50),
+              contentGap: 6.0,
+              borderRadius: 5,
+              buttonColor: kPrimaryColor,
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  otpProposedCode = textEditingController1.value.text.toString() +
+                      textEditingController2.value.text.toString() +
+                      textEditingController3.value.text.toString() +
+                      textEditingController4.value.text.toString();
+
+                  await Future.delayed(const Duration(milliseconds: 500), () {
+                    verificationOtpProvider.verificationOptCode(otpProposedCode);
+                    if (verificationOtpProvider.otpVerificationSuccessful) {
+                      verificationOtpProvider.otpErrorMessage = '';
+                      print("Le code OTP est correct");
+                      authService
+                          .createUser(currentUserProvider.currentUserPassword!,
+                          currentUserProvider.currentUser!)
+                          .then((value) {
+                        print("ID return : ${value}");
+                        currentUserProvider.setUserId(value.toString());
+                        print("Current User ID: ${currentUserProvider.currentUser?.userId}");
+                        changeLogScreen.incrementIndex();
+
+                      }).catchError((onError) {
+                        print("Erreur: $onError");
+                      });
+
+                    } else {
+                      print("Code OTP incorrect");
+                      verificationOtpProvider.otpErrorMessage = "Code incorrecte";
+                    }
+                  });
+              }}
+            ),
           ),
+
+
+
           SizedBox(
             height: getProportionateScreenHeight(20),
           ),
