@@ -1,5 +1,7 @@
 import 'package:deme/provider/change_log_screen_provider.dart';
+import 'package:deme/provider/current_user_provider.dart';
 import 'package:deme/provider/type_user_log_up_provider.dart';
+import 'package:deme/provider/verification_otp_provider.dart';
 import 'package:deme/routes.dart';
 import 'package:deme/size_config.dart';
 import 'package:deme/splash/splash_screen.dart';
@@ -13,6 +15,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => TypeUserLogUpProvider()),
         ChangeNotifierProvider(create: (context) => ChangeLogScreenProvider()),
+        ChangeNotifierProvider(create: (context) => VerificationOtpProvider()),
+        ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
       ],
     child: const MyApp(),
   ));

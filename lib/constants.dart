@@ -35,3 +35,4 @@ final RegExp birthDayRegExp = RegExp(r"^[0-9]{2}\/[0-9]{2}\/[0-9]{4}");
 
 
 String currentUserId = '1';
+const baseUrl = "http://10.175.48.41:8080";

@@ -1,3 +1,4 @@
+import 'package:deme/models/user.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,7 +6,10 @@ import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../provider/change_log_screen_provider.dart';
+import '../../../provider/current_user_provider.dart';
 import '../../../provider/type_user_log_up_provider.dart';
+import '../../../provider/verification_otp_provider.dart';
+import '../../../services/auth_service.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
 import '../../../widgets/next_button.dart';
@@ -21,7 +25,12 @@ class Body1 extends StatefulWidget {
 }
 
 class _Body1State extends State<Body1> {
+  AuthService authService = AuthService();
+
   final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   String? passwordError;
   String? nameError;
@@ -35,6 +44,8 @@ class _Body1State extends State<Body1> {
   @override
   Widget build(BuildContext context) {
     final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    final verificationOtpProvider = Provider.of<VerificationOtpProvider>(context);
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
@@ -76,6 +87,7 @@ class _Body1State extends State<Body1> {
                                     fontWeight: FontWeight.bold),
                               ),
                               TextFormFieldCustom(
+                                controller: nameController,
                                 textInputType: TextInputType.text,
                                 hintText: '',
                                 hintTextColor:
@@ -121,6 +133,7 @@ class _Body1State extends State<Body1> {
                                     fontWeight: FontWeight.bold),
                               ),
                               TextFormFieldCustom(
+                                controller: emailController,
                                 textInputType: TextInputType.emailAddress,
                                 hintText: 'Ex: test@gmail.com',
                                 hintTextColor:
@@ -159,6 +172,7 @@ class _Body1State extends State<Body1> {
                           )
                               : const SizedBox(),
                           TextFormFieldCustom(
+                            controller: passwordController,
                             isPassword: true,
                             hintText: 'Mot de passe',
                             hintTextColor:
@@ -271,8 +285,30 @@ class _Body1State extends State<Body1> {
                             press: () {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
+
+                                String name = nameController.value.text;
+                                String email = emailController.value.text;
+                                String password = passwordController.value.text;
+                                User currentUser = User(
+                                    userId: null,
+                                    name: name,
+                                    email: email,
+                                    login: null,
+                                    numTel: null,
+                                    imageUrl: null,
+                                    deviceType: null,
+                                    delete: false,
+                                    activated: true,
+                                    anonymous: false
+                                );
+                                authService.sendMailOtpCode(email).then((value) {
+                                  verificationOtpProvider.setTrueOtpCode(value);
+                                });
+
+                                currentUserProvider.setCurrentUser(currentUser);
+                                currentUserProvider.setCurrentUserPassword(password);
+
                                 changeLogScreen.incrementIndex();
-                                print(phoneNumberError);
                               }
                             },
                           ),

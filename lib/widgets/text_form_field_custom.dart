@@ -5,6 +5,7 @@ import '../../constants.dart';
 class TextFormFieldCustom extends StatefulWidget  {
   const TextFormFieldCustom({
     Key? key,
+    this.controller,
     this.hintText,
     this.errorText='',
     this.maxLine=1,
@@ -23,6 +24,7 @@ class TextFormFieldCustom extends StatefulWidget  {
     this.onTap,
   }) : super(key: key);
 
+  final TextEditingController? controller;
   final String? hintText;
   final String? errorText;
   final int maxLine;
@@ -55,6 +57,7 @@ class _TextFormFieldCustomState extends State<TextFormFieldCustom> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.controller,
       keyboardType: widget.textInputType,
       obscureText: (widget.isPassword)?obscureText:!obscureText,
       initialValue: widget.initialValue,

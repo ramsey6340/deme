@@ -40,7 +40,7 @@ class _DemandContainerState extends State<DemandContainer> {
                 CircleAvatar(
                   radius: 25,
                   backgroundImage: AssetImage(
-                      widget.demand.user.imageUrl),
+                      widget.demand.user.imageUrl!),
                 ),
                 SizedBox(
                   width: getProportionateScreenWidth(8),
