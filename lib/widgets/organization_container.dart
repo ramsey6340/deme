@@ -57,8 +57,8 @@ class _OrganizationContainerState extends State<OrganizationContainer> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ProfileImg(
-              profileImg: widget.organization.imageUrl,
-              showIconAction: widget.organization.isVerified,
+              profileImg: widget.organization.imageUrl!,
+              showIconAction: widget.organization.verified,
               iconMinimal: Icons.verified,
               iconMinimalColor: Colors.green,
               iconMinimalSize: 30,

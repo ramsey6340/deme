@@ -38,7 +38,7 @@ class _PostContainerState extends State<PostContainer> {
                 CircleAvatar(
                   radius: 25,
                   backgroundImage: AssetImage(
-                      widget.post.activity.assignment.organization.imageUrl),
+                      widget.post.activity.assignment.organization.imageUrl!),
                 ),
                 SizedBox(
                   width: getProportionateScreenWidth(8),

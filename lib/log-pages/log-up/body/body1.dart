@@ -1,6 +1,8 @@
+import 'package:async_button/async_button.dart';
+import 'package:deme/main-pages/organization/organization_page.dart';
 import 'package:deme/models/user.dart';
+import 'package:deme/models/organization.dart';
 import 'package:deme/widgets/text_navigator.dart';
-import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -13,9 +15,6 @@ import '../../../provider/verification_otp_provider.dart';
 import '../../../services/auth_service.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
-import '../../../widgets/loading_button.dart';
-import '../../../widgets/next_button.dart';
-import '../../../widgets/phone_form_field_custom.dart';
 import '../../../widgets/text_form_field_custom.dart';
 import '../../log-in/log_in.dart';
 
@@ -30,6 +29,7 @@ class Body1 extends StatefulWidget {
 
 class _Body1State extends State<Body1> {
   AuthService authService = AuthService();
+  AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
@@ -195,7 +195,7 @@ class _Body1State extends State<Body1> {
                                   value.length < kPasswordMaxLength) {
                                 setState(() {
                                   password = value;
-                                  passwordError = "Mot de passe faible";
+                                  passwordError = "Le mot de passe doit être au minimum 6 caractères";
                                 });
                                 return passwordError;
                               } else {
@@ -282,42 +282,163 @@ class _Body1State extends State<Body1> {
                             },
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
-                          NextButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: getProportionateScreenWidth(100),
-                                vertical: getProportionateScreenHeight(10)),
-                            press: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
 
-                                String name = nameController.value.text;
-                                String email = emailController.value.text;
-                                String password = passwordController.value.text;
-                                User currentUser = User(
-                                    userId: null,
-                                    name: name,
-                                    email: email,
-                                    login: null,
-                                    numTel: null,
-                                    imageUrl: null,
-                                    deviceType: (Platform.isAndroid)?'Android':'iOS',
-                                    delete: false,
-                                    activated: true,
-                                    anonymous: false,
-                                    birthDay: null
-                                );
-                                authService.sendMailOtpCode(email).then((value) {
-                                  verificationOtpProvider.setTrueOtpCode(value);
-                                });
+                          // ========================Gestion du bouton asynchrone====================
 
-                                currentUserProvider.setCurrentUser(currentUser);
-                                currentUserProvider.setCurrentUserPassword(password);
+                          Center(
+                            child: AsyncTextBtn(
+                              style: kStyleNextBtn,
 
-                                print("Debut, User: ${currentUserProvider.currentUser}");
-                                changeLogScreen.incrementIndex();
-                              }
-                            },
+                              asyncBtnStatesController: btnStateController,
+                              onPressed: () async {
+                                btnStateController.update(AsyncBtnState.loading);
+                                try {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    String name = nameController.value.text;
+                                    String email = emailController.value.text;
+                                    String password = passwordController.value.text;
+
+                                    // S'il s'agit d'un utilisateur simple
+                                    if(typeUserLogUp.typeUserLogUp == kTypeUser.user.toString()){
+                                      User currentUser = User(
+                                          userId: null,
+                                          name: name,
+                                          email: email,
+                                          login: null,
+                                          numTel: null,
+                                          imageUrl: null,
+                                          deviceType: (Platform.isAndroid)?'Android':'iOS',
+                                          delete: false,
+                                          activated: true,
+                                          anonymous: false,
+                                          birthDay: null,
+                                          profile: 'user',
+                                          preferredPaymentMethods: [],
+                                          favoriteHumanitarianCauses: []
+                                      );
+                                      authService.sendMailOtpCode(email).then((value) {
+                                        verificationOtpProvider.setTrueOtpCode(value);
+                                        print("Value : $value");
+                                        btnStateController.update(AsyncBtnState.success);
+
+                                        currentUserProvider.setCurrentUser(currentUser);
+                                        currentUserProvider.setProfile('user');
+                                        currentUserProvider.setCurrentUserPassword(password);
+                                        print("Debut, User: ${currentUserProvider.currentUser}");
+                                        changeLogScreen.incrementIndex();
+                                      }).catchError((onError){
+                                        print(onError);
+                                        btnStateController.update(AsyncBtnState.failure);
+                                      });
+                                    }
+
+                                    // S'il s'agit d'une organisation
+                                    else if(typeUserLogUp.typeUserLogUp == kTypeUser.organization.toString()){
+                                      Organization currentOrganization = Organization(
+                                          organizationId: null,
+                                          name: name,
+                                          email: email,
+                                          numTel: null,
+                                          login: null,
+                                          imageUrl: null,
+                                          deviceType: (Platform.isAndroid)?'Android':'iOS',
+                                          delete: false,
+                                          activated: true,
+                                          anonymous: false,
+                                          profile: kTypeUser.organization.toString(),
+                                          valid: true,
+                                          verified: false,
+                                          matricule: null,
+                                          type: 'Association',
+                                          startDateExercise: null,
+                                          nbSubscription: 0,
+                                          address: null,
+                                          subscribersId: [],
+                                          preferredPaymentMethods: [],
+                                          favoriteHumanitarianCauses: []);
+
+
+                                      authService.sendMailOtpCode(email).then((value) {
+                                        verificationOtpProvider.setTrueOtpCode(value);
+                                        btnStateController.update(AsyncBtnState.success);
+                                        currentUserProvider.setCurrentOrganization(currentOrganization);
+                                        currentUserProvider.setProfile(kTypeUser.organization.toString());
+                                        currentUserProvider.setCurrentUserPassword(password);
+                                        print("Debut, Organisation: ${currentUserProvider.currentUser}");
+                                        changeLogScreen.incrementIndex();
+                                      }).catchError((onError){
+                                        print(onError);
+                                        btnStateController.update(AsyncBtnState.failure);
+                                      });
+                                    }
+
+                                  }
+
+                                } catch (e) {
+                                  btnStateController.update(AsyncBtnState.failure);
+                                }
+                              },
+
+                              loadingStyle: AsyncBtnStateStyle(
+                                style: kStyleNextBtn,
+                                widget: const SizedBox.square(
+                                  dimension: 30,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+
+                              successStyle: AsyncBtnStateStyle(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: kPrimaryColor,
+                                  foregroundColor: Colors.white,
+                                ),
+                                widget: const Row(
+                                  children: [
+                                    Icon(Icons.check, color: Colors.white,),
+                                    SizedBox(width: 4),
+                                    Text('Success!',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20)
+                                    )
+                                  ],
+                                ),
+                              ),
+                              failureStyle: AsyncBtnStateStyle(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                ),
+                                widget: const Row(
+                                  children: [
+                                    Icon(Icons.error, color: Colors.white,),
+                                    SizedBox(width: 4),
+                                    Text('Erreur !',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20)
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              child: const Text(
+                                  'Continuer',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20)
+                              ),
+                            ),
                           ),
+
+                          // ========================Fin de la gestion du bouton asynchrone====================
+
+
                           SizedBox(height: getProportionateScreenHeight(20)),
                           TextNavigator(onTap: (){
                             changeLogScreen.decrementIndex();

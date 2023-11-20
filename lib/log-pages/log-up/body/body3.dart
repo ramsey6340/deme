@@ -1,5 +1,6 @@
+import 'package:async_button/async_button.dart';
+import 'package:deme/services/organization_service.dart';
 import 'package:deme/services/user_service.dart';
-import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +24,12 @@ class Body3 extends StatefulWidget {
 
 class _Body1State extends State<Body3> {
   UserService userService = UserService();
+  OrganizationService organizationService = OrganizationService();
+
   TextEditingController birthDayController = TextEditingController();
   TextEditingController loginController = TextEditingController();
+
+  AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -191,84 +196,162 @@ class _Body1State extends State<Body3> {
                         SizedBox(
                           height: getProportionateScreenHeight(40),
                         ),
-                        /*NextButton(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(100),
-                              vertical: getProportionateScreenHeight(10)),
-                          press: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                            }
-                          },
-                        ),*/
+
+                        // ========================Gestion du bouton asynchrone====================
 
                         Center(
-                          child: EasyButton(
-                              idleStateWidget: Text(
-                                'Continuer',
-                                style: GoogleFonts.inter(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ),
-                              loadingStateWidget:
-                                  const CircularProgressIndicator(
-                                strokeWidth: 3.0,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.white,
-                                ),
-                              ),
-                              useWidthAnimation: true,
-                              useEqualLoadingStateWidgetDimension: true,
-                              width: double.infinity,
-                              height: getProportionateScreenHeight(50),
-                              contentGap: 6.0,
-                              borderRadius: 5,
-                              buttonColor: kPrimaryColor,
-                              onPressed: () async{
+                          child: AsyncTextBtn(
+                            style: kStyleNextBtn,
 
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
+                            asyncBtnStatesController: btnStateController,
+                            onPressed: () async {
+                              btnStateController.update(AsyncBtnState.loading);
 
-                                  await Future.delayed(const Duration(milliseconds: 500), () {
-                                    if (typeUserLogUp.typeUserLogUp == 'user') {
-                                      final currentUser =  currentUserProvider.currentUser;
-                                      userService.isLoginAvailable(
-                                          loginController.value.text)
-                                          .then((value) {
-                                        if (value) {
-                                          globalErrorProvider
-                                              .setLoginAvailabilityError(null);
-                                          if (currentUser != null) {
-                                            userService.patchUserInfo(
-                                                currentUser.userId!, {
-                                              "login": loginController.value.text,
-                                              "birthDay":
-                                              birthDayController.value.text
-                                            }).then((value) {
-                                              currentUserProvider.setLogin(
-                                                  value!.login.toString());
-                                              currentUserProvider.setBirthDay(
-                                                  value.birthDay.toString());
+                              try {
+                                if (currentUserProvider.profile == kTypeUser.user.toString()) {
+                                  final currentUser =  currentUserProvider.currentUser;
+                                  userService.isLoginAvailable(
+                                      loginController.value.text)
+                                      .then((value) {
+                                    if (value) {
+                                      globalErrorProvider
+                                          .setLoginAvailabilityError(null);
+                                      if (currentUser != null) {
+                                        userService.patchUserInfo(
+                                            currentUser.userId!, {
+                                          "login": loginController.value.text,
+                                          "birthDay":
+                                          birthDayController.value.text
+                                        }).then((value) {
+                                          currentUserProvider.setLogin(
+                                              value!.login.toString());
+                                          currentUserProvider.setBirthDay(
+                                              value.birthDay.toString());
 
-                                              changeLogScreen.incrementIndex();
-                                            }).catchError((onError) {
-                                              print(onError);
-                                            });
-                                          }
-                                        } else {
-                                          globalErrorProvider
-                                              .setLoginAvailabilityError(
-                                              "Ce nom d'utilisateur existe déjà");
-                                        }
-                                      }).catchError((onError) {
-                                        print(onError);
-                                      });
+                                          changeLogScreen.incrementIndex();
+
+                                          btnStateController.update(AsyncBtnState.success);
+
+                                        }).catchError((onError) {
+                                          print(onError);
+                                          btnStateController.update(AsyncBtnState.failure);
+                                        });
+                                      }
+                                    } else {
+                                      globalErrorProvider
+                                          .setLoginAvailabilityError(
+                                          "Ce nom d'utilisateur existe déjà");
                                     }
+                                  }).catchError((onError) {
+                                    print(onError);
+                                    btnStateController.update(AsyncBtnState.failure);
                                   });
                                 }
-                              }),
+
+                                else if(currentUserProvider.profile == kTypeUser.organization.toString()){
+                                  final currentOrganization =  currentUserProvider.currentOrganization;
+                                  organizationService.isLoginAvailable(
+                                      loginController.value.text)
+                                      .then((value) {
+                                    if (value) {
+                                      globalErrorProvider
+                                          .setLoginAvailabilityError(null);
+                                      if (currentOrganization != null) {
+                                        organizationService.patchOrganizationInfo(
+                                            currentOrganization.organizationId!, {
+                                          "login": loginController.value.text,
+                                          "startDateExercise":
+                                          birthDayController.value.text
+                                        }).then((value) {
+                                          currentUserProvider.setOrganizationLogin(
+                                              value!.login.toString());
+                                          currentUserProvider.setOrganizationStartDateExercise(
+                                              value.startDateExercise.toString());
+
+                                          changeLogScreen.incrementIndex();
+
+                                          btnStateController.update(AsyncBtnState.success);
+
+                                        }).catchError((onError) {
+                                          print(onError);
+                                          btnStateController.update(AsyncBtnState.failure);
+                                        });
+                                      }
+                                    } else {
+                                      globalErrorProvider
+                                          .setLoginAvailabilityError(
+                                          "Ce nom d'utilisateur existe déjà");
+                                    }
+                                  }).catchError((onError) {
+                                    print(onError);
+                                    btnStateController.update(AsyncBtnState.failure);
+                                  });
+                                }
+
+                              } catch (e) {
+                                btnStateController.update(AsyncBtnState.failure);
+                              }
+                            },
+
+                            loadingStyle: AsyncBtnStateStyle(
+                              style: kStyleNextBtn,
+                              widget: const SizedBox.square(
+                                dimension: 30,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                            successStyle: AsyncBtnStateStyle(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: kPrimaryColor,
+                                foregroundColor: Colors.white,
+                              ),
+                              widget: const Row(
+                                children: [
+                                  Icon(Icons.check, color: Colors.white,),
+                                  SizedBox(width: 4),
+                                  Text('Success!',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)
+                                  )
+                                ],
+                              ),
+                            ),
+                            failureStyle: AsyncBtnStateStyle(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                              ),
+                              widget: const Row(
+                                children: [
+                                  Icon(Icons.error, color: Colors.white,),
+                                  SizedBox(width: 4),
+                                  Text('Erreur !',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)
+                                  ),
+                                ],
+                              ),
+                            ),
+                            child: const Text(
+                                'Continuer',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20)
+                            ),
+                          ),
                         ),
+
+                        // ========================Fin de la gestion du bouton asynchrone====================
+
+
                         SizedBox(height: getProportionateScreenHeight(20)),
                         GestureDetector(
                           onTap: () {

@@ -7,6 +7,7 @@ import '../../../constants.dart';
 import '../../../size_config.dart';
 import '../../../widgets/next_button.dart';
 import '../../provider/change_log_screen_provider.dart';
+import '../../services/shared_preferences_service.dart';
 import '../../widgets/list_tile_radio_custom.dart';
 import 'log_up.dart';
 
@@ -21,6 +22,7 @@ class ChooseAccountType extends StatefulWidget {
 class _Body1State extends State<ChooseAccountType> {
   final _formKey = GlobalKey<FormState>();
 
+  SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
   String? currentValue;
 
   @override
@@ -89,6 +91,7 @@ class _Body1State extends State<ChooseAccountType> {
                               horizontal: getProportionateScreenWidth(100),
                               vertical: getProportionateScreenHeight(10)),
                           press: () {
+                            sharedPreferencesService.setTypeUser(typeUserLogUp.typeUserLogUp!);
                             (typeUserLogUp.typeUserLogUp != null)?changeLogScreen.incrementIndex():null;
                           },
                         ),

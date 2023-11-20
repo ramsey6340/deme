@@ -1,6 +1,7 @@
+import 'package:async_button/async_button.dart';
+import 'package:deme/models/organization.dart';
+import 'package:deme/services/organization_service.dart';
 import 'package:deme/services/user_service.dart';
-import 'package:deme/widgets/text_navigator.dart';
-import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import '../../../constants.dart';
 import '../../../models/user.dart';
 import '../../../provider/change_log_screen_provider.dart';
 import '../../../provider/current_user_provider.dart';
+import '../../../provider/global_error_provider.dart';
 import '../../../provider/type_user_log_up_provider.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
@@ -26,6 +28,9 @@ class Body2 extends StatefulWidget {
 
 class _Body1State extends State<Body2> {
   UserService userService = UserService();
+  OrganizationService organizationService = OrganizationService();
+
+  AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
 
 
   final _formKey = GlobalKey<FormState>();
@@ -47,6 +52,7 @@ class _Body1State extends State<Body2> {
     final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
     final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
     final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    final globalErrorProvider = Provider.of<GlobalErrorProvider>(context);
 
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
@@ -116,6 +122,7 @@ class _Body1State extends State<Body2> {
                             }
                           },
                         ),
+                        (globalErrorProvider.numTelError!=null)?Text(globalErrorProvider.numTelError!, style: TextStyle(color: Colors.red),):const SizedBox(),
                         (typeUserLogUp.typeUserLogUp == 'organization')? SizedBox(height: getProportionateScreenHeight(20)): SizedBox(),
                         (typeUserLogUp.typeUserLogUp == 'organization')?
                         Column(
@@ -136,67 +143,134 @@ class _Body1State extends State<Body2> {
                           ],
                         ):SizedBox(),
                         SizedBox(height: getProportionateScreenHeight(30)),
-                        // Bouton de validation
-                        /*NextButton(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(100),
-                              vertical: getProportionateScreenHeight(10)),
-                          press: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-
-                              changeLogScreen.incrementIndex();
-                            }
-                          },
-                        ),*/
+                        // ========================Gestion du bouton asynchrone====================
 
                         Center(
-                          child: EasyButton(
-                            idleStateWidget: Text(
-                              'Continuer',
-                              style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20
-                              ),
-                            ),
-                            loadingStateWidget: const CircularProgressIndicator(
-                              strokeWidth: 3.0,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                            ),
-                            useWidthAnimation: true,
-                            useEqualLoadingStateWidgetDimension: true,
-                            width: double.infinity,
-                            height: getProportionateScreenHeight(50),
-                            contentGap: 6.0,
-                            borderRadius: 5,
-                            buttonColor: kPrimaryColor,
+                          child: AsyncTextBtn(
+                            style: kStyleNextBtn,
+
+                            asyncBtnStatesController: btnStateController,
                             onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
+                              btnStateController.update(AsyncBtnState.loading);
 
-                                if(typeUserLogUp.typeUserLogUp == 'user' && numTelController.value.text.isNotEmpty){
-                                  currentUserProvider.setNumTel(phoneNumberValue);
-                                  final currentUser = currentUserProvider.currentUser;
-                                  if(currentUser != null){
-                                    userService.patchUserInfo(
-                                        currentUser.userId!,
-                                        {"numTel": currentUser.numTel}
-                                    ).then((value) {
-                                      print(value);
-                                      changeLogScreen.incrementIndex();
+                              try {
+                                if(typeUserLogUp.typeUserLogUp == kTypeUser.user.toString()){
+                                  if(numTelController.value.text.isNotEmpty){
+                                    currentUserProvider.setNumTel(phoneNumberValue);
+                                    User? currentUser = currentUserProvider.currentUser;
+                                    if(currentUser != null){
+                                      userService.patchUserInfo(
+                                          currentUser.userId!,
+                                          {"numTel": phoneNumberValue}
+                                      ).then((value) {
+                                        globalErrorProvider.setNumTelError(null);
+                                        changeLogScreen.incrementIndex();
+                                        btnStateController.update(AsyncBtnState.success);
 
-                                    }).catchError((onError){
-                                      print(onError);
-                                    });
+                                      }).catchError((onError){
+                                        print(onError);
+                                        btnStateController.update(AsyncBtnState.failure);
+                                      });
+                                    }
+                                  }
+                                  else{
+                                    globalErrorProvider.setNumTelError("Numero de téléphone incorrcte");
                                   }
                                 }
+
+                                else if(currentUserProvider.profile == kTypeUser.organization.toString()) {
+                                  if(numTelController.value.text.isNotEmpty && matriculeController.value.text.isNotEmpty){
+                                    currentUserProvider.setOrganizationMatricule(matriculeController.value.text);
+                                    currentUserProvider.setOrganizationNumTel(phoneNumberValue);
+
+                                    Organization? currentOrganization = currentUserProvider.currentOrganization;
+                                    if(currentOrganization != null){
+                                      organizationService.patchOrganizationInfo(
+                                          currentOrganization.organizationId!,
+                                          {
+                                            "numTel": phoneNumberValue,
+                                            "matricule": matriculeController.value.text,
+                                          }
+                                      ).then((value) {
+                                        globalErrorProvider.setNumTelError(null);
+                                        changeLogScreen.incrementIndex();
+                                        btnStateController.update(AsyncBtnState.success);
+
+                                      }).catchError((onError){
+                                        print(onError);
+                                        btnStateController.update(AsyncBtnState.failure);
+                                      });
+                                    }
+                                  }
+                                  else{
+                                    globalErrorProvider.setNumTelError("Numero de téléphone incorrcte");
+                                  }
+                                }
+
+                              } catch (e) {
+                                btnStateController.update(AsyncBtnState.failure);
                               }
-                            }
+                            },
+
+                            loadingStyle: AsyncBtnStateStyle(
+                              style: kStyleNextBtn,
+                              widget: const SizedBox.square(
+                                dimension: 30,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                            successStyle: AsyncBtnStateStyle(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: kPrimaryColor,
+                                foregroundColor: Colors.white,
+                              ),
+                              widget: const Row(
+                                children: [
+                                  Icon(Icons.check, color: Colors.white,),
+                                  SizedBox(width: 4),
+                                  Text('Success!',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)
+                                  )
+                                ],
+                              ),
+                            ),
+                            failureStyle: AsyncBtnStateStyle(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                              ),
+                              widget: const Row(
+                                children: [
+                                  Icon(Icons.error, color: Colors.white,),
+                                  SizedBox(width: 4),
+                                  Text('Erreur !',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)
+                                  ),
+                                ],
+                              ),
+                            ),
+                            child: const Text(
+                                'Continuer',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20)
+                            ),
                           ),
                         ),
+
+                        // ========================Fin de la gestion du bouton asynchrone====================
+
+
                         SizedBox(height: getProportionateScreenHeight(20)),
                       ],
                     ),

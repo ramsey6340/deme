@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     iconMinimalColor: Colors.green,
                     radiusSize: 60,
                     //profileImg: 'assets/data_test/avatar.png',
-                    profileImg: widget.organization.imageUrl,
+                    profileImg: widget.organization.imageUrl!,
                   ),
                 ),
               ],

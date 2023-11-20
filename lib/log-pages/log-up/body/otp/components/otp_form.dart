@@ -1,14 +1,14 @@
+import 'package:async_button/async_button.dart';
 import 'package:deme/models/user.dart';
 import 'package:deme/provider/change_log_screen_provider.dart';
-import 'package:deme/widgets/loading_button.dart';
 import 'package:deme/widgets/text_navigator.dart';
-import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../constants.dart';
 import '../../../../../provider/current_user_provider.dart';
+import '../../../../../provider/type_user_log_up_provider.dart';
 import '../../../../../provider/verification_otp_provider.dart';
 import '../../../../../services/auth_service.dart';
 import '../../../../../size_config.dart';
@@ -31,6 +31,7 @@ class _OTPFormState extends State<OTPForm> {
   @override
   void initState() {
     super.initState();
+
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();
     pin4FocusNode = FocusNode();
@@ -59,6 +60,7 @@ class _OTPFormState extends State<OTPForm> {
 
   String otpProposedCode = '';
 
+  AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,8 @@ class _OTPFormState extends State<OTPForm> {
     final verificationOtpProvider =
         Provider.of<VerificationOtpProvider>(context);
     final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+
+    final typeUserLogUpProvider = Provider.of<TypeUserLogUpProvider>(context);
 
     return Form(
       key: _formKey,
@@ -80,99 +84,121 @@ class _OTPFormState extends State<OTPForm> {
           SizedBox(
             height: getProportionateScreenHeight(50),
           ),
-          // Le boutton "Continuer"
-          /*NextButton(
-            padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(100),
-                vertical: getProportionateScreenHeight(10)),
-            press: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
 
+          // ========================Gestion du bouton asynchrone====================
+
+          Center(
+            child: AsyncTextBtn(
+              style: kStyleNextBtn,
+
+              asyncBtnStatesController: btnStateController,
+              onPressed: () async {
+                print("Profile: ${currentUserProvider.profile}");
+                print("OTP dans App: ${verificationOtpProvider.trueOtpCode}");
+                print("OTP proposé: $otpProposedCode");
+
+                btnStateController.update(AsyncBtnState.loading);
                 otpProposedCode = textEditingController1.value.text.toString() +
                     textEditingController2.value.text.toString() +
                     textEditingController3.value.text.toString() +
                     textEditingController4.value.text.toString();
+                try {
+                  verificationOtpProvider.verificationOptCode(otpProposedCode);
+                  if (verificationOtpProvider.otpVerificationSuccessful) {
+                    verificationOtpProvider.otpErrorMessage = '';
+                    print("Le code OTP est correct");
 
-                verificationOtpProvider.verificationOptCode(otpProposedCode);
-                if (verificationOtpProvider.otpVerificationSuccessful) {
-                  verificationOtpProvider.otpErrorMessage = '';
-                  print("Le code OTP est correct");
-                  authService
-                      .createUser(currentUserProvider.currentUserPassword!,
-                          currentUserProvider.currentUser!)
-                      .then((value) {
-                    print(value);
-                    changeLogScreen.incrementIndex();
-                  }).catchError((onError) {
-                    print(onError);
-                  });
-                } else {
-                  print("Code OTP incorrect");
-                  verificationOtpProvider.otpErrorMessage = "Code incorrecte";
-                }
-              }
-            },
-          ),*/
-
-
-          Center(
-            child: EasyButton(
-              idleStateWidget: Text(
-                'Continuer',
-                style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20
-                ),
-              ),
-              loadingStateWidget: const CircularProgressIndicator(
-                strokeWidth: 3.0,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.white,
-                ),
-              ),
-              useWidthAnimation: true,
-              useEqualLoadingStateWidgetDimension: true,
-              width: double.infinity,
-              height: getProportionateScreenHeight(50),
-              contentGap: 6.0,
-              borderRadius: 5,
-              buttonColor: kPrimaryColor,
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  otpProposedCode = textEditingController1.value.text.toString() +
-                      textEditingController2.value.text.toString() +
-                      textEditingController3.value.text.toString() +
-                      textEditingController4.value.text.toString();
-
-                  await Future.delayed(const Duration(milliseconds: 500), () {
-                    verificationOtpProvider.verificationOptCode(otpProposedCode);
-                    if (verificationOtpProvider.otpVerificationSuccessful) {
-                      verificationOtpProvider.otpErrorMessage = '';
-                      print("Le code OTP est correct");
+                    if(currentUserProvider.profile == kTypeUser.user.toString()){
                       authService
-                          .createUser(currentUserProvider.currentUserPassword!,
+                          .createUser(currentUserProvider.profile!, currentUserProvider.currentUserPassword!,
                           currentUserProvider.currentUser!)
                           .then((value) {
                         print("ID return : ${value}");
                         currentUserProvider.setUserId(value.toString());
                         print("Current User ID: ${currentUserProvider.currentUser?.userId}");
                         changeLogScreen.incrementIndex();
-
+                        btnStateController.update(AsyncBtnState.success);
                       }).catchError((onError) {
                         print("Erreur: $onError");
+                        btnStateController.update(AsyncBtnState.failure);
                       });
-
-                    } else {
-                      print("Code OTP incorrect");
-                      verificationOtpProvider.otpErrorMessage = "Code incorrecte";
                     }
-                  });
-              }}
+                    else if(currentUserProvider.profile == kTypeUser.organization.toString()){
+                      authService
+                          .createOrganization(currentUserProvider.profile!, currentUserProvider.currentUserPassword!,
+                          currentUserProvider.currentOrganization!)
+                          .then((value) {
+                        currentUserProvider.setOrganizationId(value.toString());
+                        changeLogScreen.incrementIndex();
+                        btnStateController.update(AsyncBtnState.success);
+                      }).catchError((onError) {
+                        print("Erreur: $onError");
+                        btnStateController.update(AsyncBtnState.failure);
+                      });
+                    }
+
+                  } else {
+                    print("Code OTP incorrect");
+                    verificationOtpProvider.otpErrorMessage = "Code incorrecte";
+                  }
+
+                } catch (e) {
+                  btnStateController.update(AsyncBtnState.failure);
+                }
+              },
+              loadingStyle: AsyncBtnStateStyle(
+                style: kStyleNextBtn,
+                widget: const SizedBox.square(
+                  dimension: 30,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+
+              successStyle: AsyncBtnStateStyle(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: kPrimaryColor,
+                  foregroundColor: Colors.white,
+                ),
+                widget: const Row(
+                  children: [
+                    Icon(Icons.check, color: Colors.white,),
+                    SizedBox(width: 4),
+                    Text('Success !',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20)
+                    )
+                  ],
+                ),
+              ),
+              failureStyle: AsyncBtnStateStyle(
+                style: kStyleNextBtn,
+                widget: const Row(
+                  children: [
+                    Icon(Icons.error, color: Colors.white,),
+                    SizedBox(width: 4),
+                    Text('Erreur !',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20)),
+                  ],
+                ),
+              ),
+              child: const Text(
+                'Continuer',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20)
+              ),
             ),
           ),
+
+          // ========================Fin de la gestion du bouton asynchrone====================
 
 
 

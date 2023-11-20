@@ -8,7 +8,6 @@ class UserService {
   static const baseServiceAuthUrl = "$baseUrl/service-user";
 
   Future<User?> patchUserInfo(String userId, Map<String, dynamic> userPatchInfo) async{
-    print("Je suis dedans");
     final response = await http.patch(Uri.parse('$baseServiceAuthUrl/$userId'),
       body: json.encode(userPatchInfo),
       headers: {

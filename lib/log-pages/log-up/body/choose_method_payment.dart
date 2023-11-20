@@ -1,4 +1,8 @@
+import 'package:async_button/async_button.dart';
+import 'package:deme/provider/current_user_provider.dart';
+import 'package:deme/services/organization_service.dart';
 import 'package:deme/services/payment_service.dart';
+import 'package:deme/services/user_service.dart';
 import 'package:deme/widgets/checkbox_list_title_custom.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:deme/widgets/title_placeholder.dart';
@@ -21,60 +25,14 @@ class ChooseMethodPayment extends StatefulWidget {
 }
 
 class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
-  /*List<MethodPayment> methodPaymentsData = [
-    MethodPayment(
-        methodPaymentId: '1',
-        name: "Orange Money",
-        description: null,
-        imageUrl: "assets/data_test/om.png",
-        termsOfUse: null),
-    MethodPayment(
-        methodPaymentId: '2',
-        name: "Moov Money",
-        description: null,
-        imageUrl: "assets/data_test/mm.png",
-        termsOfUse: null),
-    MethodPayment(
-        methodPaymentId: '3',
-        name: "Pay Pal",
-        description: null,
-        imageUrl: "assets/data_test/pp.png",
-        termsOfUse: null),
-    MethodPayment(
-        methodPaymentId: '4',
-        name: "Sama Money",
-        description: null,
-        imageUrl: "assets/data_test/sm.png",
-        termsOfUse: null),
-    MethodPayment(
-        methodPaymentId: '5',
-        name: "Orange Money",
-        description: null,
-        imageUrl: "assets/data_test/om.png",
-        termsOfUse: null),
-    MethodPayment(
-        methodPaymentId: '6',
-        name: "Moov Money",
-        description: null,
-        imageUrl: "assets/data_test/mm.png",
-        termsOfUse: null),
-    MethodPayment(
-        methodPaymentId: '7',
-        name: "Pay Pal",
-        description: null,
-        imageUrl: "assets/data_test/pp.png",
-        termsOfUse: null),
-    MethodPayment(
-        methodPaymentId: '8',
-        name: "Sama Money",
-        description: null,
-        imageUrl: "assets/data_test/sm.png",
-        termsOfUse: null),
-  ];*/
+
+  AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
 
   List<bool> methodPayments = List.generate(13, (index) => false);
   PaymentService paymentService = PaymentService();
   late Future<List<MethodPayment>> futurePayment;
+  UserService userService = UserService();
+  OrganizationService organizationService = OrganizationService();
 
   @override
   void initState() {
@@ -82,9 +40,11 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
     futurePayment = paymentService.getAllMethodPayment();
   }
 
+
   @override
   Widget build(BuildContext context) {
     final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
@@ -125,16 +85,23 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: CheckboxListTileCustom(
-                                  checkBoxValue: false,
+                                  checkBoxValue: currentUserProvider.currentUser!.preferredPaymentMethods.contains(methodPayment.methodPaymentId),
                                   onChangedCheckValue: (value) {
                                     setState(() {
+                                      if(value==true){
+                                        currentUserProvider.addMethodPayment(methodPayment.methodPaymentId);
+                                      }
+                                      else if(value==false){
+                                        currentUserProvider.removeMethodePayment(methodPayment.methodPaymentId);
+                                      }
                                     });
                                   },
                                   title: methodPayment.name,
                                   imageUrl: methodPayment.imageUrl),
                             );
                           },
-                        ):Shimmer.fromColors(
+                        ):
+                        Shimmer.fromColors(
                           baseColor: Colors.grey.shade300,
                           highlightColor: Colors.grey.shade100,
                           enabled: true,
@@ -148,8 +115,8 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        CircleAvatar(radius: 15,),
-                                        TitlePlaceholder(width: 150),
+                                        CircleAvatar(radius: 20,),
+                                        TitlePlaceholder(width: 200),
                                       ],
                                     ),
                                   ),
@@ -162,14 +129,115 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
                   SizedBox(
                     height: getProportionateScreenHeight(20),
                   ),
-                  NextButton(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: getProportionateScreenWidth(100),
-                          vertical: getProportionateScreenHeight(10)),
-                      press: () {
-                        changeLogScreen.incrementIndex();
-                      }
+
+                  // ========================Gestion du bouton asynchrone====================
+                  Center(
+                    child: AsyncTextBtn(
+                      style: kStyleNextBtn,
+
+                      asyncBtnStatesController: btnStateController,
+                      onPressed: () async {
+                        btnStateController.update(AsyncBtnState.loading);
+
+                        try {
+                          if(currentUserProvider.profile == kTypeUser.user.toString()){
+                            final currentUser = currentUserProvider.currentUser;
+                            if(currentUser != null){
+                              userService.patchUserInfo(
+                                  currentUser.userId!,
+                                  {"preferredPaymentMethods": currentUser.preferredPaymentMethods}
+                              ).then((value) {
+                                changeLogScreen.incrementIndex();
+                                btnStateController.update(AsyncBtnState.success);
+
+                              }).catchError((onError){
+                                print(onError);
+                                btnStateController.update(AsyncBtnState.failure);
+                              });
+                            }
+                          }
+
+                          // S'il s'agit d'une organisation
+                          else if(currentUserProvider.profile == kTypeUser.organization.toString()) {
+                            final currentOragnization = currentUserProvider.currentOrganization;
+                            if(currentOragnization != null){
+                              organizationService.patchOrganizationInfo(
+                                  currentOragnization.organizationId!,
+                                  {"preferredPaymentMethods": currentOragnization.preferredPaymentMethods}
+                              ).then((value) {
+                                changeLogScreen.incrementIndex();
+                                btnStateController.update(AsyncBtnState.success);
+
+                              }).catchError((onError){
+                                print(onError);
+                                btnStateController.update(AsyncBtnState.failure);
+                              });
+                            }
+                          }
+
+                        } catch (e) {
+                          btnStateController.update(AsyncBtnState.failure);
+                        }
+                      },
+
+                      loadingStyle: AsyncBtnStateStyle(
+                        style: kStyleNextBtn,
+                        widget: const SizedBox.square(
+                          dimension: 30,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
+                      successStyle: AsyncBtnStateStyle(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: kPrimaryColor,
+                          foregroundColor: Colors.white,
+                        ),
+                        widget: const Row(
+                          children: [
+                            Icon(Icons.check, color: Colors.white,),
+                            SizedBox(width: 4),
+                            Text('Success!',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20)
+                            )
+                          ],
+                        ),
+                      ),
+                      failureStyle: AsyncBtnStateStyle(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                        ),
+                        widget: const Row(
+                          children: [
+                            Icon(Icons.error, color: Colors.white,),
+                            SizedBox(width: 4),
+                            Text('Erreur !',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20)
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: const Text(
+                          'Continuer',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20)
+                      ),
+                    ),
                   ),
+                  // ========================Fin de la gestion du bouton asynchrone====================
+
+
                   SizedBox(height: getProportionateScreenHeight(20)),
                   TextNavigator(text: 'Ignorer', isReturn: false, onTap: (){
                     changeLogScreen.incrementIndex();

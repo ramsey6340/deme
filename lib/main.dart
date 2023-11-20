@@ -5,6 +5,7 @@ import 'package:deme/provider/type_user_log_up_provider.dart';
 import 'package:deme/provider/verification_otp_provider.dart';
 import 'package:deme/routes.dart';
 import 'package:deme/size_config.dart';
+import 'package:deme/splash/loading_splash_screen.dart';
 import 'package:deme/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       //home: MainScreen(),
-      home: SplashScreen(),
+      home: LoadingSplashScreen(),
       routes: routes,
     );
   }

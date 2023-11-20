@@ -14,6 +14,9 @@ class User {
   bool delete;
   bool activated;
   bool anonymous;
+  List<String> preferredPaymentMethods;
+  List<String> favoriteHumanitarianCauses;
+  String profile;
 
   User({
     required this.userId,
@@ -27,7 +30,29 @@ class User {
     required this.delete,
     required this.activated,
     required this.anonymous,
+    required this.preferredPaymentMethods,
+    required this.favoriteHumanitarianCauses,
+    required this.profile
   });
+
+  @override
+  String toString() {
+    return 'User{'
+        'userId: $userId, '
+        'name: $name, '
+        'email: $email, '
+        'login: $login, '
+        'numTel: $numTel, '
+        'birthDay: $birthDay, '
+        'imageUrl: $imageUrl, '
+        'deviceType: $deviceType, '
+        'delete: $delete, '
+        'activated: $activated, '
+        'anonymous: $anonymous, '
+        'preferredPaymentMethods: $preferredPaymentMethods, '
+        'favoriteHumanitarianCauses: $favoriteHumanitarianCauses, '
+        'profile: $profile}';
+  }
 
   /*
   // Getter
@@ -70,10 +95,6 @@ class User {
     anonymous = value;
   }*/
 
-
-  factory User.fromRawJson(List<int> data) => User.fromJson(json.decode(utf8.decode(data)));
-  String toRawJson() => json.encode(toJson());
-
   factory User.fromJson(Map<String, dynamic> json) => User(
     userId: json["userId"],
     name: json["name"],
@@ -86,6 +107,9 @@ class User {
     delete: json["delete"],
     activated: json["activated"],
     anonymous: json["anonymous"],
+    profile: json["profile"],
+    preferredPaymentMethods: List<String>.from(json["preferredPaymentMethods"].map((x) => x)),
+    favoriteHumanitarianCauses: List<String>.from(json["favoriteHumanitarianCauses"].map((x) => x))
   );
 
   Map<String, dynamic> toJson() => {
@@ -100,5 +124,8 @@ class User {
     "delete": delete,
     "activated": activated,
     "anonymous": anonymous,
+    "profile": profile,
+    "preferredPaymentMethods": List<dynamic>.from(preferredPaymentMethods.map((x) => x)),
+    "favoriteHumanitarianCauses": List<dynamic>.from(favoriteHumanitarianCauses.map((x) => x)),
   };
 }

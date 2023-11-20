@@ -8,7 +8,7 @@ const kTextFieldOpacity = 0.7;
 const kAnimationDuration = Duration(milliseconds: 200);
 double baseWidth = 428;
 
-const kNumberOfLogUpPage = 7;
+const kNumberOfLogUpPage = 8;
 const kNumberOfHomeOption = 2;
 const kNumberOfGivenOption = 2;
 
@@ -26,7 +26,7 @@ final otpFieldDecoration = InputDecoration(
   ),
 );
 
-const int kPasswordMaxLength = 4;
+const int kPasswordMaxLength = 6;
 const int kFirstNameMinLength = 2;
 const int kLastNameMinLength = 2;
 const int maxLengthOfExampleProduct = 12;
@@ -35,4 +35,27 @@ final RegExp birthDayRegExp = RegExp(r"^[0-9]{2}\/[0-9]{2}\/[0-9]{4}");
 
 
 String currentUserId = '1';
-const baseUrl = "http://10.175.48.99:8080";
+const baseUrl = "http://10.175.48.160:8080";
+
+
+ButtonStyle? kStyleNextBtn = ButtonStyle(
+  padding: MaterialStateProperty.all(
+    EdgeInsets.symmetric(
+        horizontal: getProportionateScreenWidth(100),
+        vertical: getProportionateScreenHeight(10)),
+  ),
+  elevation: MaterialStateProperty.all(0),
+  overlayColor: MaterialStateProperty.all(Colors.transparent),
+  backgroundColor: MaterialStateProperty.all(kPrimaryColor),
+  shape: MaterialStateProperty.all(
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+  ),
+  side: MaterialStateProperty.all(
+    const BorderSide(color: Colors.transparent, width: 1),
+  ),
+);
+
+enum kTypeUser {
+  user,
+  organization
+}

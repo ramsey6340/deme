@@ -24,7 +24,7 @@ class CauseCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage (
             fit: BoxFit.cover,
-            image: AssetImage (
+            image: NetworkImage (
               cause.imageUrl,
             ),
           ),

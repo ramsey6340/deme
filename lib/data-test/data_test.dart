@@ -11,9 +11,9 @@ import '../models/user.dart';
 
 // Les users
 List<User> users = [
-  User(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: ''),
-  User(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: ''),
-  User(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '')
+  User(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user'),
+  User(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user'),
+  User(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user')
 ];
 
 // Les cause
@@ -26,11 +26,11 @@ List<Cause> causes = [
 
 // Les organisations
 List<Organization> organizations = [
-  Organization(organizationId: '1', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1910', nbSubscription: 100, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3']),
-  Organization(organizationId: '2', name: "UNICEF", imageUrl: 'assets/data_test/o2.png', isValid: true, isVerified: false, matricule: 'HD78NLSPAIDP', type: 'Fondation', startDateExercise: '21/01/1950', nbSubscription: 34, login: 'UNICEF', address: addresses[0], subscribersId: ['2', '3']),
-  Organization(organizationId: '3', name: "Sauvons les enfants", imageUrl: 'assets/data_test/o3.png', isValid: false, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/1810', nbSubscription: 104, login: 'Sauvons les enfants', address: addresses[0], subscribersId: ['2']),
-  Organization(organizationId: '4', name: "Diversity", imageUrl: 'assets/data_test/o4.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1990', nbSubscription: 76, login: 'Diversity', address: addresses[0], subscribersId: ['3']),
-  Organization(organizationId: '5', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', isValid: true, isVerified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/2000', nbSubscription: 98, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3']),
+  Organization(organizationId: '1', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1910', nbSubscription: 100, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
+  Organization(organizationId: '2', name: "UNICEF", imageUrl: 'assets/data_test/o2.png', valid: true, verified: false, matricule: 'HD78NLSPAIDP', type: 'Fondation', startDateExercise: '21/01/1950', nbSubscription: 34, login: 'UNICEF', address: addresses[0], subscribersId: ['2', '3'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
+  Organization(organizationId: '3', name: "Sauvons les enfants", imageUrl: 'assets/data_test/o3.png', valid: false, verified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/1810', nbSubscription: 104, login: 'Sauvons les enfants', address: addresses[0], subscribersId: ['2'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
+  Organization(organizationId: '4', name: "Diversity", imageUrl: 'assets/data_test/o4.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1990', nbSubscription: 76, login: 'Diversity', address: addresses[0], subscribersId: ['3'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
+  Organization(organizationId: '5', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/2000', nbSubscription: 98, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
 ];
 
 // Les assignments
