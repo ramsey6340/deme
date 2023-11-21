@@ -16,10 +16,10 @@ class ChooseAccountType extends StatefulWidget {
   const ChooseAccountType({super.key});
 
   @override
-  State<ChooseAccountType> createState() => _Body1State();
+  State<ChooseAccountType> createState() => _ChooseAccountTypeState();
 }
 
-class _Body1State extends State<ChooseAccountType> {
+class _ChooseAccountTypeState extends State<ChooseAccountType> {
   final _formKey = GlobalKey<FormState>();
 
   SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
@@ -62,11 +62,11 @@ class _Body1State extends State<ChooseAccountType> {
                       children: <Widget>[
                         ListTileRadioCustom(
                           title: 'OUI',
-                          radioValue: 'organization',
+                          radioValue: KTypeUser.organization,
                           radioGroupValue: currentValue,
                           radioOnChanged: (value) {
                             setState(() {
-                              currentValue = 'organization';
+                              currentValue = KTypeUser.organization;
                             });
                             typeUserLogUp.setTypeUserLogUp(currentValue!);
                           },
@@ -76,11 +76,11 @@ class _Body1State extends State<ChooseAccountType> {
                         ),
                         ListTileRadioCustom(
                           title: 'NON',
-                          radioValue: 'user',
+                          radioValue: KTypeUser.user,
                           radioGroupValue: currentValue,
                           radioOnChanged: (value) {
                             setState(() {
-                              currentValue = 'user';
+                              currentValue = KTypeUser.user;
                             });
                             typeUserLogUp.setTypeUserLogUp(currentValue!);
                           },

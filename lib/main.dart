@@ -6,13 +6,18 @@ import 'package:deme/provider/verification_otp_provider.dart';
 import 'package:deme/routes.dart';
 import 'package:deme/size_config.dart';
 import 'package:deme/splash/loading_splash_screen.dart';
-import 'package:deme/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'main_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TypeUserLogUpProvider()),

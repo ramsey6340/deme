@@ -14,6 +14,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../constants.dart';
 import '../../../models/method_payment.dart';
 import '../../../provider/change_log_screen_provider.dart';
+import '../../../provider/type_user_log_up_provider.dart';
 import '../../../size_config.dart';
 import '../../../widgets/next_button.dart';
 
@@ -45,6 +46,8 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
   Widget build(BuildContext context) {
     final changeLogScreen = Provider.of<ChangeLogScreenProvider>(context);
     final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    final typeUserLogUp = Provider.of<TypeUserLogUpProvider>(context);
+
 
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
@@ -85,14 +88,18 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: CheckboxListTileCustom(
-                                  checkBoxValue: currentUserProvider.currentUser!.preferredPaymentMethods.contains(methodPayment.methodPaymentId),
+                                  checkBoxValue: (typeUserLogUp.typeUserLogUp == KTypeUser.organization)?currentUserProvider.currentOrganization!.preferredPaymentMethods.contains(methodPayment.methodPaymentId):currentUserProvider.currentUser!.preferredPaymentMethods.contains(methodPayment.methodPaymentId),
                                   onChangedCheckValue: (value) {
                                     setState(() {
                                       if(value==true){
-                                        currentUserProvider.addMethodPayment(methodPayment.methodPaymentId);
+                                        (typeUserLogUp.typeUserLogUp == KTypeUser.organization)?
+                                              currentUserProvider.addInOrganizationMethodPayment(methodPayment.methodPaymentId)
+                                            :currentUserProvider.addMethodPayment(methodPayment.methodPaymentId);
                                       }
                                       else if(value==false){
-                                        currentUserProvider.removeMethodePayment(methodPayment.methodPaymentId);
+                                        (typeUserLogUp.typeUserLogUp == KTypeUser.organization)?
+                                            currentUserProvider.removeInOrganizationMethodePayment(methodPayment.methodPaymentId)
+                                            :currentUserProvider.removeMethodePayment(methodPayment.methodPaymentId);
                                       }
                                     });
                                   },
@@ -127,7 +134,7 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
                     ),
                   ),
                   SizedBox(
-                    height: getProportionateScreenHeight(20),
+                    height: getProportionateScreenHeight(10),
                   ),
 
                   // ========================Gestion du bouton asynchrone====================
@@ -140,7 +147,7 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
                         btnStateController.update(AsyncBtnState.loading);
 
                         try {
-                          if(currentUserProvider.profile == kTypeUser.user.toString()){
+                          if(currentUserProvider.profile == KTypeUser.user){
                             final currentUser = currentUserProvider.currentUser;
                             if(currentUser != null){
                               userService.patchUserInfo(
@@ -158,12 +165,12 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
                           }
 
                           // S'il s'agit d'une organisation
-                          else if(currentUserProvider.profile == kTypeUser.organization.toString()) {
-                            final currentOragnization = currentUserProvider.currentOrganization;
-                            if(currentOragnization != null){
+                          else if(currentUserProvider.profile == KTypeUser.organization) {
+                            final currentOrgnization = currentUserProvider.currentOrganization;
+                            if(currentOrgnization != null){
                               organizationService.patchOrganizationInfo(
-                                  currentOragnization.organizationId!,
-                                  {"preferredPaymentMethods": currentOragnization.preferredPaymentMethods}
+                                  currentOrgnization.organizationId!,
+                                  {"preferredPaymentMethods": currentOrgnization.preferredPaymentMethods}
                               ).then((value) {
                                 changeLogScreen.incrementIndex();
                                 btnStateController.update(AsyncBtnState.success);

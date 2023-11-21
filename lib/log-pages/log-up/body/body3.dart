@@ -208,7 +208,7 @@ class _Body1State extends State<Body3> {
                               btnStateController.update(AsyncBtnState.loading);
 
                               try {
-                                if (currentUserProvider.profile == kTypeUser.user.toString()) {
+                                if (currentUserProvider.profile == KTypeUser.user) {
                                   final currentUser =  currentUserProvider.currentUser;
                                   userService.isLoginAvailable(
                                       loginController.value.text)
@@ -248,7 +248,7 @@ class _Body1State extends State<Body3> {
                                   });
                                 }
 
-                                else if(currentUserProvider.profile == kTypeUser.organization.toString()){
+                                else if(currentUserProvider.profile == KTypeUser.organization){
                                   final currentOrganization =  currentUserProvider.currentOrganization;
                                   organizationService.isLoginAvailable(
                                       loginController.value.text)
@@ -268,7 +268,7 @@ class _Body1State extends State<Body3> {
                                           currentUserProvider.setOrganizationStartDateExercise(
                                               value.startDateExercise.toString());
 
-                                          changeLogScreen.incrementIndex();
+                                          changeLogScreen.twoCrementIndex();
 
                                           btnStateController.update(AsyncBtnState.success);
 

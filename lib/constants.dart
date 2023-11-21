@@ -8,7 +8,7 @@ const kTextFieldOpacity = 0.7;
 const kAnimationDuration = Duration(milliseconds: 200);
 double baseWidth = 428;
 
-const kNumberOfLogUpPage = 8;
+const kNumberOfLogUpPage = 9;
 const kNumberOfHomeOption = 2;
 const kNumberOfGivenOption = 2;
 
@@ -35,7 +35,7 @@ final RegExp birthDayRegExp = RegExp(r"^[0-9]{2}\/[0-9]{2}\/[0-9]{4}");
 
 
 String currentUserId = '1';
-const baseUrl = "http://10.175.48.160:8080";
+const baseUrl = "http://10.175.48.172:8080";
 
 
 ButtonStyle? kStyleNextBtn = ButtonStyle(
@@ -55,7 +55,9 @@ ButtonStyle? kStyleNextBtn = ButtonStyle(
   ),
 );
 
-enum kTypeUser {
-  user,
-  organization
+class KTypeUser {
+  static String user = 'user';
+  static String organization = 'organization';
 }
+
+String kLoginMessageError = "email ou mot de passe incorrecte";

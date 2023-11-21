@@ -11,9 +11,9 @@ import '../models/user.dart';
 
 // Les users
 List<User> users = [
-  User(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user'),
-  User(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user'),
-  User(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user')
+  User(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
+  User(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
+  User(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: '')
 ];
 
 // Les cause

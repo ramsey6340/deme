@@ -17,6 +17,7 @@ class User {
   List<String> preferredPaymentMethods;
   List<String> favoriteHumanitarianCauses;
   String profile;
+  String? gender;
 
   User({
     required this.userId,
@@ -32,7 +33,8 @@ class User {
     required this.anonymous,
     required this.preferredPaymentMethods,
     required this.favoriteHumanitarianCauses,
-    required this.profile
+    required this.profile,
+    required this.gender
   });
 
   @override
@@ -51,7 +53,8 @@ class User {
         'anonymous: $anonymous, '
         'preferredPaymentMethods: $preferredPaymentMethods, '
         'favoriteHumanitarianCauses: $favoriteHumanitarianCauses, '
-        'profile: $profile}';
+        'profile: $profile, '
+        'gender: $gender}';
   }
 
   /*
@@ -108,6 +111,7 @@ class User {
     activated: json["activated"],
     anonymous: json["anonymous"],
     profile: json["profile"],
+    gender: json["gender"],
     preferredPaymentMethods: List<String>.from(json["preferredPaymentMethods"].map((x) => x)),
     favoriteHumanitarianCauses: List<String>.from(json["favoriteHumanitarianCauses"].map((x) => x))
   );
@@ -125,6 +129,7 @@ class User {
     "activated": activated,
     "anonymous": anonymous,
     "profile": profile,
+    "gender": gender,
     "preferredPaymentMethods": List<dynamic>.from(preferredPaymentMethods.map((x) => x)),
     "favoriteHumanitarianCauses": List<dynamic>.from(favoriteHumanitarianCauses.map((x) => x)),
   };

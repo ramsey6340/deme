@@ -2,12 +2,11 @@ import 'package:deme/constants.dart';
 import 'package:deme/log-pages/log-up/body/body1.dart';
 import 'package:deme/log-pages/log-up/body/body2.dart';
 import 'package:deme/provider/change_log_screen_provider.dart';
-import 'package:deme/widgets/next_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils.dart';
 import 'body/body3.dart';
+import 'body/choose_gender.dart';
 import 'body/finish_log_message.dart';
 import 'body/choose_method_payment.dart';
 import 'body/init_preferred_cause.dart';
@@ -21,8 +20,11 @@ class LogUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double fem = MediaQuery.of(context).size.width / baseWidth;
-    double ffem = fem * 0.97;
-    List<Widget> logBodies = [ChooseAccountType(), Body1(), OTPScreen(), Body2(), Body3(), FinishLogMessage(), ChooseMethodPayment(), InitPreferredCause()];
+    List<Widget> logBodies = [
+      ChooseAccountType(), Body1(), OTPScreen(), Body2(),
+      Body3(), ChooseGender(), FinishLogMessage(), ChooseMethodPayment(),
+      InitPreferredCause()
+    ];
 
     return Scaffold(
       body: SizedBox(

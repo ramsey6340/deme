@@ -12,6 +12,13 @@ class ChangeLogScreenProvider with ChangeNotifier{
     }
   }
 
+  void twoCrementIndex() {
+    if(logIndex<kNumberOfLogUpPage-2){
+      logIndex+=2;
+      notifyListeners();
+    }
+  }
+
   void decrementIndex() {
     if(logIndex>0){
       logIndex--;

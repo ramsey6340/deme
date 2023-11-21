@@ -1,13 +1,15 @@
+import 'package:async_button/async_button.dart';
 import 'package:deme/constants.dart';
 import 'package:deme/log-pages/forgot-password/reset_password.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/verification_otp_provider.dart';
 import '../../size_config.dart';
 import '../../utils.dart';
 import '../../widgets/next_button.dart';
-import '../../widgets/phone_form_field_custom.dart';
 
 class ForgotOtpField extends StatefulWidget {
   static const String routeName = "forgot_otp_field";
@@ -21,6 +23,15 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
   late FocusNode pin2FocusNode;
   late FocusNode pin3FocusNode;
   late FocusNode pin4FocusNode;
+  AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
+
+  TextEditingController textEditingController1 = TextEditingController();
+  TextEditingController textEditingController2 = TextEditingController();
+  TextEditingController textEditingController3 = TextEditingController();
+  TextEditingController textEditingController4 = TextEditingController();
+
+  String otpProposedCode = '';
+
 
   @override
   void initState() {
@@ -49,6 +60,8 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
 
   @override
   Widget build(BuildContext context) {
+    final verificationOtpProvider = Provider.of<VerificationOtpProvider>(context);
+
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
     return Scaffold(
@@ -118,7 +131,10 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
                                   ),
                                   SizedBox(height: getProportionateScreenHeight(20)),
                                   otp_input(),
-
+                                  Text(
+                                    verificationOtpProvider.otpErrorMessage,
+                                    style: TextStyle(color: Colors.red),
+                                  ),
                                   SizedBox(height: getProportionateScreenHeight(30)),
                                   Container(
                                     margin: EdgeInsets.fromLTRB(
@@ -140,17 +156,94 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
                                     ),
                                   ),
                                   SizedBox(height: 10,),
-                                  NextButton(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: getProportionateScreenWidth(100),
-                                        vertical: getProportionateScreenHeight(10)),
-                                    press: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        _formKey.currentState!.save();
-                                        Navigator.pushNamed(context, ResetPassword.routeName);
-                                      }
-                                    },
+
+
+                                  Center(
+                                    child: AsyncTextBtn(
+                                      style: kStyleNextBtn,
+
+                                      asyncBtnStatesController: btnStateController,
+                                      onPressed: () async {
+                                        btnStateController.update(AsyncBtnState.loading);
+                                        if (_formKey.currentState!.validate()) {
+                                          _formKey.currentState!.save();
+                                          otpProposedCode = textEditingController1.value.text.toString() +
+                                              textEditingController2.value.text.toString() +
+                                              textEditingController3.value.text.toString() +
+                                              textEditingController4.value.text.toString();
+
+
+                                          try {
+                                            verificationOtpProvider.verificationOptCode(otpProposedCode);
+                                            if(verificationOtpProvider.otpVerificationSuccessful){
+                                              verificationOtpProvider.otpErrorMessage = '';
+                                              print("Le code OTP est correct");
+                                              Navigator.pushNamed(context, ResetPassword.routeName);
+                                            }
+
+                                          } catch (e) {
+                                            print(e);
+                                            btnStateController.update(AsyncBtnState.failure);
+                                          }
+                                        }
+                                      },
+
+                                      loadingStyle: AsyncBtnStateStyle(
+                                        style: kStyleNextBtn,
+                                        widget: const SizedBox.square(
+                                          dimension: 30,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+
+                                      successStyle: AsyncBtnStateStyle(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: kPrimaryColor,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                        widget: const Row(
+                                          children: [
+                                            Icon(Icons.check, color: Colors.white,),
+                                            SizedBox(width: 4),
+                                            Text('Success!',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20)
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      failureStyle: AsyncBtnStateStyle(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                        widget: const Row(
+                                          children: [
+                                            Icon(Icons.error, color: Colors.white,),
+                                            SizedBox(width: 4),
+                                            Text('Erreur !',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20)
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      child: const Text(
+                                          'Continuer',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20)
+                                      ),
+                                    ),
                                   ),
+
                                   SizedBox(height: getProportionateScreenHeight(20)),
                                   TextNavigator(onTap: (){Navigator.pop(context);}),
                                 ],
@@ -180,6 +273,7 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
         SizedBox(
           width: getProportionateScreenWidth(60),
           child: TextFormField(
+            controller: textEditingController1,
             cursorColor: kTextColor,
             autofocus: true,
             keyboardType: TextInputType.number,
@@ -195,6 +289,7 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
         SizedBox(
           width: getProportionateScreenWidth(60),
           child: TextFormField(
+            controller: textEditingController2,
             cursorColor: kTextColor,
             focusNode: pin2FocusNode,
             keyboardType: TextInputType.number,
@@ -208,6 +303,7 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
         SizedBox(
           width: getProportionateScreenWidth(60),
           child: TextFormField(
+            controller: textEditingController3,
             cursorColor: kTextColor,
             focusNode: pin3FocusNode,
             keyboardType: TextInputType.number,
@@ -221,6 +317,7 @@ class _ForgotOtpFieldState extends State<ForgotOtpField> {
         SizedBox(
           width: getProportionateScreenWidth(60),
           child: TextFormField(
+            controller: textEditingController4,
             cursorColor: kTextColor,
             focusNode: pin4FocusNode,
             keyboardType: TextInputType.number,

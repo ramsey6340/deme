@@ -68,11 +68,16 @@ class SharedPreferencesService {
 
   }
 
-  Future<void> setTypeUser(String value) async {
+  Future<void> setTypeUser(String? value) async {
     final SharedPreferences prefs = await _prefs;
 
     try{
-      prefs.setString("typeUser", value);
+      if(value != null){
+        prefs.setString("typeUser", value);
+      }
+      else{
+        prefs.remove("typeUser");
+      }
     }catch(e) {
       throw Exception(e);
     }

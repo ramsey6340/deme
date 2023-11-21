@@ -291,8 +291,11 @@ class _Body1State extends State<Body1> {
 
                               asyncBtnStatesController: btnStateController,
                               onPressed: () async {
+                                print("typeUserLogUp.typeUserLogUp : ${typeUserLogUp.typeUserLogUp}");
+
                                 btnStateController.update(AsyncBtnState.loading);
                                 try {
+
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState!.save();
                                     String name = nameController.value.text;
@@ -300,7 +303,8 @@ class _Body1State extends State<Body1> {
                                     String password = passwordController.value.text;
 
                                     // S'il s'agit d'un utilisateur simple
-                                    if(typeUserLogUp.typeUserLogUp == kTypeUser.user.toString()){
+                                    if(typeUserLogUp.typeUserLogUp == KTypeUser.user){
+                                      print("Type: User");
                                       User currentUser = User(
                                           userId: null,
                                           name: name,
@@ -313,7 +317,8 @@ class _Body1State extends State<Body1> {
                                           activated: true,
                                           anonymous: false,
                                           birthDay: null,
-                                          profile: 'user',
+                                          profile: KTypeUser.user,
+                                          gender: null,
                                           preferredPaymentMethods: [],
                                           favoriteHumanitarianCauses: []
                                       );
@@ -323,7 +328,7 @@ class _Body1State extends State<Body1> {
                                         btnStateController.update(AsyncBtnState.success);
 
                                         currentUserProvider.setCurrentUser(currentUser);
-                                        currentUserProvider.setProfile('user');
+                                        currentUserProvider.setProfile(KTypeUser.user);
                                         currentUserProvider.setCurrentUserPassword(password);
                                         print("Debut, User: ${currentUserProvider.currentUser}");
                                         changeLogScreen.incrementIndex();
@@ -334,7 +339,8 @@ class _Body1State extends State<Body1> {
                                     }
 
                                     // S'il s'agit d'une organisation
-                                    else if(typeUserLogUp.typeUserLogUp == kTypeUser.organization.toString()){
+                                    else if(typeUserLogUp.typeUserLogUp == KTypeUser.organization){
+                                      print("Type: Organisation");
                                       Organization currentOrganization = Organization(
                                           organizationId: null,
                                           name: name,
@@ -346,7 +352,7 @@ class _Body1State extends State<Body1> {
                                           delete: false,
                                           activated: true,
                                           anonymous: false,
-                                          profile: kTypeUser.organization.toString(),
+                                          profile: KTypeUser.organization,
                                           valid: true,
                                           verified: false,
                                           matricule: null,
@@ -363,9 +369,8 @@ class _Body1State extends State<Body1> {
                                         verificationOtpProvider.setTrueOtpCode(value);
                                         btnStateController.update(AsyncBtnState.success);
                                         currentUserProvider.setCurrentOrganization(currentOrganization);
-                                        currentUserProvider.setProfile(kTypeUser.organization.toString());
+                                        currentUserProvider.setProfile(KTypeUser.organization);
                                         currentUserProvider.setCurrentUserPassword(password);
-                                        print("Debut, Organisation: ${currentUserProvider.currentUser}");
                                         changeLogScreen.incrementIndex();
                                       }).catchError((onError){
                                         print(onError);
@@ -376,6 +381,7 @@ class _Body1State extends State<Body1> {
                                   }
 
                                 } catch (e) {
+                                  print("Type: Error");
                                   btnStateController.update(AsyncBtnState.failure);
                                 }
                               },

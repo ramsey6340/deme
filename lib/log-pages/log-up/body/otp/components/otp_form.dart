@@ -94,6 +94,7 @@ class _OTPFormState extends State<OTPForm> {
               asyncBtnStatesController: btnStateController,
               onPressed: () async {
                 print("Profile: ${currentUserProvider.profile}");
+                print("TypeUser: ${typeUserLogUpProvider.typeUserLogUp}");
                 print("OTP dans App: ${verificationOtpProvider.trueOtpCode}");
                 print("OTP proposé: $otpProposedCode");
 
@@ -108,7 +109,7 @@ class _OTPFormState extends State<OTPForm> {
                     verificationOtpProvider.otpErrorMessage = '';
                     print("Le code OTP est correct");
 
-                    if(currentUserProvider.profile == kTypeUser.user.toString()){
+                    if(typeUserLogUpProvider.typeUserLogUp == KTypeUser.user){
                       authService
                           .createUser(currentUserProvider.profile!, currentUserProvider.currentUserPassword!,
                           currentUserProvider.currentUser!)
@@ -123,7 +124,7 @@ class _OTPFormState extends State<OTPForm> {
                         btnStateController.update(AsyncBtnState.failure);
                       });
                     }
-                    else if(currentUserProvider.profile == kTypeUser.organization.toString()){
+                    else if(typeUserLogUpProvider.typeUserLogUp == KTypeUser.organization){
                       authService
                           .createOrganization(currentUserProvider.profile!, currentUserProvider.currentUserPassword!,
                           currentUserProvider.currentOrganization!)

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "529085308483",
+    "project_id": "deme-2bed9",
+    "storage_bucket": "deme-2bed9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529085308483:android:d4327068421004f3633ef6",
+        "android_client_info": {
+          "package_name": "com.example.deme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWpU6PM67yChgpq_e45-Ga49dwTNZplVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

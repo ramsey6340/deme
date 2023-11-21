@@ -1,42 +1,43 @@
 import 'package:async_button/async_button.dart';
 import 'package:deme/constants.dart';
-import 'package:deme/log-pages/log-in/log_in.dart';
+import 'package:deme/log-pages/forgot-password/forgot_otp_field.dart';
+import 'package:deme/provider/current_user_provider.dart';
 import 'package:deme/services/auth_service.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/current_user_provider.dart';
+import '../../provider/global_error_provider.dart';
+import '../../provider/verification_otp_provider.dart';
+import '../../services/organization_service.dart';
+import '../../services/user_service.dart';
 import '../../size_config.dart';
+import '../../utils.dart';
 import '../../widgets/next_button.dart';
+import '../../widgets/phone_form_field_custom.dart';
 import '../../widgets/text_form_field_custom.dart';
 
-class ResetPassword extends StatefulWidget {
-  static const String routeName = "reset_password";
-  const ResetPassword({super.key});
+class ForgotEmailField extends StatefulWidget {
+  static const String routeName = "forgot_phone_field";
+  const ForgotEmailField({super.key});
 
   @override
-  State<ResetPassword> createState() => _ResetPasswordState();
+  State<ForgotEmailField> createState() => _ForgotEmailFieldState();
 }
 
-class _ResetPasswordState extends State<ResetPassword> {
+class _ForgotEmailFieldState extends State<ForgotEmailField> {
   final _formKey = GlobalKey<FormState>();
-  String? passwordError;
-  String? confirmPasswordError;
-
-  String password = '';
-  String confirmPassword = '';
-
-  AuthService authService = AuthService();
-
   AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
+  TextEditingController emailController = TextEditingController();
 
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  String? emailError;
+  AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
+    final globalErrorProvider = Provider.of<GlobalErrorProvider>(context);
+    final verificationOtpProvider = Provider.of<VerificationOtpProvider>(context);
     final currentUserProvider = Provider.of<CurrentUserProvider>(context);
 
 
@@ -54,13 +55,13 @@ class _ResetPasswordState extends State<ResetPassword> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: getProportionateScreenHeight(30),),
+                // Image de header
                 Container(
                   margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 0*fem),
                   width: getProportionateScreenWidth(428),
-                  height: getProportionateScreenHeight(300),
+                  height: getProportionateScreenHeight(402),
                   child: Image.asset(
-                    'assets/images/forgot3.png',
+                    'assets/images/forgot1.png',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -74,7 +75,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       Container(
                         margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 10 * fem),
                         child: Text(
-                          'Reinitialisé mon mot de passe',
+                          'Mot de passe oublié',
                           style: GoogleFonts.inter(
                               fontSize: 30 * ffem,
                               fontWeight: FontWeight.w700,
@@ -86,6 +87,18 @@ class _ResetPasswordState extends State<ResetPassword> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text("Entrer votre numéro e téléphone, on vous enverra un code par SMS",
+                            style: GoogleFonts.inter(fontWeight: FontWeight.w400),),
+                            SizedBox(height: 20,),
+                            (globalErrorProvider.loginIdentityError != null)?Container(
+                              child: Text(globalErrorProvider.loginIdentityError!,
+                                style: GoogleFonts.inter(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ):SizedBox(),
                             Form(
                               key: _formKey,
                               child: Column(
@@ -94,124 +107,49 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("Nouveau Mot de passe", style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.bold)),
+                                      Text(
+                                        "Email",
+                                        style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                       TextFormFieldCustom(
-                                        controller: passwordController,
-                                        isPassword: true,
-                                        hintText: '',
+                                        controller: emailController,
+                                        textInputType: TextInputType.emailAddress,
+                                        hintText: 'Ex: test@gmail.com',
                                         hintTextColor:
                                         Colors.black.withOpacity(kTextFieldOpacity),
                                         cursorColor: kRoundedCategoryColor,
-                                        errorText: passwordError,
+                                        errorText: emailError,
                                         // la méthode validator
                                         validator: (value) {
-                                          if (value!.isEmpty) {
+                                          if (!emailValidatorRegExp.hasMatch(value!)) {
                                             setState(() {
-                                              password = value;
-                                              passwordError = "Entrer le mot de passe";
+                                              emailError = 'Email incorrecte';
                                             });
-                                            return passwordError;
-                                          } else if (value.isNotEmpty &&
-                                              value.length < kPasswordMaxLength) {
-                                            setState(() {
-                                              password = value;
-                                              passwordError = "Mot de passe faible";
-                                            });
-                                            return passwordError;
-                                          } else {
-                                            password = value;
-                                            return null;
+                                            return emailError;
                                           }
+                                          return null;
                                         },
                                         // la méthode onChanged
                                         onChanged: (value) {
+                                          globalErrorProvider.setLoginIdentityError(null);
                                           if (value.isEmpty) {
                                             setState(() {
-                                              passwordError = '';
+                                              emailError = '';
                                             });
                                           } else if (value.isNotEmpty &&
-                                              value.length < kPasswordMaxLength) {
+                                              !emailValidatorRegExp.hasMatch(value)) {
                                             setState(() {
-                                              passwordError = '';
-                                            });
-                                          } else if (value.isNotEmpty &&
-                                              value.length >= kPasswordMaxLength) {
-                                            setState(() {
-                                              passwordError = '';
+                                              emailError = '';
                                             });
                                           }
                                         },
                                       ),
                                     ],
                                   ),
-                                  (passwordError == null)
-                                      ? const SizedBox(
-                                    height: 24,
-                                  )
-                                      : const SizedBox(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Confirmation", style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.bold)),
-                                      TextFormFieldCustom(
-                                        controller: confirmPasswordController,
-                                        isPassword: true,
-                                        hintText: 'Confirmation de mot de passe',
-                                        hintTextColor:
-                                        Colors.black.withOpacity(kTextFieldOpacity),
-                                        cursorColor: kRoundedCategoryColor,
-                                        errorText: confirmPasswordError,
-                                        // la méthode validator
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            setState(() {
-                                              confirmPassword = value;
-                                              confirmPasswordError =
-                                              "Entrer la confirmation du mot de passe";
-                                            });
-                                            return confirmPasswordError;
-                                          } else if (value.isNotEmpty &&
-                                              value.length < kPasswordMaxLength) {
-                                            setState(() {
-                                              confirmPassword = value;
-                                              confirmPasswordError = "mot de passe faible";
-                                            });
-                                            return confirmPasswordError;
-                                          } else if (value != password) {
-                                            setState(() {
-                                              confirmPassword = value;
-                                              confirmPasswordError =
-                                              "les mots de passes ne correspondent pas";
-                                            });
-                                            return confirmPasswordError;
-                                          } else {
-                                            confirmPassword = value;
-                                            return null;
-                                          }
-                                        },
-                                        // la méthode onChanged
-                                        onChanged: (value) {
-                                          if (value.isEmpty) {
-                                            setState(() {
-                                              confirmPasswordError = '';
-                                            });
-                                          } else if (value.isNotEmpty &&
-                                              value.length < kPasswordMaxLength) {
-                                            setState(() {
-                                              confirmPasswordError = '';
-                                            });
-                                          } else if (value.isNotEmpty &&
-                                              value.length >= kPasswordMaxLength) {
-                                            setState(() {
-                                              confirmPasswordError = '';
-                                            });
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  ),
+
+
+
                                   SizedBox(height: getProportionateScreenHeight(40)),
 
                                   Center(
@@ -223,15 +161,29 @@ class _ResetPasswordState extends State<ResetPassword> {
                                         btnStateController.update(AsyncBtnState.loading);
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
+                                          String email = emailController.value.text;
 
                                           try {
-                                           authService.resetPassword(currentUserProvider.resetUserPasswordId!,
-                                               passwordController.value.text).then((value) {
-                                                 Navigator.pushNamed(context, LogIn.routeName);
-                                           }).catchError((onError){
-                                             print(onError);
-                                             btnStateController.update(AsyncBtnState.failure);
-                                           });
+                                            authService.verifyEmailForResetPassword(email).then((value) {
+                                              if(value != null){
+                                                currentUserProvider.setResetUserPasswordId(value);
+                                                authService.sendMailOtpCode(email).then((value) {
+                                                  verificationOtpProvider.setTrueOtpCode(value);
+                                                  Navigator.pushNamed(context, ForgotOtpField.routeName);
+                                                  btnStateController.update(AsyncBtnState.success);
+
+                                                }).catchError((onError){
+                                                  print(onError);
+                                                  btnStateController.update(AsyncBtnState.failure);
+                                                });
+                                              }
+                                              else{
+                                                btnStateController.update(AsyncBtnState.failure);
+                                              }
+                                            }).catchError((onError){
+                                              print(onError);
+                                              btnStateController.update(AsyncBtnState.failure);
+                                            });
                                           } catch (e) {
                                             print(e);
                                             btnStateController.update(AsyncBtnState.failure);
@@ -294,10 +246,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                                       ),
                                     ),
                                   ),
-
                                   SizedBox(height: getProportionateScreenHeight(20)),
-                                  TextNavigator(text: 'Annuler', onTap: (){
-                                    Navigator.pushNamed(context, LogIn.routeName);
+                                  TextNavigator(onTap: (){
+                                    Navigator.pop(context);
                                   }),
                                 ],
                               ),

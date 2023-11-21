@@ -13,8 +13,6 @@ import '../../../provider/current_user_provider.dart';
 import '../../../provider/global_error_provider.dart';
 import '../../../provider/type_user_log_up_provider.dart';
 import '../../../size_config.dart';
-import '../../../utils.dart';
-import '../../../widgets/next_button.dart';
 import '../../../widgets/phone_form_field_custom.dart';
 import '../../../widgets/profile_img.dart';
 import '../../../widgets/text_form_field_custom.dart';
@@ -123,8 +121,8 @@ class _Body1State extends State<Body2> {
                           },
                         ),
                         (globalErrorProvider.numTelError!=null)?Text(globalErrorProvider.numTelError!, style: TextStyle(color: Colors.red),):const SizedBox(),
-                        (typeUserLogUp.typeUserLogUp == 'organization')? SizedBox(height: getProportionateScreenHeight(20)): SizedBox(),
-                        (typeUserLogUp.typeUserLogUp == 'organization')?
+                        (typeUserLogUp.typeUserLogUp == KTypeUser.organization)? SizedBox(height: getProportionateScreenHeight(20)): SizedBox(),
+                        (typeUserLogUp.typeUserLogUp == KTypeUser.organization)?
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -143,6 +141,7 @@ class _Body1State extends State<Body2> {
                           ],
                         ):SizedBox(),
                         SizedBox(height: getProportionateScreenHeight(30)),
+
                         // ========================Gestion du bouton asynchrone====================
 
                         Center(
@@ -154,7 +153,7 @@ class _Body1State extends State<Body2> {
                               btnStateController.update(AsyncBtnState.loading);
 
                               try {
-                                if(typeUserLogUp.typeUserLogUp == kTypeUser.user.toString()){
+                                if(typeUserLogUp.typeUserLogUp == KTypeUser.user){
                                   if(numTelController.value.text.isNotEmpty){
                                     currentUserProvider.setNumTel(phoneNumberValue);
                                     User? currentUser = currentUserProvider.currentUser;
@@ -178,7 +177,7 @@ class _Body1State extends State<Body2> {
                                   }
                                 }
 
-                                else if(currentUserProvider.profile == kTypeUser.organization.toString()) {
+                                else if(currentUserProvider.profile == KTypeUser.organization) {
                                   if(numTelController.value.text.isNotEmpty && matriculeController.value.text.isNotEmpty){
                                     currentUserProvider.setOrganizationMatricule(matriculeController.value.text);
                                     currentUserProvider.setOrganizationNumTel(phoneNumberValue);

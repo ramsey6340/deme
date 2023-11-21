@@ -8,14 +8,20 @@ class CurrentUserProvider with ChangeNotifier{
   Organization? currentOrganization;
   String? currentUserPassword;
   String? profile;
+  String? resetUserPasswordId;
 
   void setProfile(String? value) {
     profile=value;
     notifyListeners();
   }
 
+  void setResetUserPasswordId(String? userId) {
+    resetUserPasswordId = userId;
+    notifyListeners();
+  }
 
-  /* ============Debut de traitement de l'objet Organisation============ */
+
+  /* ============Debut de traitement de l'objet User============ */
 
   void setCurrentUser(User? user) {
     currentUser = user;
@@ -29,6 +35,11 @@ class CurrentUserProvider with ChangeNotifier{
 
   void setUserId(String value){
     currentUser?.userId = value;
+    notifyListeners();
+  }
+
+  void setGender(String value){
+    currentUser?.gender = value;
     notifyListeners();
   }
 

@@ -1,4 +1,5 @@
 import 'package:deme/main_screen.dart';
+import 'package:deme/models/user.dart';
 import 'package:deme/services/shared_preferences_service.dart';
 import 'package:deme/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,19 +17,35 @@ class LoadingSplashScreen extends StatefulWidget {
 class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
   SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
 
+  @override
+  void initState() {
+    super.initState();
+
+    sharedPreferencesService.setFirstInteraction(false);
+    sharedPreferencesService.setTypeUser(null);
+    /*sharedPreferencesService.setTypeUser('user');
+    User user = User(userId: '', name: 'name',
+        email: 'email', login: 'login', numTel: 'numTel', birthDay: 'birthDay',
+        imageUrl: 'imageUrl', deviceType: 'deviceType',
+        delete: false, activated: true, anonymous: true,
+        preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'profile');
+    sharedPreferencesService.setCurrentUser(user);*/
+  }
+
   Future<Widget> futureCall() async {
     bool value = await sharedPreferencesService.getFirstInteraction() ?? true;
 
     if (value) {
-      return SplashScreen();
+      return  Future.value(new SplashScreen());
     }
     else {
       String? typeUser = await sharedPreferencesService.getTypeUser();
       if(typeUser == null){
-        return LogIn();
+        return  Future.value(new LogIn());
       }
       else {
-        return MainScreen();
+        print("le else typeUser: $typeUser");
+        return Future.value(new MainScreen());
       }
     }
   }

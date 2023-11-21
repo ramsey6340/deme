@@ -91,15 +91,21 @@ class _Body4State extends State<InitPreferredCause> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: CauseCard(
-                                checkBoxValue: currentUserProvider.currentUser!.favoriteHumanitarianCauses.contains(cause.causeId),
+                                checkBoxValue: (typeUserLogUp.typeUserLogUp == KTypeUser.organization)?
+                                    currentUserProvider.currentOrganization!.favoriteHumanitarianCauses.contains(cause.causeId)
+                                    :currentUserProvider.currentUser!.favoriteHumanitarianCauses.contains(cause.causeId),
                                 cause: cause,
                                 onChangedCheckBoxValue: (value) {
                                   setState(() {
                                     if(value==true){
-                                      currentUserProvider.addCause(cause.causeId);
+                                      (typeUserLogUp.typeUserLogUp == KTypeUser.organization)?
+                                          currentUserProvider.addInOrganizationFavoriteCauses(cause.causeId)
+                                          :currentUserProvider.addCause(cause.causeId);
                                     }
                                     else if(value==false){
-                                      currentUserProvider.removeCause(cause.causeId);
+                                      (typeUserLogUp.typeUserLogUp == KTypeUser.organization)?
+                                          currentUserProvider.removeInOrganizationFavoriteCauses(cause.causeId)
+                                          :currentUserProvider.removeCause(cause.causeId);
                                     }
                                   });
                                 },
@@ -128,6 +134,7 @@ class _Body4State extends State<InitPreferredCause> {
                                       padding: EdgeInsets.symmetric(vertical: 100, horizontal: 100),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
+                                        color: Colors.grey
                                       ),
                                     ),
                                   ],
@@ -151,7 +158,8 @@ class _Body4State extends State<InitPreferredCause> {
                         btnStateController.update(AsyncBtnState.loading);
 
                         try {
-                          if(currentUserProvider.profile == kTypeUser.user.toString()){
+                          if(typeUserLogUp.typeUserLogUp == KTypeUser.user){
+                            print("user : ${currentUserProvider.profile}");
                             final currentUser = currentUserProvider.currentUser;
                             if(currentUser != null){
                               userService.patchUserInfo(
@@ -172,10 +180,11 @@ class _Body4State extends State<InitPreferredCause> {
                           }
 
                           // S'il s'agit d'une organisation
-                          if(currentUserProvider.profile == kTypeUser.organization.toString()) {
+                          if(typeUserLogUp.typeUserLogUp == KTypeUser.organization) {
+                            print("Organisation: ${currentUserProvider.profile}");
                             final currentOrganization = currentUserProvider.currentOrganization;
                             if(currentOrganization != null){
-                              userService.patchUserInfo(
+                              organizationService.patchOrganizationInfo(
                                   currentOrganization.organizationId!,
                                   {"favoriteHumanitarianCauses": currentOrganization.favoriteHumanitarianCauses}
                               ).then((value) {

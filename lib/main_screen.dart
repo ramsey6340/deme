@@ -82,14 +82,14 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final currentUserProvider = Provider.of<CurrentUserProvider>(context);
     sharedPreferencesService.getTypeUser().then((value) {
-      if(value == kTypeUser.user.toString()){
+      if(value == KTypeUser.user){
         sharedPreferencesService.getCurrentUser().then((value) {
           currentUserProvider.setCurrentUser(value);
         }).catchError((onError){
           print(onError);
         });
       }
-      else if(value == kTypeUser.organization.toString()){
+      else if(value == KTypeUser.organization){
         sharedPreferencesService.getCurrentOrganization().then((value) {
           currentUserProvider.setCurrentOrganization(value);
         }).catchError((onError){
