@@ -1,24 +1,36 @@
+import 'package:async_button/async_button.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:deme/constants.dart';
+import 'package:deme/main-pages/given/body/body_given.dart';
+import 'package:deme/main-pages/given/given.dart';
+import 'package:deme/models/financial_donation.dart';
 import 'package:deme/models/method_payment.dart';
+import 'package:deme/services/donation_service.dart';
 import 'package:deme/services/payment_service.dart';
 import 'package:deme/size_config.dart';
 import 'package:deme/widgets/next_button.dart';
-import 'package:deme/widgets/text_form_field_custom.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import '../../../models/organization.dart';
+import '../../../provider/current_user_provider.dart';
 
 class FinancialPage extends StatefulWidget {
-  const FinancialPage({super.key});
+  const FinancialPage({super.key, required this.organization});
+  final Organization organization;
 
   @override
   State<FinancialPage> createState() => _FinancialPageState();
 }
 
 class _FinancialPageState extends State<FinancialPage> {
+  AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
+
   late Future<List<MethodPayment>> futureMethodPayment;
   PaymentService methodPaymentService = PaymentService();
+  DonationService donationService = DonationService();
 
   @override
   void initState() {
@@ -27,18 +39,19 @@ class _FinancialPageState extends State<FinancialPage> {
     futureMethodPayment = methodPaymentService.getAllMethodPayment();
   }
 
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController amountEditingController = TextEditingController();
   final List<String> genderItems = [
     'Male',
     'Female',
   ];
 
-  String? selectedValue;
+  String? methodPaymentId;
 
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Form(
@@ -60,7 +73,7 @@ class _FinancialPageState extends State<FinancialPage> {
                 padding: EdgeInsets.symmetric(
                     horizontal: getProportionateScreenWidth(10)),
                 child: TextField(
-                  controller: textEditingController,
+                  controller: amountEditingController,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
                   cursorColor: kPrimaryColor,
@@ -84,7 +97,7 @@ class _FinancialPageState extends State<FinancialPage> {
                           width:
                               2.0), // Personnalisez la couleur et l'épaisseur ici
                     ),
-                    focusedBorder: UnderlineInputBorder(
+                    focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.black,
                           width:
@@ -122,7 +135,7 @@ class _FinancialPageState extends State<FinancialPage> {
                           children: [
                             CircleAvatar(
                               backgroundImage:
-                                  AssetImage(snapshot.data![0].imageUrl),
+                                  NetworkImage(snapshot.data![0].imageUrl),
                               radius: 20,
                             ),
                             Text(
@@ -144,7 +157,7 @@ class _FinancialPageState extends State<FinancialPage> {
                                   children: [
                                     CircleAvatar(
                                       backgroundImage:
-                                          AssetImage(methodPayment.imageUrl),
+                                          NetworkImage(methodPayment.imageUrl),
                                       radius: 20,
                                     ),
                                     const SizedBox(
@@ -165,13 +178,20 @@ class _FinancialPageState extends State<FinancialPage> {
                     if (value == null) {
                       return 'Choisisser un mode de paiement';
                     }
+                    setState(() {
+                      methodPaymentId = value.methodPaymentId;
+                    });
                     return null;
                   },
                   onChanged: (value) {
-                    //Do something when selected item is changed.
+                    setState(() {
+                      methodPaymentId = value?.methodPaymentId;
+                    });
                   },
                   onSaved: (value) {
-                    selectedValue = value.toString();
+                    setState(() {
+                      methodPaymentId = value?.methodPaymentId;
+                    });
                   },
                   buttonStyleData: const ButtonStyleData(
                     padding: EdgeInsets.only(right: 16),
@@ -198,7 +218,7 @@ class _FinancialPageState extends State<FinancialPage> {
             SizedBox(
               height: getProportionateScreenHeight(40),
             ),
-            NextButton(text: 'Valider', press: () {
+            /*NextButton(text: 'Valider', press: () {
 
               AwesomeDialog(
                 context: context,
@@ -214,10 +234,153 @@ class _FinancialPageState extends State<FinancialPage> {
                 btnOkIcon: Icons.check_circle,
                 btnOkColor: Colors.green,
               ).show();
-            }),
+            }),*/
+
+
+            // ========================Gestion du bouton asynchrone====================
+
+            Center(
+              child: AsyncTextBtn(
+                style: kStyleNextBtn,
+                asyncBtnStatesController: btnStateController,
+                onPressed: () async {
+                  btnStateController.update(AsyncBtnState.loading);
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    try {
+                      double amount = double.parse(amountEditingController.value.text);
+                      if(methodPaymentId != null && currentUserProvider.currentOrganization!=null){
+                        MethodPayment methodPayment = await methodPaymentService.getMethodPaymentById(methodPaymentId!);
+                        if(currentUserProvider.profile == KTypeUser.organization) {
+                          Map<String, dynamic> financialDonation = {
+                            "amount": amount,
+                            "methodPaymentId": methodPayment.methodPaymentId
+                          };
+                          FinancialDonation newFinancialDonation = await donationService.
+                          createFinancialDonationByOrganisationToOrganisation(
+                              currentUserProvider.currentOrganization!.organizationId,
+                              widget.organization.organizationId, financialDonation
+                          );
+
+                          if(context.mounted){
+                            successDonation(context, widget.organization);
+                          }
+                        }
+                      }
+
+                    } catch(e){
+                      btnStateController.update(AsyncBtnState.failure);
+                      if(context.mounted){
+                        errorDonation(context, widget.organization);
+                      }
+                      throw Exception(e);
+                    }
+                  }
+                },
+
+                loadingStyle: AsyncBtnStateStyle(
+                  style: kStyleNextBtn,
+                  widget: const SizedBox.square(
+                    dimension: 30,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+
+                successStyle: AsyncBtnStateStyle(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: kPrimaryColor,
+                    foregroundColor: Colors.white,
+                  ),
+                  widget: const Row(
+                    children: [
+                      Icon(Icons.check, color: Colors.white,),
+                      SizedBox(width: 4),
+                      Text('Success!',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20)
+                      )
+                    ],
+                  ),
+                ),
+                failureStyle: AsyncBtnStateStyle(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
+                  widget: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error, color: Colors.white,),
+                      SizedBox(width: 4),
+                      Text('Erreur !',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20)
+                      ),
+                    ],
+                  ),
+                ),
+                child: const Text(
+                    'Continuer',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20)
+                ),
+              ),
+            ),
+
+            // ========================Fin de la gestion du bouton asynchrone====================
+
           ],
         ),
       ),
+    );
+  }
+
+  void successDonation(BuildContext context, Organization organization) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      animType: AnimType.rightSlide,
+      titleTextStyle: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 24),
+      descTextStyle: GoogleFonts.inter(fontSize: 16),
+      headerAnimationLoop: false,
+      title: 'Donation reussi',
+      desc:
+      'Vôtre donation a bien été envoyé. Vous pouvez voir le reçu dans votre compte',
+      btnOkOnPress: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => BodyGiven(organization: organization)));
+      },
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.green,
+    ).show();
+  }
+  void errorDonation(BuildContext context, Organization organization) {
+    AnimatedButton(
+      text: 'Echec de donation',
+      color: Colors.red,
+      pressEvent: () {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.rightSlide,
+          headerAnimationLoop: false,
+          title: 'Erreur',
+          desc:
+          "Une erreur s'est produit lors de la transaction",
+          btnOkOnPress: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => BodyGiven(organization: organization)));
+          },
+          btnOkIcon: Icons.cancel,
+          btnOkColor: Colors.red,
+        ).show();
+      },
     );
   }
 }

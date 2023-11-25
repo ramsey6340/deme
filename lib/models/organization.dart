@@ -17,7 +17,7 @@ class Organization {
   String? matricule;
   String type;
   String? startDateExercise;
-  int nbSubscription; // nombre d'abonnement
+  double nbSubscription; // nombre d'abonnement
   Address? address;
   List<String> subscribersId;
   List<String> preferredPaymentMethods;
@@ -74,7 +74,7 @@ class Organization {
   }
 
   factory Organization.fromJson(Map<String, dynamic> json) => Organization(
-      organizationId: json["userId"],
+      organizationId: json["organizationId"],
       name: json["name"],
       email: json["email"],
       login: json["login"],

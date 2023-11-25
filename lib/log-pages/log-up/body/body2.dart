@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
-import '../../../models/user.dart';
+import '../../../models/user_model.dart';
 import '../../../provider/change_log_screen_provider.dart';
 import '../../../provider/current_user_provider.dart';
 import '../../../provider/global_error_provider.dart';
@@ -156,7 +156,7 @@ class _Body1State extends State<Body2> {
                                 if(typeUserLogUp.typeUserLogUp == KTypeUser.user){
                                   if(numTelController.value.text.isNotEmpty){
                                     currentUserProvider.setNumTel(phoneNumberValue);
-                                    User? currentUser = currentUserProvider.currentUser;
+                                    UserModel? currentUser = currentUserProvider.currentUser;
                                     if(currentUser != null){
                                       userService.patchUserInfo(
                                           currentUser.userId!,

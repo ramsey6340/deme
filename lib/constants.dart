@@ -35,10 +35,11 @@ final RegExp birthDayRegExp = RegExp(r"^[0-9]{2}\/[0-9]{2}\/[0-9]{4}");
 
 
 String currentUserId = '1';
-const baseUrl = "http://10.175.48.172:8080";
+const baseUrl = "http://10.175.48.5:8080";
 
 
 ButtonStyle? kStyleNextBtn = ButtonStyle(
+  minimumSize: MaterialStateProperty.all(Size(double.infinity, getProportionateScreenHeight(50))),
   padding: MaterialStateProperty.all(
     EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(100),

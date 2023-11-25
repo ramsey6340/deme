@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'address.dart';
 
-class User {
+class UserModel {
   String? userId;
   String name;
   String email;
@@ -19,7 +19,7 @@ class User {
   String profile;
   String? gender;
 
-  User({
+  UserModel({
     required this.userId,
     required this.name,
     required this.email,
@@ -98,7 +98,7 @@ class User {
     anonymous = value;
   }*/
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     userId: json["userId"],
     name: json["name"],
     email: json["email"],

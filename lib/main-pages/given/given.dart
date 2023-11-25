@@ -13,6 +13,7 @@ import '../../widgets/anim_search_widget_custom.dart';
 import '../../widgets/organization_shimmer.dart';
 
 class Given extends StatefulWidget {
+  static const routeName = "given_donation_page";
   const Given({super.key});
 
   @override

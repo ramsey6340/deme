@@ -1,12 +1,13 @@
 import 'package:deme/models/organization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../models/user.dart';
+
+import '../models/user_model.dart';
 
 class SharedPreferencesService {
   final Future<SharedPreferences> _prefs  = SharedPreferences.getInstance();
 
-  Future<void> setCurrentUser(User? currentUser) async{
+  Future<void> setCurrentUser(UserModel? currentUser) async{
     // Cette methode permet d'enregistrer les données de l'utilisateur dans le cache,
 
     final SharedPreferences prefs = await _prefs;
@@ -19,7 +20,7 @@ class SharedPreferencesService {
 
   }
 
-  Future<User?> getCurrentUser() async {
+  Future<UserModel?> getCurrentUser() async {
     // Cette methode permet de récuperer les données de l'utilisateur coueant
     // dans le cache
 
@@ -27,7 +28,7 @@ class SharedPreferencesService {
     try{
       String? currentUserJson = prefs.getString('currentUser');
       if (currentUserJson != null) {
-        User user = User.fromJson(json.decode(currentUserJson));
+        UserModel user = UserModel.fromJson(json.decode(currentUserJson));
         return user;
       }
       return null;

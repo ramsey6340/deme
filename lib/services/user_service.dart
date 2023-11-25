@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import '../constants.dart';
-import '../models/user.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/user_model.dart';
 
 class UserService {
   static const baseServiceAuthUrl = "$baseUrl/service-user";
 
-  Future<User?> patchUserInfo(String userId, Map<String, dynamic> userPatchInfo) async{
+  Future<UserModel?> patchUserInfo(String userId, Map<String, dynamic> userPatchInfo) async{
     final response = await http.patch(Uri.parse('$baseServiceAuthUrl/$userId'),
       body: json.encode(userPatchInfo),
       headers: {
@@ -18,7 +19,7 @@ class UserService {
 
     if(response.statusCode == 200) {
       final responseData = json.decode(utf8.decode(response.bodyBytes));
-      User user = User.fromJson(responseData);
+      UserModel user = UserModel.fromJson(responseData);
       return user;
     }
 
@@ -45,12 +46,12 @@ class UserService {
     throw Exception(errorResponse);
   }
 
-  Future<User?> getUserById(String id) async {
+  Future<UserModel?> getUserById(String id) async {
     final response = await http.get(Uri.parse('$baseServiceAuthUrl/$id'));
 
     if(response.statusCode == 200) {
       final responseData = json.decode(utf8.decode(response.bodyBytes));
-      User user = User.fromJson(responseData);
+      UserModel user = UserModel.fromJson(responseData);
       return user;
     }
     Map<String, dynamic> errorMessage = {};

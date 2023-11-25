@@ -1,5 +1,7 @@
 import 'package:async_button/async_button.dart';
 import 'package:deme/log-pages/log-up/log_up.dart';
+import 'package:deme/models/organization.dart';
+import 'package:deme/models/user_model.dart';
 import 'package:deme/provider/current_user_provider.dart';
 import 'package:deme/provider/type_user_log_up_provider.dart';
 import 'package:deme/services/organization_service.dart';
@@ -62,7 +64,7 @@ class _Body1State extends State<Body> {
             children: [
               Container(
                 margin:
-                EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 27 * fem),
+                EdgeInsets.only(bottom: getProportionateScreenHeight(25)),
                 child: Text(
                   'Se connecté',
                   style: GoogleFonts.inter(
@@ -72,13 +74,24 @@ class _Body1State extends State<Body> {
                 ),
               ),
 
-            (globalErrorProvider.loginIdentityError != null)?Container(
-                child: Text(globalErrorProvider.loginIdentityError!,
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            (globalErrorProvider.loginIdentityError != null)?
+            Container(
+              width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 10),
+                margin: EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                  color: Colors.red.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(5)
+                ),
+                child: Center(
+                  child: Text(globalErrorProvider.loginIdentityError!,
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ):SizedBox(),
 
@@ -240,10 +253,11 @@ class _Body1State extends State<Body> {
                                   String password = passwordController.value.text;
 
                                   try {
-                                    FirebaseAuth.instance.signInWithEmailAndPassword(
+                                    /*FirebaseAuth.instance.signInWithEmailAndPassword(
                                         email: email,
                                         password: password
                                     ).then((value) {
+                                      btnStateController.update(AsyncBtnState.loading);
                                       if(value.user?.displayName == KTypeUser.user){
                                         userService.getUserById(value.user!.uid).then((value) {
                                           // Donnée en cache
@@ -267,6 +281,8 @@ class _Body1State extends State<Body> {
                                         });
                                       }
                                       else if(value.user?.displayName == KTypeUser.organization){
+                                        btnStateController.update(AsyncBtnState.loading);
+
                                         organizationService.getOrganizationById(value.user!.uid).then((value) {
                                           // Donnée en cache
                                           sharedPreferencesService.setCurrentOrganization(value);
@@ -292,14 +308,57 @@ class _Body1State extends State<Body> {
                                       print(onError);
                                       globalErrorProvider.setLoginIdentityError(kLoginMessageError);
                                       btnStateController.update(AsyncBtnState.failure);
-                                    });
-                                  } on FirebaseAuthException catch (e) {
-                                    if (e.code == 'user-not-found') {
-                                      print('Cet utilisateur n\'existe pas');
-                                      btnStateController.update(AsyncBtnState.failure);
-                                    } else if (e.code == 'wrong-password') {
-                                      print('Mauvais mot de passe fourni pour cet utilisateur.');
+                                    });*/
+
+
+                                    /*==============================Code de test==================*/
+                                    final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                        email: email,
+                                        password: password
+                                    );
+                                    btnStateController.update(AsyncBtnState.loading);
+                                    if(credential.user?.displayName == KTypeUser.user){
+                                      UserModel? user = await userService.getUserById(credential.user!.uid);
+                                      // Donnée en cache
+                                      sharedPreferencesService.setCurrentUser(user);
+                                      sharedPreferencesService.setTypeUser(KTypeUser.user);
+                                      sharedPreferencesService.setFirstInteraction(false);
+
+                                      // Donnée du provider
+                                      currentUserProvider.setCurrentUser(user);
+                                      currentUserProvider.setProfile(KTypeUser.user);
+                                      /* On remet à null les données de l'utilisateur de type Organization */
+                                      sharedPreferencesService.setCurrentOrganization(null);
+                                      currentUserProvider.setCurrentOrganization(null);
+
+                                      // Navigation vers la page d'accueil
+                                      Navigator.pushNamedAndRemoveUntil(context, MainScreen.routeName, (route) => false);
+
+
+                                  }
+                                    else if(credential.user?.displayName == KTypeUser.organization){
+                                      btnStateController.update(AsyncBtnState.loading);
+                                      Organization organization = await organizationService.getOrganizationById(credential.user!.uid);
+                                      // Donnée en cache
+                                      sharedPreferencesService.setCurrentOrganization(organization);
+                                      sharedPreferencesService.setTypeUser(KTypeUser.organization);
+                                      sharedPreferencesService.setFirstInteraction(false);
+
+                                      // Donnée du provider
+                                      currentUserProvider.setCurrentOrganization(organization);
+                                      currentUserProvider.setProfile(KTypeUser.organization);
+                                      /* On remet à null les données de l'utilisateur de type User */
+                                      sharedPreferencesService.setCurrentUser(null);
+                                      currentUserProvider.setCurrentUser(null);
+
+                                      // Navigation vers la page d'accueil
+                                      Navigator.pushNamedAndRemoveUntil(context, MainScreen.routeName, (route) => false);
+
                                     }
+                                    /*==============================Fin du test==================*/
+                                  } catch(e){
+                                    //btnStateController.update(AsyncBtnState.failure);
+                                    throw Exception(e);
                                   }
                                 }
                               },
@@ -338,6 +397,7 @@ class _Body1State extends State<Body> {
                                   foregroundColor: Colors.white,
                                 ),
                                 widget: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.error, color: Colors.white,),
                                     SizedBox(width: 4),

@@ -1,20 +1,21 @@
 import 'package:deme/constants.dart';
+import 'package:deme/models/testimony.dart';
 import 'package:deme/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../models/post.dart';
 
-class PostContainer extends StatefulWidget {
-  const PostContainer({super.key, required this.post});
-  final Post post;
+
+class TestimonyContainer extends StatefulWidget {
+  const TestimonyContainer({super.key, required this.testimony});
+  final Testimony testimony;
 
   @override
-  State<PostContainer> createState() => _PostContainerState();
+  State<TestimonyContainer> createState() => _TestimonyContainerState();
 }
 
-class _PostContainerState extends State<PostContainer> {
+class _TestimonyContainerState extends State<TestimonyContainer> {
   int likesCount = 0;
   bool isLiked = false;
   bool imageEmpty = false;
@@ -37,8 +38,9 @@ class _PostContainerState extends State<PostContainer> {
               children: [
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage: NetworkImage(
-                      widget.post.activity.assignment.organization.imageUrl!),
+                  backgroundImage: (widget.testimony.organization!=null)?
+                  NetworkImage(widget.testimony.organization!.imageUrl!):
+                  NetworkImage(widget.testimony.user!.imageUrl!),
                 ),
                 SizedBox(
                   width: getProportionateScreenWidth(8),
@@ -50,7 +52,9 @@ class _PostContainerState extends State<PostContainer> {
                     Text.rich(
                       TextSpan(
                           text:
-                              widget.post.activity.assignment.organization.name,
+                          (widget.testimony.organization!=null)?
+                          widget.testimony.organization?.name:
+                          widget.testimony.user?.login,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -59,52 +63,42 @@ class _PostContainerState extends State<PostContainer> {
                           children: [
                             TextSpan(
                                 text:
-                                    '\n@${widget.post.activity.assignment.cause.name.toLowerCase()}',
+                                '\n@${widget.testimony.cause.name.toLowerCase()}',
                                 style: GoogleFonts.workSans(
                                     fontSize: 12, color: kPrimaryColor))
                           ]),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      widget.post.activity.title,
-                      style: GoogleFonts.workSans(
-                        fontSize: 12,
-                      ),
                     ),
                   ],
                 ),
               ],
             ),
             Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      (widget.post.imageUrls.isNotEmpty && widget.post.imageUrls[0].isNotEmpty)?const SizedBox(height: 15):SizedBox(),
-                      (widget.post.imageUrls.isNotEmpty && widget.post.imageUrls[0].isNotEmpty)?
-                      Container(
-                        height: (widget.post.imageUrls.isNotEmpty)?getProportionateScreenHeight(200):0,
-                        width: double.infinity,
-                        decoration: (widget.post.imageUrls.isNotEmpty)?BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                            image:  DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(widget.post.imageUrls[0]),
-                            )):BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(10)),
-                      ):SizedBox(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        widget.post.message,
-                        style: GoogleFonts.workSans(
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.start,
-                      )
-                    ],
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                (widget.testimony.imageUrl!=null && widget.testimony.imageUrl!.isNotEmpty)?const SizedBox(height: 15):SizedBox(),
+                (widget.testimony.imageUrl!=null && widget.testimony.imageUrl!.isNotEmpty)?Container(
+                  height: getProportionateScreenHeight(200),
+                  decoration: (BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      image:  DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(widget.testimony.imageUrl!),
+                      ))),
+                ):SizedBox(),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  (widget.testimony.message!=null && widget.testimony.message!.isNotEmpty)?
+                  widget.testimony.message!:'',
+                  style: GoogleFonts.workSans(
+                    fontSize: 14,
                   ),
+                  textAlign: TextAlign.start,
+                )
+              ],
+            ),
             SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,

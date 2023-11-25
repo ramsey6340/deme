@@ -1,6 +1,4 @@
 import 'package:async_button/async_button.dart';
-import 'package:deme/main-pages/organization/organization_page.dart';
-import 'package:deme/models/user.dart';
 import 'package:deme/models/organization.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
+import '../../../models/user_model.dart';
 import '../../../provider/change_log_screen_provider.dart';
 import '../../../provider/current_user_provider.dart';
 import '../../../provider/type_user_log_up_provider.dart';
@@ -305,7 +304,7 @@ class _Body1State extends State<Body1> {
                                     // S'il s'agit d'un utilisateur simple
                                     if(typeUserLogUp.typeUserLogUp == KTypeUser.user){
                                       print("Type: User");
-                                      User currentUser = User(
+                                      UserModel currentUser = UserModel(
                                           userId: null,
                                           name: name,
                                           email: email,

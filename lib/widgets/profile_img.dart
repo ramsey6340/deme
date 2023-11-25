@@ -13,7 +13,8 @@ class ProfileImg extends StatelessWidget {
     this.iconMinimalColor=Colors.black,
     this.iconMinimalSize=30,
     this.backgroundIconMinimal=const Color(0xFFF5F6F9),
-    this.radiusSize=70
+    this.radiusSize=70,
+    this.isNetworkImg=true
   }) : super(key: key);
   final String profileImg;
   final Function()? pressShowImg;
@@ -24,12 +25,19 @@ class ProfileImg extends StatelessWidget {
   final Color backgroundIconMinimal;
   final double iconMinimalSize;
   final double radiusSize;
+  final bool isNetworkImg;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
         children: [
-          GestureDetector(
+          (isNetworkImg)?GestureDetector(
+            onTap: pressShowImg,
+            child: CircleAvatar(
+              radius: radiusSize,
+              backgroundImage: NetworkImage(profileImg),
+            ),
+          ):GestureDetector(
             onTap: pressShowImg,
             child: CircleAvatar(
               radius: radiusSize,

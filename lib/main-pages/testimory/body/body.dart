@@ -1,11 +1,9 @@
-import 'package:deme/models/post.dart';
-import 'package:deme/services/post_service.dart';
+import 'package:deme/models/testimony.dart';
+import 'package:deme/services/testimony_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../../../data-test/data_test.dart';
-import '../../../widgets/post_container.dart';
 import '../../../widgets/post_shimmer.dart';
+import '../../../widgets/testimony_container.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -15,28 +13,28 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  late Future<List<Post>?> futurePosts;
-  PostService postService = PostService();
+  late Future<List<Testimony>> futureTestimony;
+  TestimonyService testimonyService = TestimonyService();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    futurePosts = postService.getAllPost();
+    futureTestimony = testimonyService.getAllTestimony();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: futurePosts,
+      future: futureTestimony,
       builder: (context, snapshot) {
         return (snapshot.hasData)
             ? ListView.builder(
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  final post = snapshot.data![index];
-                  return PostContainer(
-                    post: post,
+                  final testimony = snapshot.data![index];
+                  return TestimonyContainer(
+                    testimony: testimony,
                   );
                 })
             : Shimmer.fromColors(

@@ -1,7 +1,7 @@
 import 'package:deme/constants.dart';
 import 'package:deme/models/demand.dart';
 import 'package:deme/models/organization.dart';
-import 'package:deme/services/demand_service.dart';
+import 'package:deme/services/donation_service.dart';
 import 'package:deme/services/organization_service.dart';
 import 'package:deme/size_config.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +25,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   late Future<List<Demand>> futureDemand;
-  DemandService demandService = DemandService();
+  DonationService demandService = DonationService();
 
   @override
   void initState() {

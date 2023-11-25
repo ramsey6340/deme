@@ -61,8 +61,17 @@ class _FinancialDonationWidgetState extends State<FinancialDonationWidget> {
                     Container(
                       margin: EdgeInsets.fromLTRB(
                           0 * fem, 0 * fem, 0 * fem, 5 * fem),
-                      child: Text(
-                        '@${widget.financialDonation.user.login}',
+                      child: (widget.financialDonation.donorUser!=null)?
+                      Text(
+                        '@${widget.financialDonation.donorUser?.login}',
+                        style: GoogleFonts.inter(
+                          fontSize: 14 * ffem,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                          height: 1.2125 * ffem / fem,
+                        ),
+                      ):Text(
+                        '@${widget.financialDonation.donorOrganization?.login}',
                         style: GoogleFonts.inter(
                           fontSize: 14 * ffem,
                           color: Colors.blue,
@@ -72,7 +81,7 @@ class _FinancialDonationWidgetState extends State<FinancialDonationWidget> {
                       ),
                     ),
                     Text(
-                      widget.financialDonation.date,
+                      widget.financialDonation.creationDate!,
                       style: GoogleFonts.inter(
                         fontSize: 14 * ffem,
                         fontWeight: FontWeight.w500,
@@ -87,11 +96,11 @@ class _FinancialDonationWidgetState extends State<FinancialDonationWidget> {
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)),
-                    backgroundColor: (widget.financialDonation.isUsed)
+                    backgroundColor: (widget.financialDonation.used!)
                         ? Colors.green
                         : Colors.red,
                     label: Text(
-                      (widget.financialDonation.isUsed)
+                      (widget.financialDonation.used!)
                           ? "Utilisé"
                           : "Non utilisé",
                       style:

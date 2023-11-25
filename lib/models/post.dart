@@ -1,18 +1,32 @@
 import 'package:deme/models/activity.dart';
 
 class Post {
-  final String postId;
-  final String? imageUrl;
-  final String description;
-  final String? videoUrl;
-  final Activity activity;
+  String? postId;
+  List<String> imageUrls;
+  String message;
+  String? videoUrl;
+  String? creationDate;
+  Activity activity;
+  String causeId;
 
   Post({
     required this.postId,
-    required this.imageUrl,
-    required this.description,
+    required this.imageUrls,
+    required this.message,
     required this.videoUrl,
-    required this.activity
+    required this.creationDate,
+    required this.activity,
+    required this.causeId,
   });
+
+  factory Post.fromJson(Map<String, dynamic> json, Activity activity) => Post(
+      postId: json["activityId"],
+      imageUrls: List<String>.from(json["imageUrls"].map((x) => x)),
+      message: json["message"],
+      videoUrl: json["videoUrl"],
+      causeId: json["causeId"],
+      creationDate: json["creationDate"],
+      activity: activity
+  );
 
 }

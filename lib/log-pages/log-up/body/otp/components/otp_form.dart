@@ -1,5 +1,4 @@
 import 'package:async_button/async_button.dart';
-import 'package:deme/models/user.dart';
 import 'package:deme/provider/change_log_screen_provider.dart';
 import 'package:deme/widgets/text_navigator.dart';
 import 'package:flutter/material.dart';

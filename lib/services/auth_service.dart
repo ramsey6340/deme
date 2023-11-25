@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:deme/models/organization.dart';
-import 'package:deme/models/user.dart';
 import 'package:http/http.dart' as http;
 import '../constants.dart';
+import '../models/user_model.dart';
 
 class AuthService {
 
   static const baseServiceAuthUrl = "$baseUrl/service-auth";
 
-  Future<String> createUser(String profile, String password, User user) async{
+  Future<String> createUser(String profile, String password, UserModel user) async{
     final response = await http.post(Uri.parse('$baseServiceAuthUrl/users?profile=$profile&password=$password'),
       body: json.encode(user),
       headers: {

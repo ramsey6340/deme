@@ -6,6 +6,7 @@ import 'log-pages/forgot-password/forgot_email_field.dart';
 import 'log-pages/forgot-password/reset_password.dart';
 import 'log-pages/log-in/log_in.dart';
 import 'log-pages/log-up/choose_account_type.dart';
+import 'main-pages/given/given.dart';
 import 'main_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
@@ -16,4 +17,5 @@ final Map<String, WidgetBuilder> routes = {
   ForgotEmailField.routeName: (context) => ForgotEmailField(),
   ForgotOtpField.routeName: (context) => ForgotOtpField(),
   ResetPassword.routeName: (context) => ResetPassword(),
+  Given.routeName: (context) => Given(),
 };

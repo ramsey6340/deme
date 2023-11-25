@@ -1,7 +1,9 @@
 import 'package:deme/main_screen.dart';
-import 'package:deme/models/user.dart';
+import 'package:deme/models/user_model.dart';
+import 'package:deme/services/activity_service.dart';
 import 'package:deme/services/shared_preferences_service.dart';
 import 'package:deme/splash/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_splash_screen/easy_splash_screen.dart';
 
@@ -17,13 +19,15 @@ class LoadingSplashScreen extends StatefulWidget {
 class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
   SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
 
+  ActivityService activityService = ActivityService();
+
   @override
   void initState() {
     super.initState();
 
+    /*sharedPreferencesService.setTypeUser(null);
     sharedPreferencesService.setFirstInteraction(false);
-    sharedPreferencesService.setTypeUser(null);
-    /*sharedPreferencesService.setTypeUser('user');
+    sharedPreferencesService.setTypeUser('user');
     User user = User(userId: '', name: 'name',
         email: 'email', login: 'login', numTel: 'numTel', birthDay: 'birthDay',
         imageUrl: 'imageUrl', deviceType: 'deviceType',
@@ -39,14 +43,24 @@ class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
       return  Future.value(new SplashScreen());
     }
     else {
-      String? typeUser = await sharedPreferencesService.getTypeUser();
-      if(typeUser == null){
-        return  Future.value(new LogIn());
-      }
-      else {
-        print("le else typeUser: $typeUser");
-        return Future.value(new MainScreen());
-      }
+      FirebaseAuth.instance
+          .authStateChanges()
+          .listen((User? user) async {
+        if (user != null) {
+          String? typeUser = await sharedPreferencesService.getTypeUser();
+          if(typeUser == null){
+            return Future.value(new LogIn());
+          }
+          else {
+            print("le else typeUser: $typeUser");
+            return Future.value(new MainScreen());
+          }
+        }
+        else{
+          return Future.value(new LogIn());
+        }
+      });
+      return Future.value(new LogIn());
     }
   }
 

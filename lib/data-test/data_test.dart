@@ -7,13 +7,13 @@ import '../models/cause.dart';
 import '../models/financial_donation.dart';
 import '../models/method_payment.dart';
 import '../models/post.dart';
-import '../models/user.dart';
+import '../models/user_model.dart';
 
 // Les users
-List<User> users = [
-  User(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
-  User(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
-  User(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: '')
+List<UserModel> users = [
+  UserModel(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
+  UserModel(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
+  UserModel(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: '')
 ];
 
 // Les cause
@@ -35,45 +35,44 @@ List<Organization> organizations = [
 
 // Les assignments
 List<Assignment> assignments = [
-  Assignment(assignmentId: '1', title: "Les réfugieux", description: "", organization: organizations[0], cause: causes[0]),
+  /*Assignment(assignmentId: '1', title: "Les réfugieux", description: "", organization: organizations[0], cause: causes[0]),
   Assignment(assignmentId: '2', title: "La famille", description: "", organization: organizations[1], cause: causes[1]),
   Assignment(assignmentId: '3', title: "Les enfants", description: "", organization: organizations[2], cause: causes[2]),
   Assignment(assignmentId: '4', title: "L'union", description: "", organization: organizations[3], cause: causes[3]),
-  Assignment(assignmentId: '5', title: "Les réfugieux", description: "", organization: organizations[0], cause: causes[1]),
+  Assignment(assignmentId: '5', title: "Les réfugieux", description: "", organization: organizations[0], cause: causes[1]),*/
 
 ];
 
 // Les activités
 List<Activity> activities = [
-  Activity(activityId: '1', title: "Aidons Gao fasse aux terroristes", description: "", assignment: assignments[0]),
+  /*Activity(activityId: '1', title: "Aidons Gao fasse aux terroristes", description: "", assignment: assignments[0]),
   Activity(activityId: '2', title: "Le pays c’est les enfants", description: "", assignment: assignments[1]),
   Activity(activityId: '3', title: "Les enfants sont l’avenir de la nation", description: "", assignment: assignments[2]),
   Activity(activityId: '4', title: "Les soutien mutuel est le socle qui fait tenir un pays", description: "", assignment: assignments[3]),
-  Activity(activityId: '5', title: "Aidons Gao fasse aux terroristes", description: "", assignment: assignments[0]),
-
+  Activity(activityId: '5', title: "Aidons Gao fasse aux terroristes", description: "", assignment: assignments[0]),*/
 ];
 
 // Les posts
 // 'assets/data_test/post1_unicef.png'
 List<Post> posts = [
-  Post(postId: '1', imageUrl: 'assets/data_test/post1_unhcr.png', description: "Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants ", videoUrl: "", activity: activities[0]),
-  Post(postId: '2', imageUrl: null, description: "Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants ", videoUrl: "", activity: activities[1]),
-  Post(postId: '3', imageUrl: 'assets/data_test/post1_sc.png', description: "Le pays c'est les enfants", videoUrl: "", activity: activities[2]),
-  Post(postId: '4', imageUrl: 'assets/data_test/post1_diversity.png', description: "Le pays c'est les enfants", videoUrl: "", activity: activities[3]),
-  Post(postId: '5', imageUrl: 'assets/data_test/post1_unhcr.png', description: "Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants Le pays c'est les enfants ", videoUrl: "", activity: activities[0]),
+  /*Post(postId: '1', imageUrl: 'assets/data_test/post1_unhcr.png', message: "Le pays c'est les enfants Le pays c'est les ", videoUrl: "", activityId: activities[0]),
+  Post(postId: '2', imageUrl: null, message: "Le pays c'est les enfants  ", videoUrl: "", activityId: activities[1]),
+  Post(postId: '3', imageUrl: 'assets/data_test/post1_sc.png', message: "Le pays c'est les enfants", videoUrl: "", activityId: activities[2]),
+  Post(postId: '4', imageUrl: 'assets/data_test/post1_diversity.png', message: "Le pays c'est les enfants", videoUrl: "", activityId: activities[3]),
+  Post(postId: '5', imageUrl: 'assets/data_test/post1_unhcr.png', message: "Le pays c'est les enfants Le pays c'est les enfa  ", videoUrl: "", activityId: activities[0]),*/
 
 ];
 
 // Les demandes de don faite par des utilisateurs
 List<Demand> demands = [
-  Demand(demandId: '1', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: ['assets/data_test/demand1.png'], inProgress: true, cause: causes[0], guarantor: organizations[0], user: users[0]),
+  /*Demand(demandId: '1', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: ['assets/data_test/demand1.png'], inProgress: true, cause: causes[0], guarantor: organizations[0], user: users[0]),
   Demand(demandId: '2', description: 'C’est l’histoire d’Amina, vivant dans un petit village reculé. Elle avait une soif insatiable de savoir et rêvait d\'aller à l\'école pour apprendre à lire et à écrire. Cependant, dans son village, il n\'y avait pas d\'école. Les ressources étaient rares, et l\'accès à l\'éducation était limité. Amina persistait dans son désir d\'apprendre. Elle passait...', videoUrl: null, imagesUrl: null, inProgress: true, cause: causes[1], guarantor: organizations[1], user: users[1]),
   Demand(demandId: '3', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: ['assets/data_test/demand2.png'], inProgress: true, cause: causes[2], guarantor: organizations[2], user: users[2]),
   Demand(demandId: '4', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: ['assets/data_test/demand1.png'], inProgress: true, cause: causes[3], guarantor: organizations[3], user: users[0]),
   Demand(demandId: '5', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: null, inProgress: true, cause: causes[0], guarantor: organizations[4], user: users[1]),
   Demand(demandId: '6', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: null, inProgress: true, cause: causes[1], guarantor: organizations[0], user: users[2]),
   Demand(demandId: '7', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: null, inProgress: false, cause: causes[2], guarantor: organizations[1], user: users[0]),
-  Demand(demandId: '8', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: null, inProgress: true, cause: causes[3], guarantor: organizations[2], user: users[1]),
+  Demand(demandId: '8', description: 'Fatoumata décide de nous rencontré son histoire dans la quelle elle nous invite tous à ...', videoUrl: null, imagesUrl: null, inProgress: true, cause: causes[3], guarantor: organizations[2], user: users[1]),*/
 ];
 
 // Les méthodes de paiement
@@ -98,7 +97,7 @@ List<Address> addresses = [
 
 // Les donations financiers
 List<FinancialDonation> financialDonations = [
-  FinancialDonation(financialDonationId: '1', amount: 15000, date: 'Mardi le 12/09/2023', isUsed: false, user: users[0], beneficiaryOrga: organizations[0], beneficiaryDemand: null),
+  /*FinancialDonation(financialDonationId: '1', amount: 15000, date: 'Mardi le 12/09/2023', isUsed: false, user: users[0], beneficiaryOrga: organizations[0], beneficiaryDemand: null),
   FinancialDonation(financialDonationId: '1', amount: 1000000, date: 'Vendredi le 04/07/2023', isUsed: true, user: users[1], beneficiaryOrga: organizations[0], beneficiaryDemand: null),
-  FinancialDonation(financialDonationId: '1', amount: 50000, date: 'Mardi le 12/01/2023', isUsed: false, user: users[2], beneficiaryOrga: organizations[1], beneficiaryDemand: null),
+  FinancialDonation(financialDonationId: '1', amount: 50000, date: 'Mardi le 12/01/2023', isUsed: false, user: users[2], beneficiaryOrga: organizations[1], beneficiaryDemand: null),*/
 ];

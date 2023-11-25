@@ -1,10 +1,10 @@
 import 'package:deme/models/organization.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../models/user.dart';
+import '../models/user_model.dart';
 
 class CurrentUserProvider with ChangeNotifier{
-  User? currentUser;
+  UserModel? currentUser;
   Organization? currentOrganization;
   String? currentUserPassword;
   String? profile;
@@ -23,7 +23,7 @@ class CurrentUserProvider with ChangeNotifier{
 
   /* ============Debut de traitement de l'objet User============ */
 
-  void setCurrentUser(User? user) {
+  void setCurrentUser(UserModel? user) {
     currentUser = user;
     notifyListeners();
   }
@@ -189,7 +189,7 @@ class CurrentUserProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  void setOrganizationNbSubscription(int value){
+  void setOrganizationNbSubscription(double value){
     currentOrganization?.nbSubscription = value;
     notifyListeners();
   }

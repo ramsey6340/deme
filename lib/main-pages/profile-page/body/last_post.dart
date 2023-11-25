@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../models/post.dart';
-import '../../../services/post_service.dart';
+import '../../../services/activity_service.dart';
 import '../../../widgets/post_container.dart';
 import '../../../widgets/post_shimmer.dart';
 
@@ -15,7 +15,7 @@ class LastPost extends StatefulWidget {
 
 class _LastPostState extends State<LastPost> {
   late Future<List<Post>?> futurePosts;
-  PostService postService = PostService();
+  ActivityService postService = ActivityService();
 
   @override
   void initState() {

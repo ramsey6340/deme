@@ -83,7 +83,7 @@ class _OrganizationContainerState extends State<OrganizationContainer> {
                           ),
                         ),
                         (widget.showNbFollower)?Text(
-                          '${formatNumber(widget.organization.subscribersId.length)} suivies',
+                          '${formatNumber(widget.organization.nbSubscription.toInt())} suivies',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.inter(
                               fontSize: 14,

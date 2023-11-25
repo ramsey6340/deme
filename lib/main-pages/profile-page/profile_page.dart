@@ -167,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          formatNumber(widget.organization.nbSubscription),
+                          formatNumber(widget.organization.nbSubscription.toInt()),
                           style: GoogleFonts.inter(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),

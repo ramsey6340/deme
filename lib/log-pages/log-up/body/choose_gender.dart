@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
-import '../../../models/user.dart';
+import '../../../models/user_model.dart';
 import '../../../provider/change_log_screen_provider.dart';
 import '../../../provider/type_user_log_up_provider.dart';
 import '../../../size_config.dart';
@@ -102,7 +102,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                                 if(typeUserLogUp.typeUserLogUp == KTypeUser.user){
                                   if(currentValue != null){
                                     currentUserProvider.setGender(currentValue!);
-                                    User? currentUser = currentUserProvider.currentUser;
+                                    UserModel? currentUser = currentUserProvider.currentUser;
                                     if(currentUser != null){
                                       userService.patchUserInfo(
                                           currentUser.userId!,

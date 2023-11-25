@@ -37,10 +37,15 @@ class _DemandContainerState extends State<DemandContainer> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                (widget.demand.organization != null)?
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage: AssetImage(
-                      widget.demand.user.imageUrl!),
+                  backgroundImage: NetworkImage(
+                      widget.demand.organization!.imageUrl!),
+                ):CircleAvatar(
+                  radius: 25,
+                  backgroundImage: NetworkImage(
+                      widget.demand.user!.imageUrl!),
                 ),
                 SizedBox(
                   width: getProportionateScreenWidth(8),
@@ -52,7 +57,9 @@ class _DemandContainerState extends State<DemandContainer> {
                     Text.rich(
                       TextSpan(
                           text:
-                          widget.demand.user.name,
+                          (widget.demand.organization != null)?
+                          widget.demand.organization?.name:
+                          widget.demand.user?.name,
                           style: GoogleFonts.workSans(
                               fontSize: 16, fontWeight: FontWeight.bold),
                           children: [
@@ -67,7 +74,13 @@ class _DemandContainerState extends State<DemandContainer> {
                     Text.rich(
                      TextSpan(text: 'Garantie par ',
                        children: [
-                         TextSpan(text: '@${widget.demand.guarantor.name}', style: GoogleFonts.inter(color: kPrimaryColor))
+                         TextSpan(text: '@${widget.demand.guarantor.login}',
+                             style: const TextStyle(
+                                 fontFamily: 'Inter',
+                               color: kPrimaryColor,
+                               overflow: TextOverflow.ellipsis
+                             ),
+                         )
                        ]
                      ),
                     ),
@@ -79,28 +92,28 @@ class _DemandContainerState extends State<DemandContainer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 15),
+                (widget.demand.imageUrl != null && widget.demand.imageUrl!.isNotEmpty)?
                 Container(
-                  height: (widget.demand.imagesUrl != null)?getProportionateScreenHeight(200):0,
-                  decoration: (widget.demand.imagesUrl != null)?BoxDecoration(
+                  height: getProportionateScreenHeight(200),
+                  decoration: BoxDecoration(
                       color: kPrimaryColor,
                       borderRadius: BorderRadius.circular(10),
                       image:  DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(widget.demand.imagesUrl![0]),
-                      )):BoxDecoration(
-                      color: kPrimaryColor,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
+                        image: NetworkImage(widget.demand.imageUrl!),
+                      )),
+                ):SizedBox(),
                 const SizedBox(
                   height: 10,
                 ),
+                (widget.demand.description!.isNotEmpty && widget.demand.description!=null)?
                 Text(
-                  widget.demand.description,
+                  widget.demand.description!,
                   style: GoogleFonts.workSans(
                     fontSize: 14,
                   ),
                   textAlign: TextAlign.start,
-                )
+                ):SizedBox()
               ],
             ),
             SizedBox(height: 15),
