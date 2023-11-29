@@ -73,7 +73,7 @@ class CurrentUserProvider with ChangeNotifier{
     notifyListeners();
   }
   void setDelete(bool value){
-    currentUser?.delete = value;
+    currentUser?.deleted = value;
     notifyListeners();
   }
   void setActivated(bool value){
@@ -167,7 +167,7 @@ class CurrentUserProvider with ChangeNotifier{
     notifyListeners();
   }
   void setOrganizationDelete(bool value){
-    currentOrganization?.delete = value;
+    currentOrganization?.deleted = value;
     notifyListeners();
   }
   void setOrganizationActivated(bool value){

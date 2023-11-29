@@ -234,7 +234,7 @@ class _Body1State extends State<Body3> {
 
                                         }).catchError((onError) {
                                           print(onError);
-                                          btnStateController.update(AsyncBtnState.failure);
+                                          btnStateController.update(AsyncBtnState.idle);
                                         });
                                       }
                                     } else {

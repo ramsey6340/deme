@@ -11,27 +11,27 @@ import '../models/user_model.dart';
 
 // Les users
 List<UserModel> users = [
-  UserModel(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
-  UserModel(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
-  UserModel(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: '')
+  UserModel(userId: '1', name: 'Ousmane Haidara', login: 'ousmato', imageUrl: 'assets/data_test/avatar2.png', email: '', numTel: '', deviceType: '', deleted: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
+  UserModel(userId: '2', name: 'Issa Toure', login: 'issa',  imageUrl: 'assets/data_test/avatar3.png', email: '', numTel: '', deviceType: '', deleted: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: ''),
+  UserModel(userId: '3', name: 'Drissa Sidiki Traore', login: 'ramsey6340',  imageUrl: 'assets/data_test/avatar4.png', email: '', numTel: '', deviceType: '', deleted: false, activated: true, anonymous: false, birthDay: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: [], profile: 'user', gender: '')
 ];
 
 // Les cause
 List<Cause> causes = [
-  Cause(causeId: '1', name: "Education", imageUrl: "assets/data_test/education.png", description: ""),
+  /*Cause(causeId: '1', name: "Education", imageUrl: "assets/data_test/education.png", description: ""),
   Cause(causeId: '2', name: "Santé", imageUrl: "assets/data_test/sante.png", description: ""),
   Cause(causeId: '3', name: "Environnement", imageUrl: "assets/data_test/environnement.png", description: ""),
-  Cause(causeId: '4', name: "Refugieux", imageUrl: "assets/data_test/refugieux.png", description: ""),
+  Cause(causeId: '4', name: "Refugieux", imageUrl: "assets/data_test/refugieux.png", description: ""),*/
 ];
 
 // Les organisations
-List<Organization> organizations = [
-  Organization(organizationId: '1', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1910', nbSubscription: 100, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
-  Organization(organizationId: '2', name: "UNICEF", imageUrl: 'assets/data_test/o2.png', valid: true, verified: false, matricule: 'HD78NLSPAIDP', type: 'Fondation', startDateExercise: '21/01/1950', nbSubscription: 34, login: 'UNICEF', address: addresses[0], subscribersId: ['2', '3'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
-  Organization(organizationId: '3', name: "Sauvons les enfants", imageUrl: 'assets/data_test/o3.png', valid: false, verified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/1810', nbSubscription: 104, login: 'Sauvons les enfants', address: addresses[0], subscribersId: ['2'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
-  Organization(organizationId: '4', name: "Diversity", imageUrl: 'assets/data_test/o4.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1990', nbSubscription: 76, login: 'Diversity', address: addresses[0], subscribersId: ['3'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
-  Organization(organizationId: '5', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/2000', nbSubscription: 98, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3'], email: '', numTel: '', deviceType: '', delete: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
-];
+//List<Organization> organizations = [
+  /*Organization(organizationId: '1', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1910', nbSubscription: 100, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3'], email: '', numTel: '', deviceType: '', deleted: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
+  Organization(organizationId: '2', name: "UNICEF", imageUrl: 'assets/data_test/o2.png', valid: true, verified: false, matricule: 'HD78NLSPAIDP', type: 'Fondation', startDateExercise: '21/01/1950', nbSubscription: 34, login: 'UNICEF', address: addresses[0], subscribersId: ['2', '3'], email: '', numTel: '', deviceType: '', deleted: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
+  Organization(organizationId: '3', name: "Sauvons les enfants", imageUrl: 'assets/data_test/o3.png', valid: false, verified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/1810', nbSubscription: 104, login: 'Sauvons les enfants', address: addresses[0], subscribersId: ['2'], email: '', numTel: '', deviceType: '', deleted: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
+  Organization(organizationId: '4', name: "Diversity", imageUrl: 'assets/data_test/o4.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'ONG', startDateExercise: '21/01/1990', nbSubscription: 76, login: 'Diversity', address: addresses[0], subscribersId: ['3'], email: '', numTel: '', deviceType: '', deleted: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),
+  Organization(organizationId: '5', name: "UNHCR", imageUrl: 'assets/data_test/o1.png', valid: true, verified: true, matricule: 'HD78NLSPAIDP', type: 'Association', startDateExercise: '21/01/2000', nbSubscription: 98, login: 'UNHCR', address: addresses[0], subscribersId: ['1', '2', '3'], email: '', numTel: '', deviceType: '', deleted: false, activated: true, anonymous: false, profile: '', preferredPaymentMethods: [], favoriteHumanitarianCauses: []),*/
+//];
 
 // Les assignments
 List<Assignment> assignments = [
@@ -77,7 +77,7 @@ List<Demand> demands = [
 
 // Les méthodes de paiement
 List<MethodPayment> methodsPayment = [
-  MethodPayment(methodPaymentId: '1', name: 'Orange Money', description: 'Orange Money est pour Orange', imageUrl: 'assets/data_test/om_logo.png', termsOfUse: null),
+  /*MethodPayment(methodPaymentId: '1', name: 'Orange Money', description: 'Orange Money est pour Orange', imageUrl: 'assets/data_test/om_logo.png', termsOfUse: null),
   MethodPayment(methodPaymentId: '2', name: 'Moov Money', description: 'Moov Money est pour Moov Africa', imageUrl: 'assets/data_test/mm_logo.png', termsOfUse: null),
   MethodPayment(methodPaymentId: '3', name: 'Sama Money', description: 'Sama Money est pour Sama', imageUrl: 'assets/data_test/sm_logo.png', termsOfUse: null),
   MethodPayment(methodPaymentId: '4', name: 'Pay Pal', description: 'Pay Pal est pour Pay Pal', imageUrl: 'assets/data_test/pp_logo.jpg', termsOfUse: null),
@@ -85,7 +85,7 @@ List<MethodPayment> methodsPayment = [
   MethodPayment(methodPaymentId: '5', name: 'Orange Money', description: 'Orange Money est pour Orange', imageUrl: 'assets/data_test/om_logo.png', termsOfUse: null),
   MethodPayment(methodPaymentId: '6', name: 'Moov Money', description: 'Moov Money est pour Moov Africa', imageUrl: 'assets/data_test/mm_logo.png', termsOfUse: null),
   MethodPayment(methodPaymentId: '7', name: 'Sama Money', description: 'Sama Money est pour Sama', imageUrl: 'assets/data_test/sm_logo.png', termsOfUse: null),
-  MethodPayment(methodPaymentId: '8', name: 'Pay Pal', description: 'Pay Pal est pour Pay Pal', imageUrl: 'assets/data_test/pp_logo.jpg', termsOfUse: null),
+  MethodPayment(methodPaymentId: '8', name: 'Pay Pal', description: 'Pay Pal est pour Pay Pal', imageUrl: 'assets/data_test/pp_logo.jpg', termsOfUse: null),*/
 ];
 
 // Les adresses

@@ -17,6 +17,7 @@ class ActivityService {
   static const activityCollectionName = "activities";
   static const postCollectionName = "posts";
   static const assignmentCollectionName = "assignments";
+  static const organizationCollectionName = "organizations";
 
   Future<Assignment> getAssignmentById(String assignmentId) async {
     try{
@@ -118,6 +119,50 @@ class ActivityService {
             continue;
           }
         }
+        return posts;
+      }
+      // Gestion de l'exception
+      Map<String, dynamic> errorMessage = {};
+      var errorResponse = json.decode(utf8.decode(response.bodyBytes));
+
+      if (errorResponse.containsKey('message')) {
+        errorMessage['message'] = errorResponse['message'];
+      }
+      if (errorResponse.containsKey('error')) {
+        errorMessage['error'] = errorResponse['error'];
+      }
+      if (errorResponse.containsKey('status')) {
+        errorMessage['status'] = errorResponse['status'];
+      }
+      if (errorResponse.containsKey('path')) {
+        errorMessage['path'] = errorResponse['path'];
+      }
+      if (errorResponse.containsKey('timestamp')) {
+        errorMessage['timestamp'] = errorResponse['timestamp'];
+      }
+
+      throw Exception(errorResponse);
+    }catch(e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<List<Post>> getAllPostsForOrganization(String organizationId) async {
+    try{
+      final response = await http.get(Uri.parse('$baseServiceActivityUrl/$postCollectionName/$organizationCollectionName/$organizationId/$postCollectionName'));
+      if(response.statusCode == 200){
+        final responseData = json.decode(utf8.decode(response.bodyBytes));
+        List<Post> posts = [];
+        for(var post in responseData) {
+          if(post["activityId"] != null && post["activityId"] !='') {
+            final activity = await getActivityById(post["activityId"]);
+            posts.add(Post.fromJson(post, activity));
+          }
+          else{
+            continue;
+          }
+        }
+        print(posts);
         return posts;
       }
       // Gestion de l'exception

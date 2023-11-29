@@ -177,7 +177,7 @@ class _ChooseMethodPaymentState extends State<ChooseMethodPayment> {
 
                               }).catchError((onError){
                                 print(onError);
-                                btnStateController.update(AsyncBtnState.failure);
+                                btnStateController.update(AsyncBtnState.idle);
                               });
                             }
                           }

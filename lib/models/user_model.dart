@@ -11,7 +11,7 @@ class UserModel {
   String? birthDay;
   String? imageUrl;
   String? deviceType;
-  bool delete;
+  bool deleted;
   bool activated;
   bool anonymous;
   List<String> preferredPaymentMethods;
@@ -28,7 +28,7 @@ class UserModel {
     required this.birthDay,
     required this.imageUrl,
     required this.deviceType,
-    required this.delete,
+    required this.deleted,
     required this.activated,
     required this.anonymous,
     required this.preferredPaymentMethods,
@@ -48,7 +48,7 @@ class UserModel {
         'birthDay: $birthDay, '
         'imageUrl: $imageUrl, '
         'deviceType: $deviceType, '
-        'delete: $delete, '
+        'deleted: $deleted, '
         'activated: $activated, '
         'anonymous: $anonymous, '
         'preferredPaymentMethods: $preferredPaymentMethods, '
@@ -107,7 +107,7 @@ class UserModel {
     birthDay: json["birthDay"],
     imageUrl: json["imageUrl"],
     deviceType: json["deviceType"],
-    delete: json["delete"],
+    deleted: json["deleted"],
     activated: json["activated"],
     anonymous: json["anonymous"],
     profile: json["profile"],
@@ -125,7 +125,7 @@ class UserModel {
     "birthDay": birthDay,
     "imageUrl": imageUrl,
     "deviceType": deviceType,
-    "delete": delete,
+    "deleted": deleted,
     "activated": activated,
     "anonymous": anonymous,
     "profile": profile,

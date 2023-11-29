@@ -34,7 +34,6 @@ class _BodyState extends State<Body> {
     futureDemand = demandService.getAllDemand();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -42,22 +41,24 @@ class _BodyState extends State<Body> {
       builder: (context, snapshot) {
         return (snapshot.hasData)
             ? ListView.builder(
-            itemCount: snapshot.data?.length,
-            itemBuilder: (context, index) {
-              final demand = snapshot.data![index];
-              return DemandContainer(demand: demand,);
-            })
+                itemCount: snapshot.data?.length,
+                itemBuilder: (context, index) {
+                  final demand = snapshot.data![index];
+                  return DemandContainer(
+                    demand: demand,
+                  );
+                })
             : Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          enabled: true,
-          child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return PostShimmer();
-              }),
-        );
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.grey.shade100,
+                enabled: true,
+                child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      return PostShimmer();
+                    }),
+              );
       },
     );
   }

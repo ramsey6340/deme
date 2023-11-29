@@ -1,10 +1,15 @@
 import 'package:deme/constants.dart';
-import 'package:deme/main-pages/given/body/financial_page.dart';
-import 'package:deme/main-pages/given/body/material_page_given.dart';
 import 'package:deme/main-pages/given/given.dart';
+import 'package:deme/models/demand.dart';
 import 'package:deme/models/organization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../provider/global_value.dart';
+import 'financial_page.dart';
+import 'material_page_given.dart';
+
 
 class BodyGiven extends StatefulWidget {
   const BodyGiven({super.key, required this.organization});
@@ -19,8 +24,10 @@ class _BodyGivenState extends State<BodyGiven> {
   TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final globalValue = Provider.of<GlobalValue>(context);
+
     return DefaultTabController(
-      length: [FinancialPage(organization: widget.organization), MaterialPageGiven()].length,
+      length: [FinancialPage(organization: widget.organization), MaterialPageGiven(organization: widget.organization)].length,
       child: Scaffold(
         appBar: AppBar(
           surfaceTintColor: Colors.white,
@@ -71,7 +78,7 @@ class _BodyGivenState extends State<BodyGiven> {
           ),
         ),
         body: TabBarView(
-          children: [FinancialPage(organization: widget.organization), MaterialPageGiven()],
+          children: [FinancialPage(organization: widget.organization), MaterialPageGiven(organization: widget.organization)],
         ),
       ),
     );

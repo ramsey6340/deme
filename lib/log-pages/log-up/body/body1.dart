@@ -312,7 +312,7 @@ class _Body1State extends State<Body1> {
                                           numTel: null,
                                           imageUrl: null,
                                           deviceType: (Platform.isAndroid)?'Android':'iOS',
-                                          delete: false,
+                                          deleted: false,
                                           activated: true,
                                           anonymous: false,
                                           birthDay: null,
@@ -348,7 +348,7 @@ class _Body1State extends State<Body1> {
                                           login: null,
                                           imageUrl: null,
                                           deviceType: (Platform.isAndroid)?'Android':'iOS',
-                                          delete: false,
+                                          deleted: false,
                                           activated: true,
                                           anonymous: false,
                                           profile: KTypeUser.organization,
@@ -381,7 +381,7 @@ class _Body1State extends State<Body1> {
 
                                 } catch (e) {
                                   print("Type: Error");
-                                  btnStateController.update(AsyncBtnState.failure);
+                                  btnStateController.update(AsyncBtnState.idle);
                                 }
                               },
 

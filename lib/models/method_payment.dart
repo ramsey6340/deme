@@ -3,12 +3,14 @@ class MethodPayment {
   String name;
   String? description;
   String imageUrl;
+  bool deleted;
   String? termsOfUse;
 
   MethodPayment({
     required this.methodPaymentId,
     required this.name,
     required this.description,
+    required this.deleted,
     required this.imageUrl,
     required this.termsOfUse
 });
@@ -18,6 +20,7 @@ class MethodPayment {
     name: json["name"],
     description: json["description"],
     imageUrl: json["imageUrl"],
+    deleted: json["deleted"],
     termsOfUse: json["termsOfUse"],
   );
 
@@ -25,6 +28,7 @@ class MethodPayment {
     "methodPaymentId": methodPaymentId,
     "name": name,
     "description": description,
+    "deleted": deleted,
     "imageUrl": imageUrl,
     "termsOfUse": termsOfUse
   };

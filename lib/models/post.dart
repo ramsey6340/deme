@@ -5,18 +5,18 @@ class Post {
   List<String> imageUrls;
   String message;
   String? videoUrl;
+  bool deleted;
   String? creationDate;
   Activity activity;
-  String causeId;
 
   Post({
     required this.postId,
     required this.imageUrls,
     required this.message,
     required this.videoUrl,
+    required this.deleted,
     required this.creationDate,
-    required this.activity,
-    required this.causeId,
+    required this.activity
   });
 
   factory Post.fromJson(Map<String, dynamic> json, Activity activity) => Post(
@@ -24,9 +24,19 @@ class Post {
       imageUrls: List<String>.from(json["imageUrls"].map((x) => x)),
       message: json["message"],
       videoUrl: json["videoUrl"],
-      causeId: json["causeId"],
       creationDate: json["creationDate"],
+      deleted: json['deleted'],
       activity: activity
   );
+
+  Map<String, dynamic> toJson() => {
+    "postId": postId,
+    "imageUrls": imageUrls,
+    "message": message,
+    "videoUrl": videoUrl,
+    "creationDate": creationDate,
+    "deleted": deleted,
+    "activityId": activity.activityId,
+  };
 
 }

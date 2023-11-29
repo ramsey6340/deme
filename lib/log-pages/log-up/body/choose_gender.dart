@@ -113,7 +113,7 @@ class _ChooseGenderState extends State<ChooseGender> {
 
                                       }).catchError((onError){
                                         print(onError);
-                                        btnStateController.update(AsyncBtnState.failure);
+                                        btnStateController.update(AsyncBtnState.idle);
                                       });
                                     }
                                   }

@@ -7,7 +7,9 @@ import 'package:shimmer/shimmer.dart';
 import '../../../widgets/financial_donation_widget_shimmer.dart';
 
 class LastDonation extends StatefulWidget {
-  const LastDonation({super.key});
+  const LastDonation({super.key, required this.organizationId});
+
+  final String organizationId;
 
   @override
   State<LastDonation> createState() => _LastDonationState();

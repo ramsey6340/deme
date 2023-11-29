@@ -1,3 +1,5 @@
+import 'package:deme/services/shared_preferences_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -7,7 +9,8 @@ import '../../../widgets/post_container.dart';
 import '../../../widgets/post_shimmer.dart';
 
 class LastPost extends StatefulWidget {
-  const LastPost({super.key});
+  const LastPost({super.key, required this.organizationId});
+  final String organizationId;
 
   @override
   State<LastPost> createState() => _LastPostState();
@@ -20,7 +23,10 @@ class _LastPostState extends State<LastPost> {
   @override
   void initState() {
     super.initState();
-    futurePosts = postService.getAllPost();
+    futurePosts = postService.getAllPostsForOrganization(widget.organizationId);
+    futurePosts.then((value) {
+      print(value?.length);
+    });
   }
 
   @override

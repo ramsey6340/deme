@@ -8,6 +8,7 @@ class FinancialDonation {
   bool? used;
   String? creationDate;
   double amount;
+  bool deleted;
   UserModel? donorUser; // Le user qui fait le don
   Organization? donorOrganization; // L'organisation qui fait le don
   MethodPayment methodPayment; // Methode de paiement utilsé pour faire le don
@@ -20,6 +21,7 @@ class FinancialDonation {
     required this.used,
     required this.creationDate,
     required this.amount,
+    required this.deleted,
     required this.donorUser,
     required this.donorOrganization,
     required this.methodPayment,
@@ -36,6 +38,7 @@ class FinancialDonation {
       used: json["used"],
       creationDate: json["creationDate"],
       amount: json["amount"],
+      deleted: json["deleted"],
       donorUser: donorUser,
       donorOrganization: donorOrganization,
       methodPayment: methodPayment,
@@ -48,10 +51,11 @@ class FinancialDonation {
     "used": used,
     "creationDate": creationDate,
     "amount": amount,
-    "donorUser": donorUser,
-    "donorOrganization": donorOrganization,
-    "methodPayment": methodPayment,
-    "beneficiaryOrganization": beneficiaryOrganization,
-    "beneficiaryDemand": beneficiaryDemand,
+    "deleted": deleted,
+    "donorUserId": donorUser?.userId,
+    "donorOrganizationId": donorOrganization?.organizationId,
+    "methodPaymentId": methodPayment.methodPaymentId,
+    "beneficiaryOrganizationId": beneficiaryOrganization?.organizationId,
+    "beneficiaryDemandId": beneficiaryDemand?.demandId,
   };
 }

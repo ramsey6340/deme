@@ -1,7 +1,10 @@
 import 'package:deme/main-pages/profile-page/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import '../../constants.dart';
 import '../../data-test/data_test.dart';
+import '../../provider/current_user_provider.dart';
 import '../../size_config.dart';
 import '../../widgets/anim_search_widget_custom.dart';
 import 'body/body.dart';
@@ -20,6 +23,9 @@ class _OrganizationPageState extends State<OrganizationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+
+
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.white,
@@ -42,7 +48,9 @@ class _OrganizationPageState extends State<OrganizationPage> {
             size: 30,
           ),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(organization: organizations[0],)));
+            if(currentUserProvider.profile == KTypeUser.organization){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(organization: currentUserProvider.currentOrganization!,)));
+            }
           },
         ),
         actions: [

@@ -8,6 +8,7 @@ class Testimony {
   String? imageUrl;
   String? videoUrl;
   String creationDate;
+  bool deleted;
   UserModel? user;
   Cause cause;
   Organization? organization;
@@ -18,6 +19,7 @@ class Testimony {
     required this.imageUrl,
     required this.videoUrl,
     required this.creationDate,
+    required this.deleted,
     required this.user,
     required this.organization,
     required this.cause
@@ -30,8 +32,21 @@ class Testimony {
       imageUrl: json["imageUrl"],
       videoUrl: json["videoUrl"],
       creationDate: json["creationDate"],
+      deleted: json['deleted'],
       user: user,
       organization: organization,
       cause: cause
   );
+
+  Map<String, dynamic> toJson() => {
+    "testimonyId": testimonyId,
+    "message": message,
+    "imageUrl": imageUrl,
+    "videoUrl": videoUrl,
+    "creationDate": creationDate,
+    "deleted": deleted,
+    "userId": user?.userId,
+    "organizationId": organization?.organizationId,
+    "cause": cause.causeId,
+  };
 }

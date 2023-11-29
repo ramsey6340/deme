@@ -18,7 +18,7 @@ import '../../../provider/current_user_provider.dart';
 import '../../../services/user_service.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
-import '../../../widgets/cause_card.dart';
+import '../../../widgets/cause_radio_card.dart';
 import '../../../widgets/next_button.dart';
 import '../../../widgets/text_navigator.dart';
 
@@ -90,7 +90,7 @@ class _Body4State extends State<InitPreferredCause> {
                             final cause = snapshot.data![index];
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
-                              child: CauseCard(
+                              child: CauseRadioCard(
                                 checkBoxValue: (typeUserLogUp.typeUserLogUp == KTypeUser.organization)?
                                     currentUserProvider.currentOrganization!.favoriteHumanitarianCauses.contains(cause.causeId)
                                     :currentUserProvider.currentUser!.favoriteHumanitarianCauses.contains(cause.causeId),
@@ -202,7 +202,7 @@ class _Body4State extends State<InitPreferredCause> {
                           }
 
                         } catch (e) {
-                          btnStateController.update(AsyncBtnState.failure);
+                          btnStateController.update(AsyncBtnState.idle);
                         }
                       },
 

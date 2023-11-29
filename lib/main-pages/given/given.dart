@@ -1,16 +1,20 @@
-import 'package:deme/main-pages/given/body/body_given.dart';
+import 'package:deme/constants.dart';
 import 'package:deme/main-pages/profile-page/profile_page.dart';
+import 'package:deme/provider/current_user_provider.dart';
 import 'package:deme/widgets/organization_container.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../data-test/data_test.dart';
 import '../../models/organization.dart';
+import '../../provider/global_value.dart';
 import '../../services/organization_service.dart';
 import '../../size_config.dart';
 import '../../widgets/anim_search_widget_custom.dart';
 import '../../widgets/organization_shimmer.dart';
+import 'body/give_to_organization/body_given.dart';
 
 class Given extends StatefulWidget {
   static const routeName = "given_donation_page";
@@ -40,6 +44,9 @@ class _GivenState extends State<Given> {
 
   @override
   Widget build(BuildContext context) {
+    final globalValue = Provider.of<GlobalValue>(context);
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.white,
@@ -62,7 +69,9 @@ class _GivenState extends State<Given> {
             size: 30,
           ),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(organization: organizations[0],)));
+            if(currentUserProvider.profile == KTypeUser.organization){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(organization: currentUserProvider.currentOrganization!,)));
+            }
           },
         ),
         actions: [
@@ -100,6 +109,8 @@ class _GivenState extends State<Given> {
                             organization: snapshot.data![index],
                             showFollowButton: false,
                             onTapOrga: () {
+                              globalValue.setBeneficiaryDonation(BeneficiaryType.demand);
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

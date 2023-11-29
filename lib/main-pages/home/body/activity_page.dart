@@ -27,40 +27,46 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: futurePosts,
-      builder: (context, snapshot) {
-        if(snapshot.hasData){
-          return ListView.builder(
-              itemCount: snapshot.data?.length,
-              itemBuilder: (context, index) {
-                final post = snapshot.data![index];
-                return PostContainer(
-                  post: post,
-                );
-              });
-        }
-        else if(snapshot.hasError){
-          return Center(
-            child: Container(
-              child: Image.asset("assets/images/404 error.jpg"),
-            ),
-          );
-        }
-        else {
-          return Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
-            enabled: true,
-            child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 4,
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: double.infinity,
+        maxWidth: MediaQuery.sizeOf(context).width*0.9
+      ),
+      child: FutureBuilder(
+        future: futurePosts,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            return ListView.builder(
+                itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  return PostShimmer();
-                }),
-          );
-        }
-      },
+                  final post = snapshot.data![index];
+                  return PostContainer(
+                    post: post,
+                  );
+                });
+          }
+          else if(snapshot.hasError){
+            return Center(
+              child: Container(
+                child: Image.asset("assets/images/404 error.jpg"),
+              ),
+            );
+          }
+          else {
+            return Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              enabled: true,
+              child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    return PostShimmer();
+                  }),
+            );
+          }
+        },
+      ),
     );
   }
 }

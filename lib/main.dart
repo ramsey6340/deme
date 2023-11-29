@@ -1,6 +1,7 @@
 import 'package:deme/provider/change_log_screen_provider.dart';
 import 'package:deme/provider/current_user_provider.dart';
 import 'package:deme/provider/global_error_provider.dart';
+import 'package:deme/provider/global_value.dart';
 import 'package:deme/provider/type_user_log_up_provider.dart';
 import 'package:deme/provider/verification_otp_provider.dart';
 import 'package:deme/routes.dart';
@@ -25,6 +26,7 @@ void main() async{
         ChangeNotifierProvider(create: (context) => VerificationOtpProvider()),
         ChangeNotifierProvider(create: (context) => CurrentUserProvider()),
         ChangeNotifierProvider(create: (context) => GlobalErrorProvider()),
+        ChangeNotifierProvider(create: (context) => GlobalValue()),
       ],
     child: const MyApp(),
   ));

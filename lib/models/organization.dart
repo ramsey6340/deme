@@ -8,7 +8,7 @@ class Organization {
   String? imageUrl;
   String? login;
   String? deviceType;
-  bool delete;
+  bool deleted;
   bool activated;
   bool anonymous;
   String profile;
@@ -31,7 +31,7 @@ class Organization {
     required this.login,
     required this.imageUrl,
     required this.deviceType,
-    required this.delete,
+    required this.deleted,
     required this.activated,
     required this.anonymous,
     required this.profile,
@@ -58,7 +58,7 @@ class Organization {
         'startDateExercise: $startDateExercise, '
         'imageUrl: $imageUrl, '
         'deviceType: $deviceType, '
-        'delete: $delete, '
+        'delete: $deleted, '
         'activated: $activated, '
         'anonymous: $anonymous, '
         'valid: $valid, '
@@ -82,7 +82,7 @@ class Organization {
       startDateExercise: json["startDateExercise"],
       imageUrl: json["imageUrl"],
       deviceType: json["deviceType"],
-      delete: json["delete"],
+      deleted: json["deleted"],
       activated: json["activated"],
       anonymous: json["anonymous"],
       profile: json["profile"],
@@ -106,7 +106,7 @@ class Organization {
     "startDateExercise": startDateExercise,
     "imageUrl": imageUrl,
     "deviceType": deviceType,
-    "delete": delete,
+    "deleted": deleted,
     "activated": activated,
     "anonymous": anonymous,
     "valid": valid,

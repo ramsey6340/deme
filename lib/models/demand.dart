@@ -9,6 +9,7 @@ class Demand {
   String? videoUrl;
   String? imageUrl;
   bool active;
+  bool deleted;
   String? creationDate;
   Cause cause;
   Organization guarantor;
@@ -21,6 +22,7 @@ class Demand {
     required this.videoUrl,
     required this.imageUrl,
     required this.active,
+    required this.deleted,
     required this.creationDate,
     required this.cause,
     required this.guarantor,
@@ -35,10 +37,26 @@ class Demand {
       videoUrl: json["videoUrl"],
       imageUrl: json["imageUrl"],
       active: json["active"],
+      deleted: json["deleted"],
       creationDate: json["creationDate"],
       guarantor: guarantor,
       cause: cause,
       user: user,
       organization: organization
   );
+
+  Map<String, dynamic> toJson() => {
+    "demandId": demandId,
+    "description": description,
+    "videoUrl": videoUrl,
+    "imageUrl": imageUrl,
+    "active": active,
+    "deleted": deleted,
+    "creationDate": creationDate,
+    "guarantorId": guarantor.organizationId,
+    "causeId": cause.causeId,
+    "userId": user?.userId,
+    "organizationId": organization?.organizationId,
+  };
+
 }

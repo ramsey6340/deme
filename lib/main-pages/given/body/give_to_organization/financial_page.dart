@@ -1,7 +1,6 @@
 import 'package:async_button/async_button.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:deme/constants.dart';
-import 'package:deme/main-pages/given/body/body_given.dart';
 import 'package:deme/main-pages/given/given.dart';
 import 'package:deme/models/financial_donation.dart';
 import 'package:deme/models/method_payment.dart';
@@ -14,8 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/organization.dart';
-import '../../../provider/current_user_provider.dart';
+import '../../../../models/organization.dart';
+import '../../../../provider/current_user_provider.dart';
+import 'body_given.dart';
+
 
 class FinancialPage extends StatefulWidget {
   const FinancialPage({super.key, required this.organization});
@@ -27,10 +28,11 @@ class FinancialPage extends StatefulWidget {
 
 class _FinancialPageState extends State<FinancialPage> {
   AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
+  DonationService donationService = DonationService();
 
   late Future<List<MethodPayment>> futureMethodPayment;
   PaymentService methodPaymentService = PaymentService();
-  DonationService donationService = DonationService();
+
 
   @override
   void initState() {

@@ -51,6 +51,7 @@ class OrganizationService {
     final response = await http.get(Uri.parse('$baseServiceOrganizationUrl/$id'));
 
     if(response.statusCode == 200) {
+      print("JE SUIS ICI");
       final responseData = json.decode(utf8.decode(response.bodyBytes));
       Organization organization = Organization.fromJson(responseData);
       return organization;

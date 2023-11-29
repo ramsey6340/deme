@@ -4,9 +4,12 @@ import 'package:deme/widgets/next_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../main-pages/given/body/give_to_demand/body_given_demand.dart';
 import '../models/demand.dart';
 import '../models/post.dart';
+import '../provider/global_value.dart';
 
 class DemandContainer extends StatefulWidget {
   const DemandContainer({super.key, required this.demand});
@@ -23,6 +26,8 @@ class _DemandContainerState extends State<DemandContainer> {
 
   @override
   Widget build(BuildContext context) {
+    final globalValue = Provider.of<GlobalValue>(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Container(
@@ -58,10 +63,10 @@ class _DemandContainerState extends State<DemandContainer> {
                       TextSpan(
                           text:
                           (widget.demand.organization != null)?
-                          widget.demand.organization?.name:
-                          widget.demand.user?.name,
+                          widget.demand.organization?.login:
+                          widget.demand.user?.login,
                           style: GoogleFonts.workSans(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16, fontWeight: FontWeight.bold, ),
                           children: [
                             TextSpan(
                                 text:
@@ -175,7 +180,15 @@ class _DemandContainerState extends State<DemandContainer> {
                 ),
 
                 //SizedBox(width: getProportionateScreenWidth(20),),
-                NextButton(text: 'Faire un don',press: (){}),
+                NextButton(
+                    text: 'Faire un don',
+                    press: (){
+                      globalValue.setBeneficiaryDonation(BeneficiaryType.demand);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => BodyGivenDemand(demand: widget.demand)));
+                    }
+                ),
               ],
             ),
             const SizedBox(height: 10),

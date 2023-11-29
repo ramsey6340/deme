@@ -138,8 +138,7 @@ class _Body1State extends State<Body> {
                                     setState(() {
                                       emailError = '';
                                     });
-                                  } else if (value.isNotEmpty &&
-                                      !emailValidatorRegExp.hasMatch(value)) {
+                                  } else {
                                     setState(() {
                                       emailError = '';
                                     });
@@ -251,6 +250,8 @@ class _Body1State extends State<Body> {
 
                                   String email = emailController.value.text;
                                   String password = passwordController.value.text;
+                                  print("Email: $email");
+                                  print("password: $password");
 
                                   try {
                                     /*FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -317,47 +318,55 @@ class _Body1State extends State<Body> {
                                         password: password
                                     );
                                     btnStateController.update(AsyncBtnState.loading);
-                                    if(credential.user?.displayName == KTypeUser.user){
-                                      UserModel? user = await userService.getUserById(credential.user!.uid);
-                                      // Donnée en cache
-                                      sharedPreferencesService.setCurrentUser(user);
-                                      sharedPreferencesService.setTypeUser(KTypeUser.user);
-                                      sharedPreferencesService.setFirstInteraction(false);
+                                    if(credential.user != null){
+                                      if(credential.user?.displayName == KTypeUser.user){
+                                        print("credential.user?.displayName == KTypeUser.user");
+                                        UserModel? user = await userService.getUserById(credential.user!.uid);
+                                        // Donnée en cache
+                                        sharedPreferencesService.setCurrentUser(user);
+                                        sharedPreferencesService.setTypeUser(KTypeUser.user);
+                                        sharedPreferencesService.setFirstInteraction(false);
 
-                                      // Donnée du provider
-                                      currentUserProvider.setCurrentUser(user);
-                                      currentUserProvider.setProfile(KTypeUser.user);
-                                      /* On remet à null les données de l'utilisateur de type Organization */
-                                      sharedPreferencesService.setCurrentOrganization(null);
-                                      currentUserProvider.setCurrentOrganization(null);
+                                        // Donnée du provider
+                                        currentUserProvider.setCurrentUser(user);
+                                        currentUserProvider.setProfile(KTypeUser.user);
+                                        /* On remet à null les données de l'utilisateur de type Organization */
+                                        sharedPreferencesService.setCurrentOrganization(null);
+                                        currentUserProvider.setCurrentOrganization(null);
 
-                                      // Navigation vers la page d'accueil
-                                      Navigator.pushNamedAndRemoveUntil(context, MainScreen.routeName, (route) => false);
+                                        // Navigation vers la page d'accueil
+                                        Navigator.pushNamedAndRemoveUntil(context, MainScreen.routeName, (route) => false);
 
 
-                                  }
-                                    else if(credential.user?.displayName == KTypeUser.organization){
-                                      btnStateController.update(AsyncBtnState.loading);
-                                      Organization organization = await organizationService.getOrganizationById(credential.user!.uid);
-                                      // Donnée en cache
-                                      sharedPreferencesService.setCurrentOrganization(organization);
-                                      sharedPreferencesService.setTypeUser(KTypeUser.organization);
-                                      sharedPreferencesService.setFirstInteraction(false);
+                                      }
+                                      else if(credential.user?.displayName == KTypeUser.organization){
+                                        btnStateController.update(AsyncBtnState.loading);
+                                        Organization organization = await organizationService.getOrganizationById(credential.user!.uid);
 
-                                      // Donnée du provider
-                                      currentUserProvider.setCurrentOrganization(organization);
-                                      currentUserProvider.setProfile(KTypeUser.organization);
-                                      /* On remet à null les données de l'utilisateur de type User */
-                                      sharedPreferencesService.setCurrentUser(null);
-                                      currentUserProvider.setCurrentUser(null);
+                                        // Donnée en cache
+                                        sharedPreferencesService.setCurrentOrganization(organization);
+                                        sharedPreferencesService.setTypeUser(KTypeUser.organization);
+                                        sharedPreferencesService.setFirstInteraction(false);
 
-                                      // Navigation vers la page d'accueil
-                                      Navigator.pushNamedAndRemoveUntil(context, MainScreen.routeName, (route) => false);
+                                        // Donnée du provider
+                                        currentUserProvider.setCurrentOrganization(organization);
+                                        currentUserProvider.setProfile(KTypeUser.organization);
+                                        /* On remet à null les données de l'utilisateur de type User */
+                                        sharedPreferencesService.setCurrentUser(null);
+                                        currentUserProvider.setCurrentUser(null);
 
+                                        // Navigation vers la page d'accueil
+                                        Navigator.pushNamedAndRemoveUntil(context, MainScreen.routeName, (route) => false);
+
+                                      }
+                                    }
+                                    else{
+                                      print("credential.user est null");
+                                      btnStateController.update(AsyncBtnState.failure);
                                     }
                                     /*==============================Fin du test==================*/
                                   } catch(e){
-                                    //btnStateController.update(AsyncBtnState.failure);
+                                    btnStateController.update(AsyncBtnState.idle);
                                     throw Exception(e);
                                   }
                                 }
