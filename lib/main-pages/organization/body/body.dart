@@ -84,7 +84,7 @@ class _BodyState extends State<Body> {
               builder: (context, snapshot) {
                 return (snapshot.hasData)
                     ? GridView.count(
-                        childAspectRatio: 0.7,
+                        childAspectRatio: 0.65,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 8),
                         crossAxisSpacing: 0,

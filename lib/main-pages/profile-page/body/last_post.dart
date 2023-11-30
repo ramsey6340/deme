@@ -40,9 +40,12 @@ class _LastPostState extends State<LastPost> {
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
                   final post = snapshot.data![index];
-                  return PostContainer(
+                  return SizedBox();
+                  /*
+                  PostContainer(
                     post: post,
-                  );
+                  )
+                   */
                 })
             : Shimmer.fromColors(
                 baseColor: Colors.grey.shade300,

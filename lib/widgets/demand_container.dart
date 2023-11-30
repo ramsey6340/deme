@@ -180,14 +180,18 @@ class _DemandContainerState extends State<DemandContainer> {
                 ),
 
                 //SizedBox(width: getProportionateScreenWidth(20),),
-                NextButton(
-                    text: 'Faire un don',
-                    press: (){
-                      globalValue.setBeneficiaryDonation(BeneficiaryType.demand);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => BodyGivenDemand(demand: widget.demand)));
-                    }
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width*0.4,
+                  child: NextButton(
+                      text: 'Faire un don',
+                      textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
+                      press: (){
+                        globalValue.setBeneficiaryDonation(BeneficiaryType.demand);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => BodyGivenDemand(demand: widget.demand)));
+                      }
+                  ),
                 ),
               ],
             ),

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Cause {
   String causeId;
   String name;
@@ -20,6 +22,19 @@ class Cause {
     deleted: json["deleted"],
     imageUrl: json["imageUrl"],
   );
+
+  factory Cause.fromSnapshotDoc(DocumentSnapshot? snapshot) {
+    final json = snapshot?.data() as Map<String, dynamic>?;
+    print("Cause: ${json.runtimeType.toString()}");
+
+    return Cause(
+      causeId: json?["causeId"],
+      name: json?["name"],
+      description: json?["description"],
+      deleted: json?["deleted"],
+      imageUrl: json?["imageUrl"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "causeId": causeId,

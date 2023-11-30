@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'assignment.dart';
 
 class Activity {
@@ -31,6 +33,22 @@ class Activity {
       description: json["description"],
       assignment: assignment
   );
+
+  static Future<Activity> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
+    final json = snapshot?.data() as Map<String, dynamic>;
+    final assignmentDocumentSnapshot = await json['assignmentId'].data().get();
+
+    return Activity(
+        activityId: json["activityId"],
+        title: json["title"],
+        startDate: json["startDate"],
+        endDate: json["endDate"],
+        deleted: json["deleted"],
+        creationDate: json["creationDate"],
+        description: json["description"],
+        assignment: Assignment.getFromSnapshotDoc(assignmentDocumentSnapshot)
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "activityId": activityId,

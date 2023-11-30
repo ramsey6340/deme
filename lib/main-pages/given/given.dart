@@ -97,7 +97,7 @@ class _GivenState extends State<Given> {
         builder: (context, snapshot) {
           return (snapshot.hasData)
               ? GridView.count(
-                  childAspectRatio: 0.8,
+                  childAspectRatio: 0.7,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   crossAxisSpacing: 0,

@@ -6,6 +6,7 @@ import '../../data-test/data_test.dart';
 import '../../provider/current_user_provider.dart';
 import 'body/body.dart';
 import '../../widgets/app_bar_custom.dart';
+import 'body/choose_cause.dart';
 
 class DemandPage extends StatelessWidget {
   const DemandPage({super.key});
@@ -24,7 +25,7 @@ class DemandPage extends StatelessWidget {
           }
         },
         onTrailingPress: () {
-
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> ChooseCause()));
         },
       ),
       body: Body(),

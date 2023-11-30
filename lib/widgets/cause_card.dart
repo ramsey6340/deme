@@ -28,6 +28,7 @@ class CauseCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
               // group6Gpr (I10:266;10:262)
@@ -44,11 +45,12 @@ class CauseCard extends StatelessWidget {
                 child: Text(
                   cause.name,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
-                      height: 1.2125
+                      height: 1.2125,
+                    overflow: TextOverflow.ellipsis
                   ),
                 ),
               ),

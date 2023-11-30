@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deme/models/organization.dart';
 
 import 'cause.dart';
@@ -36,6 +37,25 @@ class Assignment {
       organization: organization,
       cause: cause
   );
+
+  static Future<Assignment> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
+    final json = snapshot?.data() as Map<String, dynamic>;
+    final causeDocumentSnapshot = await json['causeId'].data().get();
+    final organizationDocumentSnapshot = await json['organizationId'].data().get();
+
+    return Assignment(
+
+        assignmentId: json["assignmentId"],
+        title: json["title"],
+        description: json["description"],
+        deleted: json["deleted"],
+        descriptionNeeds: json["descriptionNeeds"],
+        descriptionResources: json["descriptionResources"],
+        creationDate: json["creationDate"],
+        organization: Organization.fromSnapshotDoc(organizationDocumentSnapshot),
+        cause: Cause.fromSnapshotDoc(causeDocumentSnapshot)
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "assignmentId": assignmentId,

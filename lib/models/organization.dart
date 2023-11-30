@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'address.dart';
 
 class Organization {
@@ -96,6 +98,37 @@ class Organization {
       favoriteHumanitarianCauses: List<String>.from(json["favoriteHumanitarianCauses"].map((x) => x)),
       subscribersId: List<String>.from(json["subscribersId"].map((x) => x)),
   );
+
+
+
+  static Organization getFromSnapshotDoc(DocumentSnapshot? snapshot) {
+    final json = snapshot?.data() as Map<String, dynamic>?;
+    print("Organisation: ${json.runtimeType.toString()}");
+
+    return Organization(
+      organizationId: json?["organizationId"],
+      name: json?["name"],
+      email: json?["email"],
+      login: json?["login"],
+      numTel: json?["numTel"],
+      startDateExercise: json?["startDateExercise"],
+      imageUrl: json?["imageUrl"],
+      deviceType: json?["deviceType"],
+      deleted: json?["deleted"],
+      activated: json?["activated"],
+      anonymous: json?["anonymous"],
+      profile: json?["profile"],
+      valid: json?["valid"],
+      verified: json?["verified"],
+      matricule: json?["matricule"],
+      type: json?["type"],
+      nbSubscription: json?["nbSubscription"].toDouble(),
+      address: json?["address"],
+      preferredPaymentMethods: List<String>.from(json?["preferredPaymentMethods"].map((x) => x)),
+      favoriteHumanitarianCauses: List<String>.from(json?["favoriteHumanitarianCauses"].map((x) => x)),
+      subscribersId: List<String>.from(json?["subscribersId"].map((x) => x)),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "organizationId": organizationId,

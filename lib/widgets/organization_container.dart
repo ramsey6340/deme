@@ -74,11 +74,11 @@ class _OrganizationContainerState extends State<OrganizationContainer> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          widget.organization.name,
+                          widget.organization.login!,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.inter(
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.w600
                           ),
                         ),
