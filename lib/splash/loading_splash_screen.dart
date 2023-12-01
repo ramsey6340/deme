@@ -27,7 +27,7 @@ class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
   @override
   void initState() {
     super.initState();
-    test();
+    //test();
 
     sharedPreferencesService.setTypeUser(KTypeUser.organization);
     sharedPreferencesService.setFirstInteraction(false);
@@ -64,17 +64,17 @@ class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
     sharedPreferencesService.setCurrentUser(user);*/
   }
 
-  void test() async{
+ /* void test() async{
     FirebaseFirestore db = FirebaseFirestore.instance;
     final d = await db.collection('test').doc("DjmT0J48kKIhoK5do7NP").get();
     final json = d.data() as Map<String, dynamic>;
     print("Splash Screen: ${json.runtimeType.toString()}");
     final f = db.collection('test').doc("DjmT0J48kKIhoK5do7NP").get().then((value) {
       value.data()?["field1"].get().then((value){
-        print(Organization.fromSnapshotDoc(value).toString());
+        print(Organization.getFromSnapshotDoc(value).toString());
       });
     });
-  }
+  }*/
 
   Future<Widget> futureCall() async {
     bool value = await sharedPreferencesService.getFirstInteraction() ?? true;

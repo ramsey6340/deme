@@ -38,10 +38,27 @@ class Assignment {
       cause: cause
   );
 
-  static Future<Assignment> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
+  factory Assignment.fromFirestore(Map<String, dynamic> json) {
+    return Assignment(
+        assignmentId: json["assignmentId"],
+        title: json["title"],
+        description: json["description"],
+        deleted: json["deleted"],
+        descriptionNeeds: json["descriptionNeeds"],
+        descriptionResources: json["descriptionResources"],
+        creationDate: json["creationDate"],
+        organization: Organization.fromJson(json["organization"]),
+        cause: Cause.fromJson(json["cause"])
+      /*organization: Organization.fromJson(json["creationDate"]),
+      cause: Cause.fromJson(json["cause"])*/
+    );
+  }
+
+
+  /*static Future<Assignment> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
     final json = snapshot?.data() as Map<String, dynamic>;
-    final causeDocumentSnapshot = await json['causeId'].data().get();
-    final organizationDocumentSnapshot = await json['organizationId'].data().get();
+    final causeDocumentSnapshot = await json['cause'].data().get();
+    final organizationDocumentSnapshot = await json['organization'].data().get();
 
     return Assignment(
 
@@ -52,10 +69,10 @@ class Assignment {
         descriptionNeeds: json["descriptionNeeds"],
         descriptionResources: json["descriptionResources"],
         creationDate: json["creationDate"],
-        organization: Organization.fromSnapshotDoc(organizationDocumentSnapshot),
+        organization: Organization.getFromSnapshotDoc(organizationDocumentSnapshot),
         cause: Cause.fromSnapshotDoc(causeDocumentSnapshot)
     );
-  }
+  }*/
 
   Map<String, dynamic> toJson() => {
     "assignmentId": assignmentId,
@@ -67,5 +84,17 @@ class Assignment {
     "creationDate": creationDate,
     "causeId": cause.causeId,
     "organizationId": organization.organizationId,
+  };
+
+  Map<String, dynamic> toJsonFirestore() => {
+    "assignmentId": assignmentId,
+    "title": title,
+    "description": description,
+    "deleted": deleted,
+    "descriptionNeeds": descriptionNeeds,
+    "descriptionResources": descriptionResources,
+    "creationDate": creationDate,
+    "causeId": {},
+    "organizationId": {},
   };
 }

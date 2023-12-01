@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'user_model.dart';
 import 'cause.dart';
 import 'organization.dart';
@@ -49,4 +51,44 @@ class Testimony {
     "organizationId": organization?.organizationId,
     "cause": cause.causeId,
   };
+
+
+  static Future<Testimony> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
+
+    final testimonyMap = snapshot?.data() as Map<String, dynamic>;
+
+    // Cause
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotCause = await testimonyMap['cause'].get();
+    Map<String, dynamic> causeMap = documentSnapshotCause.data() ?? {};
+
+    // Organisation
+    DocumentSnapshot<Map<String, dynamic>>? documentSnapshotOrganization = (testimonyMap['organization']!=null)?await testimonyMap['organization'].get():null;
+    Map<String, dynamic>? organizationMap = (documentSnapshotOrganization!=null)?documentSnapshotOrganization.data(): {};
+
+    // User
+    DocumentSnapshot<Map<String, dynamic>>? documentSnapshotUser = (testimonyMap['user']!=null)? await testimonyMap['user'].get():null;
+    Map<String, dynamic>? userMap = (documentSnapshotUser!=null)?documentSnapshotUser.data() : {};
+
+    testimonyMap["cause"] = causeMap;
+    testimonyMap["organization"] = organizationMap;
+    testimonyMap["user"] = userMap;
+
+    Cause cause = Cause.fromJson(causeMap);
+    Organization? organization = (organizationMap?["organizationId"]=={})?null:Organization.fromJson(organizationMap!);
+    UserModel? user = (userMap?["userId"]==null)?null:UserModel.fromJson(userMap!);
+
+    Testimony testimony = Testimony(
+        testimonyId: testimonyMap["testimonyId"],
+        message: testimonyMap["message"],
+        imageUrl: testimonyMap["imageUrl"],
+        videoUrl: testimonyMap["videoUrl"],
+        creationDate: testimonyMap["creationDate"],
+        deleted: testimonyMap['deleted'],
+        cause: cause,
+        user: user,
+        organization: organization
+    );
+
+    return Future.value(testimony);
+  }
 }

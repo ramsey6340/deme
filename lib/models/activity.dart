@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deme/models/cause.dart';
+import 'package:deme/models/organization.dart';
 
 import 'assignment.dart';
 
@@ -34,9 +36,35 @@ class Activity {
       assignment: assignment
   );
 
-  static Future<Activity> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
+  factory Activity.fromFirestore(Map<String, dynamic> json) {
+    return Activity(
+      activityId: json["activityId"],
+      title: json["title"],
+      startDate: json["startDate"],
+      endDate: json["endDate"],
+      deleted: json["deleted"],
+      creationDate: json["creationDate"],
+      description: json["description"],
+      assignment: Assignment.fromFirestore(json["assignment"]),
+      /*assignment: Assignment(assignmentId: "assignmentId",
+          title: "title", description: "description", descriptionNeeds: "descriptionNeeds",
+          descriptionResources: "descriptionResources",
+          creationDate: "creationDate", deleted: false,
+          organization: Organization(organizationId: "organizationId",
+              name: "name", email: "email", numTel: "numTel", login: "login",
+              imageUrl: "imageUrl", deviceType: "deviceType", deleted: false,
+              activated: true, anonymous: true, profile: "profile", valid: true,
+              verified: true, matricule: "matricule", type: "type",
+              startDateExercise: "startDateExercise", nbSubscription: 0,
+              address: null, subscribersId: [], preferredPaymentMethods: [],
+              favoriteHumanitarianCauses: []),
+          cause: Cause(causeId: "causeId", name: "name", imageUrl: "imageUrl", deleted: false, description: "description"))*/
+    );
+  }
+
+  /*static Future<Activity> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
     final json = snapshot?.data() as Map<String, dynamic>;
-    final assignmentDocumentSnapshot = await json['assignmentId'].data().get();
+    final assignmentDocumentSnapshot = await json['assignment'].data().get();
 
     return Activity(
         activityId: json["activityId"],
@@ -46,9 +74,25 @@ class Activity {
         deleted: json["deleted"],
         creationDate: json["creationDate"],
         description: json["description"],
-        assignment: Assignment.getFromSnapshotDoc(assignmentDocumentSnapshot)
+        assignment: await Assignment.getFromSnapshotDoc(assignmentDocumentSnapshot)
     );
-  }
+  }*/
+
+  /*static Future<Activity> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
+    final json = snapshot?.data() as Map<String, dynamic>;
+    final assignmentDocumentSnapshot = await json['assignment'].data().get();
+
+    return Activity(
+        activityId: json["activityId"],
+        title: json["title"],
+        startDate: json["startDate"],
+        endDate: json["endDate"],
+        deleted: json["deleted"],
+        creationDate: json["creationDate"],
+        description: json["description"],
+        assignment: await Assignment.getFromSnapshotDoc(assignmentDocumentSnapshot)
+    );
+  }*/
 
   Map<String, dynamic> toJson() => {
     "activityId": activityId,
@@ -60,4 +104,15 @@ class Activity {
     "description": description,
     "assignmentId": assignment.assignmentId
   };
+
+  Map<String, dynamic> toJsonFirestore() => {
+    "activityId": activityId,
+    "title": title,
+    "startDate": startDate,
+    "endDate": endDate,
+    "deleted": deleted,
+    "creationDate": creationDate,
+    "description": description,
+    "assignmentId": {}
+      };
 }

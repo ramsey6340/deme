@@ -92,7 +92,7 @@ class Organization {
       verified: json["verified"],
       matricule: json["matricule"],
       type: json["type"],
-      nbSubscription: json["nbSubscription"],
+      nbSubscription: json["nbSubscription"].toDouble(),
       address: json["address"],
       preferredPaymentMethods: List<String>.from(json["preferredPaymentMethods"].map((x) => x)),
       favoriteHumanitarianCauses: List<String>.from(json["favoriteHumanitarianCauses"].map((x) => x)),
@@ -101,11 +101,10 @@ class Organization {
 
 
 
-  static Organization getFromSnapshotDoc(DocumentSnapshot? snapshot) {
+  static Future<Organization> getFromSnapshotDoc(DocumentSnapshot? snapshot) {
     final json = snapshot?.data() as Map<String, dynamic>?;
-    print("Organisation: ${json.runtimeType.toString()}");
 
-    return Organization(
+    return Future.value(Organization(
       organizationId: json?["organizationId"],
       name: json?["name"],
       email: json?["email"],
@@ -127,7 +126,7 @@ class Organization {
       preferredPaymentMethods: List<String>.from(json?["preferredPaymentMethods"].map((x) => x)),
       favoriteHumanitarianCauses: List<String>.from(json?["favoriteHumanitarianCauses"].map((x) => x)),
       subscribersId: List<String>.from(json?["subscribersId"].map((x) => x)),
-    );
+    ));
   }
 
   Map<String, dynamic> toJson() => {

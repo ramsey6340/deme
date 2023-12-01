@@ -34,9 +34,29 @@ class Post {
   );
 
   static Future<Post> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
-    print("*******************ICI*******************");
+
     final json = snapshot?.data() as Map<String, dynamic>;
-    final activityDocumentSnapshot = await json['activityId'].data().get();
+
+    // Activity
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await json['activity'].get();
+    Map<String, dynamic> activityMap = documentSnapshot.data() ?? {};
+
+    // Assignment
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotAssignment = await activityMap['assignment'].get();
+    Map<String, dynamic> assignmentMap = documentSnapshotAssignment.data() ?? {};
+
+    // Cause
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotCause = await assignmentMap['cause'].get();
+    Map<String, dynamic> causeMap = documentSnapshotCause.data() ?? {};
+
+    // Organisation
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotOrganisation = await assignmentMap['organization'].get();
+    Map<String, dynamic> organizationMap = documentSnapshotOrganisation.data() ?? {};
+
+    assignmentMap["cause"] = causeMap;
+    assignmentMap["organization"] = organizationMap;
+    activityMap["assignment"] = assignmentMap;
+    Activity activity = Activity.fromFirestore(activityMap);
 
 
     return Post(
@@ -46,7 +66,7 @@ class Post {
         videoUrl: json["videoUrl"],
         creationDate: json["creationDate"],
         deleted: json['deleted'],
-        activity: Activity.getFromSnapshotDoc(activityDocumentSnapshot)
+        activity: activity
     );
   }
 
@@ -57,7 +77,7 @@ class Post {
     "videoUrl": videoUrl,
     "creationDate": creationDate,
     "deleted": deleted,
-    "activityId": activity.activityId,
+    "activityId": activity?.activityId,
   };
 
   // convertir un DocumentSnapshot en classe Post

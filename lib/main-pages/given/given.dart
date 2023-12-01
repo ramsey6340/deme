@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../data-test/data_test.dart';
 import '../../models/organization.dart';
 import '../../provider/global_value.dart';
 import '../../services/organization_service.dart';
@@ -89,7 +88,7 @@ class _GivenState extends State<Given> {
             },
             onSubmitted: (value) {},
           ),
-          SizedBox(width: 20,),
+          const SizedBox(width: 20,),
         ],
       ),
       body: FutureBuilder(
@@ -106,7 +105,7 @@ class _GivenState extends State<Given> {
                   children: List.generate(
                       snapshot.data!.length,
                       (index) => OrganizationContainer(
-                            organization: snapshot.data![index],
+                            organization: Future.value(snapshot.data![index]),
                             showFollowButton: false,
                             onTapOrga: () {
                               globalValue.setBeneficiaryDonation(BeneficiaryType.demand);

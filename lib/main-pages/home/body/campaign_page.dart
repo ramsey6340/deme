@@ -8,6 +8,12 @@ class CampaignPage extends StatefulWidget {
 }
 
 class _CampaignPageState extends State<CampaignPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("Hello");
+  }
 
   @override
   Widget build(BuildContext context) {
