@@ -9,8 +9,12 @@ import 'package:deme/splash/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_splash_screen/easy_splash_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../log-pages/log-in/log_in.dart';
+import '../models/cause.dart';
+import '../provider/current_user_provider.dart';
+import '../services/cause_service.dart';
 
 class LoadingSplashScreen extends StatefulWidget {
   const LoadingSplashScreen({super.key});
@@ -24,10 +28,19 @@ class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
 
   ActivityService activityService = ActivityService();
 
+  CauseService causeService = CauseService();
+  late Future<List<Cause>> futureCause;
+
+  void testCause() async {
+    futureCause = causeService.getAllCause();
+    List<Cause> causes = await futureCause;
+    print("Liste: $causes");
+  }
+
   @override
   void initState() {
     super.initState();
-    //test();
+    testCause();
 
     sharedPreferencesService.setTypeUser(KTypeUser.organization);
     sharedPreferencesService.setFirstInteraction(false);
@@ -109,6 +122,9 @@ class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
+    //currentUserProvider.setProfile(KTypeUser.organization);
+
     return EasySplashScreen(
       logo: Image.asset(
           'assets/images/logo.jpg'),

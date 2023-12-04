@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../models/cause.dart';
+import '../models/assignment.dart';
 
-class CauseCard extends StatelessWidget {
-  const CauseCard({super.key, required this.cause, this.onTap,});
-  final Future<Cause> cause;
+class AssignmentCard extends StatelessWidget {
+  const AssignmentCard({super.key, required this.assignment, this.onTap,});
+  final Future<Assignment> assignment;
   final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: cause,
+      future: assignment,
       builder: (context, snapshot) {
         if(snapshot.hasData){
           return InkWell(
@@ -27,7 +27,7 @@ class CauseCard extends StatelessWidget {
                 image: DecorationImage (
                   fit: BoxFit.cover,
                   image: NetworkImage (
-                    snapshot.data!.imageUrl,
+                    snapshot.data!.cause.imageUrl,
                   ),
                 ),
               ),
@@ -48,7 +48,7 @@ class CauseCard extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        snapshot.data!.name,
+                        snapshot.data!.title,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.white,

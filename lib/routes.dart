@@ -1,4 +1,5 @@
 import 'package:deme/log-pages/log-up/log_up.dart';
+import 'package:deme/main-pages/profile-page/body/setting-pages/assignment/setting_assignment.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'log-pages/forgot-password/forgot_otp_field.dart';
@@ -18,4 +19,5 @@ final Map<String, WidgetBuilder> routes = {
   ForgotOtpField.routeName: (context) => ForgotOtpField(),
   ResetPassword.routeName: (context) => ResetPassword(),
   Given.routeName: (context) => Given(),
+  SettingAssignment.routeName: (context) => SettingAssignment(),
 };

@@ -88,7 +88,6 @@ class Testimony {
         user: user,
         organization: organization
     );
-
     return Future.value(testimony);
   }
 }

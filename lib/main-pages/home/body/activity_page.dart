@@ -25,7 +25,6 @@ class _ActivityPageState extends State<ActivityPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Dans initState");
   }
 
 
@@ -65,10 +64,10 @@ class _ActivityPageState extends State<ActivityPage> {
               highlightColor: Colors.grey.shade100,
               enabled: true,
               child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: 4,
                   itemBuilder: (context, index) {
-                    return PostShimmer();
+                    return const PostShimmer();
                   }),
             );
           }

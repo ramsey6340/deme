@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deme/constants.dart';
 import 'package:deme/main-pages/profile-page/profile_page.dart';
 import 'package:deme/provider/current_user_provider.dart';
@@ -5,6 +6,7 @@ import 'package:deme/widgets/organization_container.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../models/organization.dart';
@@ -24,14 +26,18 @@ class Given extends StatefulWidget {
 }
 
 class _GivenState extends State<Given> {
-  late Future<List<Organization>> futureOrganization;
-  OrganizationService organizationService = OrganizationService();
+  //late Future<List<Organization>> futureOrganization;
+  //OrganizationService organizationService = OrganizationService();
+
+  late Stream<QuerySnapshot> organizationStream;
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    futureOrganization = organizationService.getAllOrganizations();
+    //futureOrganization = organizationService.getAllOrganizations();
+    organizationStream = db.collection('organizations').snapshots();
   }
 
   String formatNumber(int number) {
@@ -51,7 +57,7 @@ class _GivenState extends State<Given> {
         surfaceTintColor: Colors.white,
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
+          preferredSize: const Size.fromHeight(1),
           child: Container(
             color: Colors.black.withOpacity(0.5),
             height: 1,
@@ -69,7 +75,18 @@ class _GivenState extends State<Given> {
           ),
           onPressed: () {
             if(currentUserProvider.profile == KTypeUser.organization){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(organization: currentUserProvider.currentOrganization!,)));
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: ProfilePage(
+                  organization: currentUserProvider.currentOrganization!,),
+                withNavBar: false, // OPTIONAL VALUE. True by default.
+                pageTransitionAnimation: PageTransitionAnimation.fade,
+              );
+
+              /*Navigator.push(
+                  context, MaterialPageRoute(
+                  builder: (context)=>ProfilePage(
+                    organization: currentUserProvider.currentOrganization!,)));*/
             }
           },
         ),
@@ -91,20 +108,73 @@ class _GivenState extends State<Given> {
           const SizedBox(width: 20,),
         ],
       ),
-      body: FutureBuilder(
-        future: futureOrganization,
+      body: StreamBuilder(
+        stream: organizationStream,
         builder: (context, snapshot) {
-          return (snapshot.hasData)
-              ? GridView.count(
-                  childAspectRatio: 0.7,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  children: List.generate(
-                      snapshot.data!.length,
-                      (index) => OrganizationContainer(
+          if(snapshot.hasData){
+            return GridView.count(
+              childAspectRatio: 0.8,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 8),
+              crossAxisSpacing: 0,
+              mainAxisSpacing: 10,
+              crossAxisCount: 2,
+              children: List.generate(
+                  snapshot.data!.docs.length,
+                      (index) {
+                    final organization = Organization.getFromSnapshotDoc(snapshot.data?.docs[index]);
+                    return OrganizationContainer(
+                      organization: organization,
+                      showFollowButton: false,
+                      onTapOrga: () {
+                        globalValue.setBeneficiaryDonation(BeneficiaryType.demand);
+
+                        organization.then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BodyGiven(
+                                      organization:
+                                      value)));
+                        });
+                      },
+                    );
+                  }),
+            );
+          }
+          else if(snapshot.hasError){
+            return Center(
+              child: Image.asset("assets/images/404 error.jpg"),
+            );
+          }
+          else{
+            return Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              enabled: true,
+              child: GridView.builder(
+                gridDelegate:
+                const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // 2 cartes par ligne
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  childAspectRatio:
+                  0.8, // Ajustez l'aspect ratio selon vos besoins
+                ),
+                itemBuilder: (context, index) {
+                  return const OrganizationShimmer();
+                },
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+/*
+
+OrganizationContainer(
                             organization: Future.value(snapshot.data![index]),
                             showFollowButton: false,
                             onTapOrga: () {
@@ -117,28 +187,5 @@ class _GivenState extends State<Given> {
                                           organization:
                                               snapshot.data![index])));
                             },
-                          )),
-                )
-              : Shimmer.fromColors(
-                  baseColor: Colors.grey.shade300,
-                  highlightColor: Colors.grey.shade100,
-                  enabled: true,
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 2 cartes par ligne
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
-                      childAspectRatio:
-                          0.8, // Ajustez l'aspect ratio selon vos besoins
-                    ),
-                    itemBuilder: (context, index) {
-                      return OrganizationShimmer();
-                    },
-                  ),
-                );
-        },
-      ),
-    );
-  }
-}
+                          )
+ */

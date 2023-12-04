@@ -97,4 +97,34 @@ class Assignment {
     "causeId": {},
     "organizationId": {},
   };
+
+  static Future<Assignment> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
+
+    final assignmentMap = snapshot?.data() as Map<String, dynamic>;
+    
+    // Cause
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotCause = await assignmentMap['cause'].get();
+    Map<String, dynamic> causeMap = documentSnapshotCause.data() ?? {};
+
+    // Organisation
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotOrganisation = await assignmentMap['organization'].get();
+    Map<String, dynamic> organizationMap = documentSnapshotOrganisation.data() ?? {};
+
+    assignmentMap["cause"] = causeMap;
+    assignmentMap["organization"] = organizationMap;
+    
+
+
+    return Assignment(
+      assignmentId: assignmentMap["assignmentId"],
+      title: assignmentMap["title"],
+      description: assignmentMap["description"],
+      deleted: assignmentMap["deleted"],
+      descriptionNeeds: assignmentMap["descriptionNeeds"],
+      descriptionResources: assignmentMap['descriptionResources'],
+      creationDate: assignmentMap['creationDate'],
+      cause: Cause.fromJson(assignmentMap['cause']),
+      organization: Organization.fromJson(assignmentMap['organization'])
+    );
+  }
 }

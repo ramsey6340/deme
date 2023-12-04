@@ -19,6 +19,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   //OrganizationService organizationService = OrganizationService();
   late Stream<QuerySnapshot> organizationStream;
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -26,8 +27,6 @@ class _BodyState extends State<Body> {
     super.initState();
     //futureOrganization = organizationService.getAllOrganizations();
 
-
-    FirebaseFirestore db = FirebaseFirestore.instance;
     organizationStream = db.collection('organizations').snapshots();
   }
 
@@ -60,7 +59,7 @@ class _BodyState extends State<Body> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /*Padding(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -83,7 +82,7 @@ class _BodyState extends State<Body> {
                     }),
                   ),
                 )),
-          ),*/
+          ),
           Expanded(
             child: StreamBuilder(
               stream: organizationStream,

@@ -1,5 +1,6 @@
 import 'package:deme/main-pages/profile-page/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../data-test/data_test.dart';
@@ -19,7 +20,17 @@ class Testimory extends StatelessWidget {
         title: 'Témoignages',
         onLeadingPress: () {
           if(currentUserProvider.profile == KTypeUser.organization){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(organization: currentUserProvider.currentOrganization!,)));
+            PersistentNavBarNavigator.pushNewScreen(
+              context,
+              screen: ProfilePage(
+                organization: currentUserProvider.currentOrganization!,),
+              withNavBar: false, // OPTIONAL VALUE. True by default.
+              pageTransitionAnimation: PageTransitionAnimation.fade,
+            );
+            /*Navigator.push(
+                context, MaterialPageRoute(
+                builder: (context)=>ProfilePage(
+                  organization: currentUserProvider.currentOrganization!,)));*/
           }
         }, onTrailingPress: () {  },),
       body: Body(),

@@ -55,7 +55,7 @@ class _FinancialPageState extends State<FinancialPage> {
   Widget build(BuildContext context) {
     final currentUserProvider = Provider.of<CurrentUserProvider>(context);
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Form(
         key: formKey,
         child: ListView(

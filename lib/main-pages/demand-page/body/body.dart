@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deme/constants.dart';
 import 'package:deme/models/demand.dart';
 import 'package:deme/models/organization.dart';
@@ -24,26 +25,30 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  late Future<List<Demand>> futureDemand;
-  DonationService demandService = DonationService();
+  //late Future<List<Demand>> futureDemand;
+ // DonationService demandService = DonationService();
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  late Stream<QuerySnapshot> demandStream;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    futureDemand = demandService.getAllDemand();
+    //futureDemand = demandService.getAllDemand();
+    demandStream = db.collection('demands').snapshots();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: futureDemand,
+    return StreamBuilder(
+      stream: demandStream,
       builder: (context, snapshot) {
         return (snapshot.hasData)
             ? ListView.builder(
-                itemCount: snapshot.data?.length,
+                itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  final demand = snapshot.data![index];
+                  final demand = Demand.getFromSnapshotDoc(snapshot.data?.docs[index]);
                   return DemandContainer(
                     demand: demand,
                   );

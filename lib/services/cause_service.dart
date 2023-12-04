@@ -11,15 +11,15 @@ class CauseService {
   Future<List<Cause>> getAllCause() async{
    try{
      final response = await http.get(Uri.parse('$baseServiceAuthUrl/'));
+     print("=======${response.statusCode}");
 
      if(response.statusCode == 200){
        final responseData = json.decode(utf8.decode(response.bodyBytes));
-       List<Cause> methodPayments = [];
-       for (var methodPayment in responseData) {
-         methodPayments.add(Cause.fromJson(methodPayment));
+       List<Cause> causes = [];
+       for (var cause in responseData) {
+         causes.add(Cause.fromJson(cause));
        }
-       print(methodPayments);
-       return methodPayments;
+       return causes;
      }
 
      // Gestion de l'exception

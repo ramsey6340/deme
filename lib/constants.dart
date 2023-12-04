@@ -35,7 +35,7 @@ final RegExp birthDayRegExp = RegExp(r"^[0-9]{2}\/[0-9]{2}\/[0-9]{4}");
 
 
 String currentUserId = '1';
-const baseUrl = "http://10.175.48.38:8080";
+const baseUrl = "http://10.0.2.2:8080";
 
 
 ButtonStyle? kStyleNextBtn = ButtonStyle(

@@ -43,4 +43,17 @@ class Cause {
     "description": description,
     "imageUrl": imageUrl
   };
+
+  static Cause getFromSnapshotDoc(DocumentSnapshot? snapshot) {
+    final causeMap = snapshot?.data() as Map<String, dynamic>;
+
+    Cause cause = Cause(
+        causeId: causeMap["causeId"],
+        name: causeMap["name"],
+        deleted: causeMap["deleted"],
+        description: causeMap["description"],
+        imageUrl: causeMap["imageUrl"],
+    );
+    return cause;
+  }
 }

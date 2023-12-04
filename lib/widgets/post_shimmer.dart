@@ -48,10 +48,11 @@ class PostShimmer extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
+                      /*image: const DecorationImage(
                         fit: BoxFit.cover,
                         image: AssetImage(''),
-                      )),
+                      )*/
+                  ),
                 ),
                 const SizedBox(height: 10,),
                 const TitlePlaceholder(width: 200)

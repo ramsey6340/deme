@@ -18,6 +18,8 @@ class _AddDemandState extends State<AddDemand> {
   final formKey = GlobalKey<FormState>();
   TextEditingController descriptionEditingController = TextEditingController();
 
+  bool waiting = false;
+
   @override
   Widget build(BuildContext context) {
     final currentUserProvider = Provider.of<CurrentUserProvider>(context);
@@ -42,8 +44,21 @@ class _AddDemandState extends State<AddDemand> {
                     style: TextButton.styleFrom(
                         backgroundColor: kPrimaryColor
                     ),
-                    onPressed: () {  },
-                    child: Text("Poster", style: TextStyle(color: Colors.white),),
+                    onPressed: () {
+                      setState(() {
+                        waiting = true;
+                      });
+
+                      if(formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
+
+
+                      }
+                    },
+                    child: (!waiting)?const Text("Poster", style: TextStyle(color: Colors.white),):
+                    const SizedBox.square(
+                      dimension: 20,
+                        child: CircularProgressIndicator(color: Colors.white,)),
                   ),
                 ],
               ),
@@ -66,8 +81,7 @@ class _AddDemandState extends State<AddDemand> {
               ),
 
               // ========================Gestion du bouton asynchrone====================
-
-              Center(
+              /*Center(
                 child: AsyncTextBtn(
                   style: kStyleNextBtn,
                   asyncBtnStatesController: btnStateController,
@@ -154,8 +168,7 @@ class _AddDemandState extends State<AddDemand> {
                           fontSize: 20)
                   ),
                 ),
-              ),
-
+              ),*/
               // ========================Fin de la gestion du bouton asynchrone====================
 
               const SizedBox(height: 10,)

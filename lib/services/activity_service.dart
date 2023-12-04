@@ -234,7 +234,7 @@ class ActivityService {
     }
   }
 
-  Future<List<Post>> getSnapshotPost() async{
+  /*Future<List<Post>> getSnapshotPost() async{
     QuerySnapshot querySnapshot = await db.collection('posts').get();
     List<Post> posts = [];
     for (var docSnapshot in querySnapshot.docs) {
@@ -243,30 +243,48 @@ class ActivityService {
       posts.add(post);
     }
     return posts;
-  }
+  }*/
 
-  Future<Post> fromSnapshot(Map<String, dynamic> data) async {
-    //final data = snapshot?.data() as Map<String, dynamic>;
+  Future<String> createAssignment(String organizationId, String causeId, Map<String, dynamic> assignmentMap) async{
+    try{
+      final response = await http.post(Uri.parse(
+          '$baseServiceActivityUrl/$assignmentCollectionName/organizations/$organizationId?causeId=$causeId'),
+        body: json.encode(assignmentMap),
+        headers: {
+          // Je m'assure que le type de média est défini sur JSON
+          'Content-Type':'application/json'
+        },
+      );
 
-    final activityData = await db.collection('activities').doc(data['activityId']).get();
-    final assignmentData = await db.collection('assignments').doc(activityData['assignmentId']).get();
-    final organizationData = await db.collection('organizations').doc(assignmentData['organizationId']).get();
-    final causeData = await db.collection('causes').doc(assignmentData['causeId']).get();
+      if(response.statusCode == 201){
+        final responseData = json.decode(utf8.decode(response.bodyBytes));
+        return responseData["assignmentId"];
+      }
 
-    final activityMap = activityData.data() as Map<String, dynamic>;
-    final assignmentMap = assignmentData.data() as Map<String, dynamic>;
-    final organizationMap = organizationData.data() as Map<String, dynamic>;
-    final causeMap = causeData.data() as Map<String, dynamic>;
-    return Post(
-      postId: data['postId'],
-      imageUrls: [],
-      message: data['message'],
-      videoUrl: data['videoUrl'],
-      creationDate: data['creationDate'],
-      deleted: data['deleted'],
-      activity: Activity.fromJson(
-          activityMap,
-          Assignment.fromJson(assignmentMap, Organization.fromJson(organizationMap), Cause.fromJson(causeMap))),
-    );
+      Map<String, dynamic> errorMessage = {};
+      var errorResponse = json.decode(utf8.decode(response.bodyBytes));
+
+      if (errorResponse.containsKey('message')) {
+        errorMessage['message'] = errorResponse['message'];
+      }
+      if (errorResponse.containsKey('error')) {
+        errorMessage['error'] = errorResponse['error'];
+      }
+      if (errorResponse.containsKey('status')) {
+        errorMessage['status'] = errorResponse['status'];
+      }
+      if (errorResponse.containsKey('path')) {
+        errorMessage['path'] = errorResponse['path'];
+      }
+      if (errorResponse.containsKey('timestamp')) {
+        errorMessage['timestamp'] = errorResponse['timestamp'];
+      }
+
+      print("Error: $errorMessage");
+      throw Exception(errorResponse);
+    }
+    catch(e) {
+      throw Exception(e);
+    }
   }
 }

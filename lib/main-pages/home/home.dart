@@ -3,6 +3,7 @@ import 'package:deme/main-pages/home/body/campaign_page.dart';
 import 'package:deme/main-pages/profile-page/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 import '../../data-test/data_test.dart';
 import '../../provider/current_user_provider.dart';
@@ -30,8 +31,19 @@ class _HomeState extends State<Home> {
           centerTitle: true,
           title: Text('Accueil', style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w400), overflow: TextOverflow.ellipsis,),
           leading: IconButton(icon: Icon(Icons.account_circle_rounded), onPressed: (){
-            if(currentUserProvider.profile == KTypeUser.organization){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(organization: currentUserProvider.currentOrganization!,)));
+            //currentUserProvider.profile == KTypeUser.organization
+            if('organization' == KTypeUser.organization){
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: ProfilePage(
+                  organization: currentUserProvider.currentOrganization!,),
+                withNavBar: false, // OPTIONAL VALUE. True by default.
+                pageTransitionAnimation: PageTransitionAnimation.fade,
+              );
+
+              /*Navigator.push(context, MaterialPageRoute(
+                  builder: (context)=>ProfilePage(
+                    organization: currentUserProvider.currentOrganization!,)));*/
             }          },),
           actions: [
             IconButton(icon: Icon(Icons.map), onPressed: (){},),

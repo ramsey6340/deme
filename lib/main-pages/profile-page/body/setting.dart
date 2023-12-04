@@ -1,53 +1,63 @@
+import 'package:deme/main-pages/profile-page/body/setting-pages/assignment/list_assignment.dart';
+import 'package:deme/main-pages/profile-page/body/setting-pages/assignment/setting_assignment.dart';
 import 'package:deme/size_config.dart';
 import 'package:deme/widgets/next_page.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<SettingData> settingData = [
+    List<SettingData> settingDatas = [
       SettingData(
-          icon: Icon(Icons.account_circle_rounded),
+          icon: const Icon(Icons.account_circle_rounded),
           title: 'Profile',
-          routeName: 'setting_profile'),
+          page: Text('setting_profile')
+      ),
       SettingData(
-          icon: Icon(Icons.campaign_outlined),
+          icon: const Icon(Icons.campaign_outlined),
+          title: 'Mission',
+          page: SettingAssignment(),
+      ),
+      SettingData(
+          icon: const Icon(Icons.campaign_outlined),
           title: 'Activités',
-          routeName: 'setting_activity'),
+          page: const Text('setting_profile')),
       SettingData(
-          icon: Icon(Icons.campaign_outlined),
+          icon: const Icon(Icons.campaign_outlined),
           title: 'Campagnes',
-          routeName: 'setting_campaign'),
+          page: Text('setting_profile')
+      ),
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Donations',
-          routeName: 'setting_donation'),
+          page: Text('setting_profile')),
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Demandes',
-          routeName: 'setting_demand'),
+          page: Text('setting_profile')),
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Notifications',
-          routeName: 'setting_notification'),
+          page: Text('setting_profile')),
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Sponsors',
-          routeName: 'setting_sponsor'),
+          page: Text('setting_profile')),
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Temoignages',
-          routeName: 'setting_testimony'),
+          page: Text('setting_profile')),
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Abonnements',
-          routeName: 'setting_subscription'),
+          page: Text('setting_profile')),
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Mode de paiement',
-          routeName: 'setting_method_payment'),
+          page: Text('setting_profile')),
     ];
 
     return SafeArea(
@@ -55,17 +65,25 @@ class Setting extends StatelessWidget {
         padding:
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
         child: ListView.builder(
-            itemCount: settingData.length,
+            itemCount: settingDatas.length,
             itemBuilder: (context, index) {
               return Container(
                   margin: EdgeInsets.symmetric(
                       vertical: getProportionateScreenHeight(10)),
                   child: NextPage(
-                      title: settingData[index].title,
+                      title: settingDatas[index].title,
                       press: () {
-                        //Navigator.pushNamed(context, settingData[index].routeName);
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const ListAssignment(),
+                          withNavBar: false, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        );
+
+                        /*Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => SettingAssignment()));*/
                       },
-                      leading: settingData[index].icon));
+                      leading: settingDatas[index].icon));
             }),
       ),
     );
@@ -75,8 +93,8 @@ class Setting extends StatelessWidget {
 class SettingData {
   final Widget icon;
   final String title;
-  final String routeName;
+  final Widget page;
 
   SettingData(
-      {required this.icon, required this.title, required this.routeName});
+      {required this.icon, required this.title, required this.page});
 }

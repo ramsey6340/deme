@@ -1,4 +1,5 @@
 import 'package:async_button/async_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deme/models/cause.dart';
 import 'package:deme/provider/change_log_screen_provider.dart';
 import 'package:deme/provider/type_user_log_up_provider.dart';
@@ -33,23 +34,25 @@ class ChooseCause extends StatefulWidget {
 
 class _ChooseCauseState extends State<ChooseCause> {
 
-  late Future<List<Cause>> futureCause;
-  CauseService causeService = CauseService();
+  //late Future<List<Cause>> futureCause;
+  //CauseService causeService = CauseService();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    futureCause = causeService.getAllCause();
+    //futureCause = causeService.getAllCause();
   }
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    final Stream<QuerySnapshot> causeStream = db.collection('causes').snapshots();
 
-    double fem = MediaQuery.of(context).size.width / baseWidth;
+    //double fem = MediaQuery.of(context).size.width / baseWidth;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Demander un don"),
+        title: const Text("Demander un don"),
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -65,21 +68,21 @@ class _ChooseCauseState extends State<ChooseCause> {
               textAlign: TextAlign.center,
               maxLines: 2,
             ),
-            SizedBox(height: 5,),
+            const SizedBox(height: 5,),
             Expanded(
-              child: FutureBuilder(
-                future: futureCause,
+              child: StreamBuilder(
+                stream: causeStream,
                 builder: (context, snapshot) {
                   return (snapshot.hasData)?
                   GridView.builder(
-                    itemCount: snapshot.data?.length,
+                    itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
-                      final cause = snapshot.data![index];
+                      final cause = Cause.getFromSnapshotDoc(snapshot.data?.docs[index]);
                       return Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: CauseCard(
-                            cause: cause,
+                            cause: Future.value(cause),
                             onTap: (){
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) => AddDemand()));
@@ -101,12 +104,13 @@ class _ChooseCauseState extends State<ChooseCause> {
                     highlightColor: Colors.grey.shade100,
                     enabled: true,
                     child: GridView.builder(
-                      itemCount: snapshot.data?.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 10,
                       itemBuilder: (context, index) {
                         return Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(vertical: 100, horizontal: 80),
+                              padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 80),
                               decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
                                   color: Colors.grey
