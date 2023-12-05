@@ -31,16 +31,9 @@ class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
   CauseService causeService = CauseService();
   late Future<List<Cause>> futureCause;
 
-  void testCause() async {
-    futureCause = causeService.getAllCause();
-    List<Cause> causes = await futureCause;
-    print("Liste: $causes");
-  }
-
   @override
   void initState() {
     super.initState();
-    testCause();
 
     sharedPreferencesService.setTypeUser(KTypeUser.organization);
     sharedPreferencesService.setFirstInteraction(false);
@@ -122,8 +115,6 @@ class _LoadingSplashScreenState extends State<LoadingSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUserProvider = Provider.of<CurrentUserProvider>(context);
-    //currentUserProvider.setProfile(KTypeUser.organization);
 
     return EasySplashScreen(
       logo: Image.asset(

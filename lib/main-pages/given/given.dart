@@ -82,11 +82,15 @@ class _GivenState extends State<Given> {
                 withNavBar: false, // OPTIONAL VALUE. True by default.
                 pageTransitionAnimation: PageTransitionAnimation.fade,
               );
-
-              /*Navigator.push(
-                  context, MaterialPageRoute(
-                  builder: (context)=>ProfilePage(
-                    organization: currentUserProvider.currentOrganization!,)));*/
+            }
+            else{
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: ProfilePage(
+                  organization: currentUserProvider.currentOrganization!,),
+                withNavBar: false, // OPTIONAL VALUE. True by default.
+                pageTransitionAnimation: PageTransitionAnimation.fade,
+              );
             }
           },
         ),
@@ -130,12 +134,13 @@ class _GivenState extends State<Given> {
                         globalValue.setBeneficiaryDonation(BeneficiaryType.demand);
 
                         organization.then((value) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BodyGiven(
-                                      organization:
-                                      value)));
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: BodyGiven(
+                              organization: value,),
+                            withNavBar: false, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation: PageTransitionAnimation.fade,
+                          );
                         });
                       },
                     );

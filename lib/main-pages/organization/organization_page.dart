@@ -63,6 +63,15 @@ class _OrganizationPageState extends State<OrganizationPage> {
                   builder: (context)=>ProfilePage(
                     organization: currentUserProvider.currentOrganization!,)));*/
             }
+            else{
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: ProfilePage(
+                  organization: currentUserProvider.currentOrganization!,),
+                withNavBar: false, // OPTIONAL VALUE. True by default.
+                pageTransitionAnimation: PageTransitionAnimation.fade,
+              );
+            }
           },
         ),
         actions: [

@@ -34,7 +34,8 @@ class _BodyGivenState extends State<BodyGiven> {
           centerTitle: true,
           leading: IconButton(icon: const Icon(Icons.arrow_back_outlined),
             onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> Given()));
+            Navigator.pop(context);
+            //Navigator.push(context, MaterialPageRoute(builder: (context)=> Given()));
             }),
           title: Text(
             '${widget.organization.name}',

@@ -18,6 +18,5 @@ final Map<String, WidgetBuilder> routes = {
   ForgotEmailField.routeName: (context) => ForgotEmailField(),
   ForgotOtpField.routeName: (context) => ForgotOtpField(),
   ResetPassword.routeName: (context) => ResetPassword(),
-  Given.routeName: (context) => Given(),
-  SettingAssignment.routeName: (context) => SettingAssignment(),
+  Given.routeName: (context) => Given()
 };

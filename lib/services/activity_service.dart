@@ -246,6 +246,7 @@ class ActivityService {
   }*/
 
   Future<String> createAssignment(String organizationId, String causeId, Map<String, dynamic> assignmentMap) async{
+
     try{
       final response = await http.post(Uri.parse(
           '$baseServiceActivityUrl/$assignmentCollectionName/organizations/$organizationId?causeId=$causeId'),
@@ -257,8 +258,7 @@ class ActivityService {
       );
 
       if(response.statusCode == 201){
-        final responseData = json.decode(utf8.decode(response.bodyBytes));
-        return responseData["assignmentId"];
+        return response.body;
       }
 
       Map<String, dynamic> errorMessage = {};

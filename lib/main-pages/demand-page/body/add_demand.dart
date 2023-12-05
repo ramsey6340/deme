@@ -38,7 +38,10 @@ class _AddDemandState extends State<AddDemand> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(onPressed: (){}, child: Icon(Icons.arrow_back, color: Colors.black,)),
+                  TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      }, child: const Icon(Icons.arrow_back, color: Colors.black,)),
 
                   TextButton(
                     style: TextButton.styleFrom(
