@@ -1,69 +1,84 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deme/main-pages/demand-page/body/add_demand_user.dart';
-import 'package:deme/models/cause.dart';
-import 'package:deme/widgets/cause_card.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../../models/assignment.dart';
+import '../../../models/organization.dart';
+import '../../../services/shared_preferences_service.dart';
+import '../../../widgets/assignment_card.dart';
 import 'add_demand_organization.dart';
 
-class ChooseCause extends StatefulWidget {
-  const ChooseCause({super.key});
+class ChooseAssignment extends StatefulWidget {
+  const ChooseAssignment({super.key});
 
   @override
-  State<ChooseCause> createState() => _ChooseCauseState();
+  State<ChooseAssignment> createState() => _ChooseAssignmentState();
 }
 
-class _ChooseCauseState extends State<ChooseCause> {
-
-
+class _ChooseAssignmentState extends State<ChooseAssignment> {
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  late Stream<QuerySnapshot> assignmentStream;
+  SharedPreferencesService sharedPreferencesService = SharedPreferencesService();
+  String? organizationId = '';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    initStream();
   }
+
+  void initStream() async {
+    Organization? currentOrganization = await sharedPreferencesService.getCurrentOrganization();
+    organizationId = currentOrganization?.organizationId;
+    assignmentStream = db.collection('assignments')
+        .where("organizationId", isEqualTo: organizationId).snapshots();
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    final Stream<QuerySnapshot> causeStream = db.collection('causes').snapshots();
-
-    //double fem = MediaQuery.of(context).size.width / baseWidth;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Demander un don"),
       ),
+
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         width: double.infinity,
         child: Column(
           children: [
-            const Text("Pour quel cause souhaitez-vous avoir un don ?",
+            const Text("Pour quel mission souhaitez-vous avoir un don ?",
               style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
                 overflow: TextOverflow.ellipsis,
               ),
               textAlign: TextAlign.center,
               maxLines: 2,
             ),
             const SizedBox(height: 5,),
+
             Expanded(
               child: StreamBuilder(
-                stream: causeStream,
+                stream: assignmentStream,
                 builder: (context, snapshot) {
                   return (snapshot.hasData)?
                   GridView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
-                      final cause = Cause.getFromSnapshotDoc(snapshot.data?.docs[index]);
+                      final assignment = Assignment.getFromSnapshotDoc(snapshot.data?.docs[index]);
                       return Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: CauseCard(
-                            cause: Future.value(cause),
+                          child: AssignmentCard(
+                            assignment: assignment,
                             onTap: (){
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => AddDemandUser(cause: cause)));
+                              assignment.then((value) {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => AddDemandOrganization(assignment: value,)));
+                              });
                             },
                           ),
                         ),
@@ -114,18 +129,4 @@ class _ChooseCauseState extends State<ChooseCause> {
       ),
     );
   }
-
-  /*
-  Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(vertical: 100, horizontal: 100),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey
-                                ),
-                              ),
-                            ],
-                          )
-   */
 }

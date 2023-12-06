@@ -1,19 +1,25 @@
 import 'package:async_button/async_button.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:deme/models/assignment.dart';
+import 'package:deme/services/donation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../provider/current_user_provider.dart';
 
-class AddDemand extends StatefulWidget {
-  const AddDemand({super.key});
+class AddDemandOrganization extends StatefulWidget {
+  const AddDemandOrganization({super.key, required this.assignment});
+  final Assignment assignment;
 
   @override
-  State<AddDemand> createState() => _AddDemandState();
+  State<AddDemandOrganization> createState() => _AddDemandOrganizationState();
 }
 
-class _AddDemandState extends State<AddDemand> {
+class _AddDemandOrganizationState extends State<AddDemandOrganization> {
   AsyncBtnStatesController btnStateController = AsyncBtnStatesController();
+  DonationService donationService = DonationService();
 
   final formKey = GlobalKey<FormState>();
   TextEditingController descriptionEditingController = TextEditingController();
@@ -27,7 +33,7 @@ class _AddDemandState extends State<AddDemand> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 20,
-        leading: SizedBox(),
+        leading: const SizedBox(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -42,8 +48,96 @@ class _AddDemandState extends State<AddDemand> {
                       onPressed: (){
                         Navigator.pop(context);
                       }, child: const Icon(Icons.arrow_back, color: Colors.black,)),
+                  Text(widget.assignment.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
 
-                  TextButton(
+                  SizedBox(
+                    width: 100,
+                    height: 35,
+                    child: AsyncTextBtn(
+                      style: TextButton.styleFrom(
+                          backgroundColor: kPrimaryColor,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50))
+                        )
+                      ),
+                      asyncBtnStatesController: btnStateController,
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          formKey.currentState!.save();
+                          btnStateController.update(AsyncBtnState.loading);
+                          try {
+                            if(descriptionEditingController.value.text.isNotEmpty) {
+                              Map<String, dynamic> demandMap = {
+                                "description": descriptionEditingController.value.text,
+                              };
+
+                              String demandId = await donationService.createDemandByOrganization(
+                                  currentUserProvider.currentOrganization!.organizationId!,
+                                  widget.assignment.assignmentId!, demandMap);
+
+                              setState(() {
+
+                              });
+                              if (context.mounted) {
+                                successDemand(context);
+                              }
+                            }
+                          } catch (e) {
+                            btnStateController.update(AsyncBtnState.success);
+                            if (context.mounted) {
+                              errorDemand(context);
+                            }
+                            throw Exception(e);
+                          }
+                        }
+                      },
+                      loadingStyle: AsyncBtnStateStyle(
+                        style: TextButton.styleFrom(
+                            backgroundColor: kPrimaryColor
+                        ),
+                        widget: const SizedBox.square(
+                          dimension: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      successStyle:
+                      AsyncBtnStateStyle(
+                        style: TextButton.styleFrom(
+                            backgroundColor: kPrimaryColor,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(50))
+                            )
+                        ),
+                        widget: const Text('Success!',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20)),
+                      ),
+
+                      failureStyle: AsyncBtnStateStyle(
+                        style: TextButton.styleFrom(
+                            backgroundColor: kPrimaryColor,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(50))
+                            )
+                        ),
+                        widget: const Icon(
+                          Icons.error,
+                          color: Colors.white,
+                        ),
+                      ),
+                      child: const Text('Poster',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14)),
+                    ),
+                  )
+
+                  /*TextButton(
                     style: TextButton.styleFrom(
                         backgroundColor: kPrimaryColor
                     ),
@@ -62,7 +156,7 @@ class _AddDemandState extends State<AddDemand> {
                     const SizedBox.square(
                       dimension: 20,
                         child: CircularProgressIndicator(color: Colors.white,)),
-                  ),
+                  ),*/
                 ],
               ),
               Expanded(
@@ -71,8 +165,9 @@ class _AddDemandState extends State<AddDemand> {
                   keyboardType: TextInputType.multiline,
                   maxLines: null, // Permet un nombre dynamique de lignes
                   expands: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Decrivez précisement votre problème et votre \nbesoin pour la cause education',
+                  decoration: InputDecoration(
+                    hintText: 'Decrivez précisement votre problème et votre \nbesoin '
+                        'pour la mission ${widget.assignment.title}',
                   ),
                   validator: (value) {
                     if(value!.isEmpty){
@@ -180,5 +275,39 @@ class _AddDemandState extends State<AddDemand> {
         ),
       ),
     );
+  }
+
+  void successDemand(BuildContext context) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      animType: AnimType.rightSlide,
+      titleTextStyle:
+      GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 24),
+      descTextStyle: GoogleFonts.inter(fontSize: 16),
+      headerAnimationLoop: false,
+      title: 'Succès',
+      desc: 'Vôtre demande à bien été poster',
+      btnOkOnPress: () {},
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.green,
+    ).show();
+  }
+
+  void errorDemand(BuildContext context) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      animType: AnimType.rightSlide,
+      titleTextStyle:
+      GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 24),
+      descTextStyle: GoogleFonts.inter(fontSize: 16),
+      headerAnimationLoop: false,
+      title: 'Echec',
+      desc: "La demande n'a pas pu être poster",
+      btnOkOnPress: () {},
+      btnOkIcon: Icons.cancel,
+      btnOkColor: Colors.red,
+    ).show();
   }
 }

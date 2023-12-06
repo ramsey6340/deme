@@ -144,6 +144,7 @@ class DonationService {
         },
       );
       if(response.statusCode == 201) {
+        print("Creation reussi");
         final responseData = json.decode(utf8.decode(response.bodyBytes));
 
         String donorOrganizationId = responseData["donorOrganizationId"];
@@ -348,7 +349,6 @@ class DonationService {
         errorMessage['timestamp'] = errorResponse['timestamp'];
       }
 
-      print("Error get-ID-assignment: $errorMessage");
       print("Error: $errorMessage");
       throw Exception(errorResponse);
     }catch(e) {
@@ -356,5 +356,47 @@ class DonationService {
     }
   }
 
+  Future<String> createDemandByOrganization(String organizationId, String assignmentId,
+      Map<String, dynamic> demandMap)  async{
+    try{
+      final response = await http.post(Uri.parse(
+          '$baseServiceDemandUrl/demands/organizations/$organizationId?assignmentId=$assignmentId'),
+        body: json.encode(demandMap),
+        headers: {
+          // Je m'assure que le type de média est défini sur JSON
+          'Content-Type':'application/json'
+        },
+      );
 
+      if(response.statusCode == 201){
+        return response.body;
+      }
+      // Gestion de l'exception
+      Map<String, dynamic> errorMessage = {};
+      var errorResponse = json.decode(utf8.decode(response.bodyBytes));
+
+      if (errorResponse.containsKey('message')) {
+        errorMessage['message'] = errorResponse['message'];
+      }
+      if (errorResponse.containsKey('error')) {
+        errorMessage['error'] = errorResponse['error'];
+      }
+      if (errorResponse.containsKey('status')) {
+        errorMessage['status'] = errorResponse['status'];
+      }
+      if (errorResponse.containsKey('path')) {
+        errorMessage['path'] = errorResponse['path'];
+      }
+      if (errorResponse.containsKey('timestamp')) {
+        errorMessage['timestamp'] = errorResponse['timestamp'];
+      }
+
+      print("Error: $errorMessage");
+      throw Exception(errorMessage);
+
+    }catch(e){
+      throw Exception(e);
+    }
+
+  }
 }

@@ -53,7 +53,7 @@ dependencies:
   firebase_core: ^2.22.0
   firebase_auth: ^4.14.0
   cloud_firestore: ^4.13.3
-  async_list_view: ^1.0.2
+  animated_custom_dropdown: ^2.0.0
 
 dev_dependencies:
   flutter_test:

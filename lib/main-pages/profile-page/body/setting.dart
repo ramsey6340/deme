@@ -1,5 +1,6 @@
 import 'package:deme/main-pages/profile-page/body/setting-pages/assignment/list_assignment.dart';
 import 'package:deme/main-pages/profile-page/body/setting-pages/assignment/setting_assignment.dart';
+import 'package:deme/main-pages/profile-page/body/setting-pages/donation/list_financial_donation.dart';
 import 'package:deme/size_config.dart';
 import 'package:deme/widgets/next_page.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class Setting extends StatelessWidget {
       SettingData(
           icon: const Icon(Icons.campaign_outlined),
           title: 'Mission',
-          page: SettingAssignment(),
+          page: ListAssignment(),
       ),
       SettingData(
           icon: const Icon(Icons.campaign_outlined),
@@ -33,7 +34,7 @@ class Setting extends StatelessWidget {
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Donations',
-          page: Text('setting_profile')),
+          page: ListFinancialDonation()),
       SettingData(
           icon: Icon(Icons.campaign_outlined),
           title: 'Demandes',
@@ -75,7 +76,8 @@ class Setting extends StatelessWidget {
                       press: () {
                         PersistentNavBarNavigator.pushNewScreen(
                           context,
-                          screen: const ListAssignment(),
+                          //screen: const ListAssignment(),
+                          screen: settingDatas[index].page,
                           withNavBar: false, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation: PageTransitionAnimation.fade,
                         );

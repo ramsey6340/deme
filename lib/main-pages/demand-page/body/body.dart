@@ -25,9 +25,8 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  //late Future<List<Demand>> futureDemand;
+  late Future<List<Demand>> futureDemand;
  // DonationService demandService = DonationService();
-
   FirebaseFirestore db = FirebaseFirestore.instance;
   late Stream<QuerySnapshot> demandStream;
 
@@ -36,11 +35,14 @@ class _BodyState extends State<Body> {
     // TODO: implement initState
     super.initState();
     //futureDemand = demandService.getAllDemand();
-    demandStream = db.collection('demands').snapshots();
+    demandStream = db.collection('demands').orderBy("creationDate", descending:true).snapshots();
+
   }
 
   @override
   Widget build(BuildContext context) {
+    //FirebaseFirestore db = FirebaseFirestore.instance;
+    //final Stream<QuerySnapshot> demandStream = db.collection('demands').snapshots();
     return StreamBuilder(
       stream: demandStream,
       builder: (context, snapshot) {
@@ -58,10 +60,10 @@ class _BodyState extends State<Body> {
                 highlightColor: Colors.grey.shade100,
                 enabled: true,
                 child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: 4,
                     itemBuilder: (context, index) {
-                      return PostShimmer();
+                      return const PostShimmer();
                     }),
               );
       },

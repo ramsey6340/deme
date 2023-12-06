@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deme/models/method_payment.dart';
 import 'package:deme/models/organization.dart';
 import 'package:deme/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'demand.dart';
 
 class FinancialDonation {
@@ -58,4 +60,47 @@ class FinancialDonation {
     "beneficiaryOrganizationId": beneficiaryOrganization?.organizationId,
     "beneficiaryDemandId": beneficiaryDemand?.demandId,
   };
+
+  static Future<FinancialDonation> getFromSnapshotDoc(DocumentSnapshot? snapshot) async{
+
+    final financialDonationMap = snapshot?.data() as Map<String, dynamic>;
+
+    // donorOrganization
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotDonorOrganization = await financialDonationMap['donorOrganization'].get();
+    Map<String, dynamic> donorOrganizationMap = documentSnapshotDonorOrganization.data() ?? {};// donorOrganization
+
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotBeneficiaryOrganization = await financialDonationMap['beneficiaryOrganization'].get();
+    Map<String, dynamic> beneficiaryOrganizationMap = documentSnapshotBeneficiaryOrganization.data() ?? {};
+
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotMethodPayment = await financialDonationMap['methodPayment'].get();
+    Map<String, dynamic> methodPaymentMap = documentSnapshotMethodPayment.data() ?? {};
+
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotBeneficiaryDemand = await financialDonationMap['beneficiaryDemand'].get();
+    Map<String, dynamic> beneficiaryDemandMap = documentSnapshotBeneficiaryDemand.data() ?? {};
+
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshotDonorUser = await financialDonationMap['donorUser'].get();
+    Map<String, dynamic> donorUserMap = documentSnapshotDonorUser.data() ?? {};
+
+
+    financialDonationMap["donorOrganization"] = donorOrganizationMap;
+    financialDonationMap["beneficiaryOrganization"] = beneficiaryOrganizationMap;
+    financialDonationMap["methodPayment"] = methodPaymentMap;
+    financialDonationMap["donorUser"] = donorUserMap;
+    financialDonationMap["beneficiaryDemand"] = beneficiaryDemandMap;
+
+
+
+    return FinancialDonation(
+        donationId: financialDonationMap["donationId"],
+        used: financialDonationMap["used"],
+        creationDate: financialDonationMap["creationDate"],
+        amount: financialDonationMap["amount"],
+        deleted: financialDonationMap["deleted"],
+        donorUser: (financialDonationMap["donorUser"]==null)?null:UserModel.fromJson(financialDonationMap['donorUser']),
+        donorOrganization: financialDonationMap['donorOrganization'],
+        methodPayment: MethodPayment.fromJson(financialDonationMap['methodPayment']),
+        beneficiaryOrganization: Organization.fromJson(financialDonationMap['beneficiaryOrganization']),
+        beneficiaryDemand: (financialDonationMap["beneficiaryDemand"]==null)?null:await Demand.getFromSnapshotDoc(documentSnapshotBeneficiaryDemand)
+    );
+  }
 }
